@@ -5,6 +5,10 @@
 	"description": "A small library purposed for providing beautiful one-line/one-expression solutions to frequent miniature tasks for frequently encountered JS datatypes.",
 	"version": "0.1.0",
 	"author": "hgargg-0710",
+	"bugs": {
+		"url": "https://github.com/HGARgG-0710/one/issues"
+	},
+	"homepage": "https://github.com/HGARgG-0710/one#readme",
 	"keywords": [
 		"expression",
 		"line"
