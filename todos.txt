@@ -1,2 +1,11 @@
-1. Add tests; 
-2. Add documentation; 
+1. Add 'numbers' module: 
+
+	Things like 'sum': 
+
+		export const sum(...nums) = nums.reduce((prev, curr) => prev + curr, 0)
+
+2. For existing modules: 
+
+	'array': 
+
+		1. firstOut, first (analogous to 'last');

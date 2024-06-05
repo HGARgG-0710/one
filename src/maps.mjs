@@ -1,6 +1,7 @@
-export const kv = (obj) => ["keys", "values"].map((x) => obj[x]())
+export const kv = (map) => ["keys", "values"].map((x) => Array.from(map[x]()))
 export const dekv = (kv) =>
-	kv.reduce((prev, curr) => {
-		prev.set(curr[0], curr[1])
-		return prev
-	}, new Map())
+	((x, y) =>
+		x.reduce((prev, curr, i) => {
+			prev.set(curr, y[i])
+			return prev
+		}, new Map()))(...kv)

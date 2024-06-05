@@ -4,10 +4,10 @@ export const clear = (x) => (x.length = 0)
 export const insert = (x, index, ...values) =>
 	x.slice(0, index).concat(values).concat(x.slice(index))
 
-export const replace = (arr, index, value) =>
+export const replace = (arr, index, ...values) =>
 	arr
 		.slice(0, index)
-		.concat([value])
+		.concat(values)
 		.concat(arr.slice(index + 1))
 
 export const out = (array, index) => [...array.slice(0, index), ...array.slice(index + 1)]
@@ -19,6 +19,6 @@ export function swapped(array, i, j) {
 		array[j],
 		...array.slice(i + 1, j),
 		array[i],
-		...array.slice(j)
+		...array.slice(j + 1)
 	]
 }
