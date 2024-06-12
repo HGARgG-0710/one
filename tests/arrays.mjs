@@ -1,4 +1,18 @@
-import { lastOut, last, clear, insert, replace, out, swapped } from "../src/arrays.mjs"
+import {
+	lastOut,
+	last,
+	clear,
+	insert,
+	replace,
+	out,
+	swapped,
+	firstOut,
+	first,
+	propPreserve,
+	iterator,
+	middleOutN,
+	middleOutP
+} from "../src/arrays.mjs"
 
 // * lastOut
 console.log(
@@ -50,3 +64,46 @@ console.log()
 console.log(swapped(["a", "b", "c"], 0, 2))
 console.log(swapped(["a", "b", "c"], 2, 0))
 console.log(swapped(["a", "b", "c"], 2, 1))
+
+console.log()
+
+// * 'firstOut'
+console.log(
+	firstOut([
+		"TARTAR",
+		"You know, if not for the zeroth one, all'd be well!",
+		"I second that!"
+	])
+)
+console.log(firstOut([]))
+
+console.log()
+
+// * 'first'
+console.log(first([888, 0, 1, 2, 3]))
+console.log(first([]))
+
+console.log()
+
+// * 'propPreserve'
+const propCheck = propPreserve((x) => x.map((x) => x + 3))
+const _t = [0, 2, 3, 5]
+_t.S = 333
+const _tPlus = propCheck(_t)
+console.log(_tPlus)
+console.log(_t === _tPlus)
+
+console.log()
+
+// * 'iterator'
+
+const A = { [Symbol.iterator]: iterator([393920, 109098, "STIRNG!"]) }
+console.log(...A)
+console.log()
+
+// * 'middleOutN' and  'middleOutP'
+
+console.log(middleOutN([0, 1, 2, 3, 4, 5, 6, 7, 8]))
+console.log(middleOutN([0, 1, 2, 3, 4, 5, 6, 7, 8, 9]))
+console.log(middleOutP([0, 1, 2, 3, 4, 5, 6, 7, 8]))
+console.log(middleOutP([0, 1, 2, 3, 4, 5, 6, 7, 8, 9]))

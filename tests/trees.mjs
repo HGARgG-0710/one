@@ -4,7 +4,8 @@ import {
 	levelCount,
 	recursiveIndexation,
 	treeCount,
-	treeFlatten
+	treeFlatten,
+	treeReverseLR
 } from "../src/trees.mjs"
 
 // * 'depth'
@@ -39,3 +40,13 @@ console.log()
 // * 'deepSearch'
 console.log(deepSearch([["hello!"], [[[4431]]], "19"], (x) => typeof x === "number"))
 console.log()
+
+// * 'treeReverseLR'
+console.log(
+	treeReverseLR([
+		"79S",
+		[[[["Saari", "K"], "oopop"], "LUPO"]],
+		["ESQ.", [[3277], 9098, 90251, 3213, "SIEGBRAU", false, [true, [97]]]],
+		[999, 23]
+	])
+)
