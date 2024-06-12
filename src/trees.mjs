@@ -1,11 +1,10 @@
 // * Methods for working with array trees;
 
 import { lastOut } from "./arrays.mjs"
+import { sum } from "./numbers.mjs"
 
 export const depth = (tree) =>
-	((x) => (x ? 1 + (tree.length ? Math.max(...tree.map(depth)) : 0) : 0))(
-		tree instanceof Array
-	)
+	tree instanceof Array ? 1 + (tree.length ? Math.max.apply(null, tree.map(depth)) : 0) : 0
 
 export const treeFlatten = (tree) =>
 	tree.some((x) => x instanceof Array) ? treeFlatten(tree.flat()) : tree
@@ -38,6 +37,7 @@ export const deepSearch = (tree, prop) =>
 
 export const levelCount = (tree) =>
 	(tree instanceof Array) +
-	tree
-		.map((x) => (x instanceof Array ? levelCount(x) : 0))
-		.reduce((sum, summand) => sum + summand, 0)
+	sum(...tree.map((x) => (x instanceof Array ? levelCount(x) : 0)))
+
+export const treeReverseLR = (tree) =>
+	tree instanceof Array ? tree.reverse().map(treeReverseLR) : tree

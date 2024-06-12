@@ -1,11 +1,8 @@
-1. Add 'numbers' module: 
+1. TO TEST and DOCUMENT:
 
-	Things like 'sum': 
+	T/D: 
 
-		export const sum(...nums) = nums.reduce((prev, curr) => prev + curr, 0)
-
-2. For existing modules: 
-
-	'array': 
-
-		1. firstOut, first (analogous to 'last');
+		1. firstOut, first, propPreserve, iterator, middleOutP, middleOutN (array)
+		2. structObject (object)
+		3. product, sum (number)
+		4. treeReverseLR (tree)

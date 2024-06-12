@@ -1,3 +1,5 @@
+import { kv } from "./objects.mjs"
+
 export const lastOut = (x) => x.slice(0, x.length - 1)
 export const last = (x) => x[x.length - 1]
 export const clear = (x) => (x.length = 0)
@@ -22,3 +24,24 @@ export function swapped(array, i, j) {
 		...array.slice(j + 1)
 	]
 }
+
+export const firstOut = (x) => x.slice(1)
+export const first = (x) => x[0]
+
+export const propPreserve = (f) => (x) => {
+	const result = f(x)
+	const [keys, values] = kv(x)
+	keys.forEach((x, i) => {
+		if (isNaN(x)) result[x] = values[i]
+	})
+	return result
+}
+
+export const iterator = (arr) =>
+	function* () {
+		for (let i = 0; i < arr.length; ++i) yield arr[i]
+	}
+
+export const [middleOutP, middleOutN] = [0, 1].map(
+	(x) => (arr) => out(arr, Math.floor(arr.length / 2) - x * ((arr.length + 1) % 2))
+)
