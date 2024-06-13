@@ -1,6 +1,7 @@
 {
 	"name": "@hgargg-0710/one",
 	"main": "./main.mjs",
+	"type": "module",
 	"license": "MIT",
 	"description": "A small library purposed for providing beautiful one-line/one-expression solutions to frequent miniature tasks for frequently encountered JS datatypes.",
 	"version": "0.1.1",
