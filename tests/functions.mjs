@@ -8,7 +8,8 @@ import {
 	repeat,
 	arrayCompose,
 	tupleSlice,
-	tuplePick
+	tuplePick,
+	cache
 } from "../src/functions/functions.mjs"
 import { sum, product } from "../src/numbers/numbers.mjs"
 
@@ -104,5 +105,13 @@ const testPick = arrayCompose(
 		(x, i) => [0, 3].includes(i),
 		(x, i) => [1, 2].includes(i),
 		(x, i) => i === 3
-	)(...Array(3).fill(product)))
+	)(...Array(3).fill(product))
+)
 console.log(testPick(77, 29, -2, 30, -1))
+console.log()
+
+// * 'cache'
+const cacheRes = cache((x) => x + 3, [9998, 20])
+console.log(cacheRes.get(9998))
+console.log(cacheRes.get(20))
+console.log(cacheRes)

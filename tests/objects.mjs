@@ -10,7 +10,7 @@ console.log(dekv(kv({ a: "T", [Symbol("c")]: "K", 0: 4 })))
 console.log(dekv(kv({})))
 console.log()
 
-// * 'structObject'
+// * 'structCheck'
 const check = structCheck("A", "B", "D", ["kar"])
 console.log(check({ A: 33, D: 334, C: 23 }))
 console.log(check(2))

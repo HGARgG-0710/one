@@ -198,6 +198,43 @@ function repeat(f: Function, n: number): void
 
 Calls the function `f` for values from `0` to `n-1`.
 
+```ts
+function arrayCompose(...fs: ((...x: any[]): any[])[]): (...x): any
+```
+
+A function that accepts an array of functions, each of which returns an array.
+The functions are then composed in a fashion that uses the output of each (an array)
+as signature for the next function (that being, the result of the next function are expanded).
+
+```ts
+function cache(f: (x: any): any, keys: any[]): Map
+```
+
+Creates a new `Map`, with keys of `keys` and values of `f(key)` for each `key` in `keys`.
+
+This, effectively, caches a portion of a function so that its cached values can be retrieved like:
+
+```ts
+const f = ...
+const cached = cache(f, ...)
+const value = c.get(...)
+```
+
+```ts
+function tuplePick(...inds: ((x: any, i: number, arr: any[]): boolean)[]): (...fs: (...x: any[]): any): (...x: any[]): any
+```
+
+A function that returns a sequence of functions that result in a tuple consisting of
+values returned from each of functions from `fs` function array, with values
+being from `x` array, and `i`th function only using the values `x.filter((inds[i] || (() => true))`.
+
+```ts
+function tupleSlice(...inds: [number?, number?][]): (...fs: (...x: any[]): any): (...x: any[]): any
+```
+
+Similar to `tuplePick`, but operates on `.slice`-ranges from `inds` instead
+(the array of indexes for `i`th function is sliced using `inds[i]`).
+
 <br>
 
 #### `tree`
@@ -275,7 +312,7 @@ function dekv(x: [string[], any[]]): object
 Reverses the `kv`.
 
 ```ts
-function structObject(props: string[]): (x: any): boolean
+function structCheck(...props: (string | string[])[]): (x: any): boolean
 ```
 
 Creates and returns a new function that checks whether:
@@ -287,6 +324,12 @@ Creates and returns a new function that checks whether:
 Allows to create handy predicates for checking structural adherence of `x` to
 a certain necessary objects' "class" without needing to use more complex constructions
 like prototype chains.
+
+```ts
+function toMap(x: object): Map
+```
+
+Converts the given object to a `Map`.
 
 <br>
 
@@ -319,6 +362,12 @@ function dekv(x: [any[], any[]]): Map
 ```
 
 A `Map` version of `object.dekv`.
+
+```ts
+function toObject(map: Map): object
+```
+
+Converts the given `Map` to an `object`.
 
 <br>
 
