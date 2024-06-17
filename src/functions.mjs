@@ -21,7 +21,9 @@ export const and =
 export const trivialCompose =
 	(...fs) =>
 	(...x) =>
-		lastOut(fs).reverse().reduce((last, curr) => curr(last), last(fs)(...x))
+		lastOut(fs)
+			.reverse()
+			.reduce((last, curr) => curr(last), last(fs)(...x))
 
 export const iterations = (f, n, j = 1) =>
 	Array(Math.floor(n / j))
@@ -44,3 +46,16 @@ export const repeat = (f, n) =>
 	Array(n)
 		.fill(0)
 		.forEach((_x, i) => f(i))
+
+// ^ Same thing as 'trivialCompose', but functions return arrays and get expanded as one another's signatures (requires them to return arrays);
+export const arrayCompose =
+	(...fs) =>
+	(...x) =>
+		fs.reverse().reduce((last, curr) => curr(...last), x)
+
+export const cache = (f, keys) => new Map(keys.map((x) => [x, f(x)]))
+export const tuple =
+	(...inds) =>
+	(...fs) =>
+	(...x) =>
+		fs.map((f, i) => f(...x.slice(...inds[i])))
