@@ -1,4 +1,4 @@
-import { last, lastOut } from "./arrays.mjs"
+import { last, lastOut } from "../arrays/arrays.mjs"
 
 export const ndepth =
 	(f) =>
@@ -54,8 +54,13 @@ export const arrayCompose =
 		fs.reverse().reduce((last, curr) => curr(...last), x)
 
 export const cache = (f, keys) => new Map(keys.map((x) => [x, f(x)]))
-export const tuple =
+export const tupleSlice =
 	(...inds) =>
 	(...fs) =>
 	(...x) =>
-		fs.map((f, i) => f(...x.slice(...inds[i])))
+		fs.map((f, i) => f(...x.slice(...(inds[i] || []))))
+export const tuplePick =
+	(...inds) =>
+	(...fs) =>
+	(...x) =>
+		fs.map((f, i) => f(...x.filter(inds[i] || (() => true))))

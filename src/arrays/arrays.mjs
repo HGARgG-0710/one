@@ -1,4 +1,4 @@
-import { kv } from "./objects.mjs"
+import { kv } from "../objects/main.mjs"
 
 export const lastOut = (x) => x.slice(0, x.length - 1)
 export const last = (x) => x[x.length - 1]

@@ -12,7 +12,7 @@ import {
 	iterator,
 	middleOutN,
 	middleOutP
-} from "../src/arrays.mjs"
+} from "../src/arrays/arrays.mjs"
 
 // * lastOut
 console.log(

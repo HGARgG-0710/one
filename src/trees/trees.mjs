@@ -1,7 +1,7 @@
 // * Methods for working with array trees;
 
-import { lastOut } from "./arrays.mjs"
-import { sum } from "./numbers.mjs"
+import { lastOut } from "../arrays/arrays.mjs"
+import { sum } from "../numbers/numbers.mjs"
 
 export const depth = (tree) =>
 	tree instanceof Array ? 1 + (tree.length ? Math.max.apply(null, tree.map(depth)) : 0) : 0

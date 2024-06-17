@@ -1,4 +1,4 @@
-import { norepetitions, same } from "../src/sets.mjs"
+import { norepetitions, same } from "../src/sets/sets.mjs"
 
 // * 'same'
 console.log(same(new Set(["aaa", "bacae"]), new Set(["bacae", "aaa"])))

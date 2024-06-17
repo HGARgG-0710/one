@@ -5,8 +5,12 @@ import {
 	trivialCompose,
 	iterations,
 	sequence,
-	repeat
-} from "../src/functions.mjs"
+	repeat,
+	arrayCompose,
+	tupleSlice,
+	tuplePick
+} from "../src/functions/functions.mjs"
+import { sum, product } from "../src/numbers/numbers.mjs"
 
 // * 'ndepth'
 const a = (x, y, z, d) =>
@@ -87,3 +91,18 @@ let i = 14
 repeat((j) => (i += String(j)), 10)
 console.log(i)
 console.log()
+
+// * 'arrayCompose', 'tupleSlice' and 'tuplePick':
+const testSlice = arrayCompose(
+	sum,
+	tupleSlice([0, 3], [1, 2], [3])(...Array(3).fill(product))
+)
+console.log(testSlice(77, 29, -2, 30, -1))
+const testPick = arrayCompose(
+	sum,
+	tuplePick(
+		(x, i) => [0, 3].includes(i),
+		(x, i) => [1, 2].includes(i),
+		(x, i) => i === 3
+	)(...Array(3).fill(product)))
+console.log(testPick(77, 29, -2, 30, -1))

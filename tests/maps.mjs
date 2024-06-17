@@ -1,4 +1,4 @@
-import { kv, dekv } from "../src/maps.mjs"
+import { kv, dekv, toObject } from "../src/maps/maps.mjs"
 
 // * 'kv'
 console.log(
@@ -29,3 +29,16 @@ console.log(
 )
 console.log(dekv(kv(new Map([]))))
 console.log()
+
+// * 'toObject'
+console.log(
+	toObject(
+		new Map([
+			["990", false],
+			[2772, "990"],
+			[function () {}, "KKKARR"],
+			[{}, 9990],
+			[{ "I AM ANOTHER": 990 }, "SIEG!"]
+		])
+	)
+)

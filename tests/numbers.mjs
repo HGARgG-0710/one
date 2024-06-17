@@ -1,4 +1,4 @@
-import { product, sum } from "../src/numbers.mjs";
+import { product, sum } from "../src/numbers/numbers.mjs"
 
 // * 'sum'
 console.log(sum(1, 2, 3, 4, 5, 6, 7, 29))
