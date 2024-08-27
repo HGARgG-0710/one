@@ -1,8 +1,0 @@
-export * as set from "./src/sets/sets.mjs"
-export * as string from "./src/strings/strings.mjs"
-export * as function from "./src/functions/functions.mjs"
-export * as array from "./src/arrays/arrays.mjs"
-export * as tree from "./src/trees/trees.mjs"
-export * as map from "./src/maps/maps.mjs"
-export * as object from "./src/objects/objects.mjs"
-export * as number from "./src/numbers/numbers.mjs"

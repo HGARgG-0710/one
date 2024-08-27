@@ -1,17 +1,21 @@
 {
 	"name": "@hgargg-0710/one",
-	"main": "./main.mjs",
-	"type": "module",
-	"license": "MIT",
-	"description": "A small library purposed for providing beautiful one-line/one-expression solutions to frequent miniature tasks for frequently encountered JS datatypes.",
-	"version": "0.1.2",
 	"author": "hgargg-0710",
+	"version": "0.2.0",
+	"description": "A small library purposed for providing beautiful one-line/one-expression solutions to frequent miniature tasks for frequently encountered JS datatypes.",
+	"type": "module",
+	"main": "./dist/main.js",
+	"scripts": {
+		"build": "tsc --project ."
+	},
+	"license": "MIT",
 	"bugs": {
 		"url": "https://github.com/HGARgG-0710/one/issues"
 	},
 	"homepage": "https://github.com/HGARgG-0710/one#readme",
 	"keywords": [
 		"expression",
-		"line"
+		"line",
+		"typeof"
 	]
 }

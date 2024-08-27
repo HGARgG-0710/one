@@ -1,4 +1,4 @@
-import { kv, dekv, structCheck, toMap } from "../src/objects/objects.mjs"
+import { kv, dekv, structCheck, toMap } from "../src/objects/objects.js"
 
 // * 'kv'
 console.log(kv({ a: "T", [Symbol("c")]: "K", 0: 4 }))

@@ -1,4 +1,4 @@
-import { kv, dekv, toObject } from "../src/maps/maps.mjs"
+import { kv, dekv, toObject } from "../src/maps/maps.js"
 
 // * 'kv'
 console.log(

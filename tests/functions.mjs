@@ -10,8 +10,8 @@ import {
 	tupleSlice,
 	tuplePick,
 	cache
-} from "../src/functions/functions.mjs"
-import { sum, product } from "../src/numbers/numbers.mjs"
+} from "../src/functions/functions.js"
+import { sum, product } from "../src/numbers/numbers.js"
 
 // * 'ndepth'
 const a = (x, y, z, d) =>

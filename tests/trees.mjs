@@ -6,7 +6,7 @@ import {
 	treeCount,
 	treeFlatten,
 	treeReverseLR
-} from "../src/trees/trees.mjs"
+} from "../src/trees/trees.js"
 
 // * 'depth'
 console.log(depth([["hello!"], [[[4431]]], "19"]))
