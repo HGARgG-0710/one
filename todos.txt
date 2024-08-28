@@ -5,10 +5,3 @@
 
 2. Documentation; 
 3. Testing [write the new modules, RE-CHECK USE THE OLD ONES!]; 
-
-4. WRITE THE CHANGELOG!
-
-	6.1. Renamed the 'ndepth' into 'curry'; 
-	6.2. Added TypeScript support; 
-	6.3. Added the new 'inplace' module; 
-	6.4. Added the new 'typeof' module; 

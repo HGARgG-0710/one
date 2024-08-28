@@ -1,4 +1,4 @@
-import { kv, dekv, toObject } from "../src/maps/maps.js"
+import { kv, dekv, toObject } from "../../dist/src/maps/maps.js"
 
 // * 'kv'
 console.log(
@@ -8,7 +8,7 @@ console.log(
 			[45, "T"],
 			[true, -11],
 			[{}, "meow!"]
-		])
+		] as [any, any][])
 	)
 )
 console.log(kv(new Map([])))
@@ -23,7 +23,7 @@ console.log(
 				[45, "T"],
 				[true, -11],
 				[{}, "meow!"]
-			])
+			] as [any, any][])
 		)
 	)
 )
@@ -39,6 +39,6 @@ console.log(
 			[function () {}, "KKKARR"],
 			[{}, 9990],
 			[{ "I AM ANOTHER": 990 }, "SIEG!"]
-		])
+		] as [any, any][])
 	)
 )

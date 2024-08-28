@@ -1,4 +1,4 @@
-import { product, sum } from "../src/numbers/numbers.js"
+import { product, sum } from "../../dist/src/numbers/numbers.js"
 
 // * 'sum'
 console.log(sum(1, 2, 3, 4, 5, 6, 7, 29))

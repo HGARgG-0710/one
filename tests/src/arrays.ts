@@ -12,7 +12,7 @@ import {
 	iterator,
 	middleOutN,
 	middleOutP
-} from "../src/arrays/arrays.js"
+} from "../../dist/src/arrays/arrays.js"
 
 // * lastOut
 console.log(
@@ -86,8 +86,8 @@ console.log(first([]))
 console.log()
 
 // * 'propPreserve'
-const propCheck = propPreserve((x) => x.map((x) => x + 3))
-const _t = [0, 2, 3, 5]
+const propCheck = propPreserve((x: any[]) => x.map((x) => x + 3))
+const _t: { [x: string]: any } & any[] = [0, 2, 3, 5]
 _t.S = 333
 const _tPlus = propCheck(_t)
 console.log(_tPlus)

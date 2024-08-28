@@ -1,5 +1,6 @@
 // * Methods for working with array trees;
 
+import { mutate } from "src/inplace/inplace.js"
 import { last, lastOut } from "../arrays/arrays.js"
 import { sum } from "../numbers/numbers.js"
 import { isArray } from "../typeof/typeof.js"
@@ -10,9 +11,6 @@ export const depth = <Type = any>(tree: ArrayTree<Type>) =>
 	tree instanceof Array
 		? 1 + (tree.length ? Math.max.apply(null, tree.map(depth)) : 0)
 		: 0
-
-export const treeFlatten = <Type = any>(tree: ArrayTree<Type>) =>
-	tree.some(isArray) ? treeFlatten(tree.flat()) : tree
 
 export const recursiveIndexation = <Type = any>(
 	tree: ArrayTree<Type>,
@@ -31,7 +29,7 @@ export const recursiveSetting = <Type = any>(
 export const treeCount = <Type = any>(
 	tree: ArrayTree<Type>,
 	prop: (x: any) => any = (x) => x,
-	start = 0
+	start: any = 0
 ): number | boolean | string =>
 	tree
 		.map((x) =>
@@ -62,4 +60,4 @@ export const levelCount = <Type = any>(tree: ArrayTree<Type>) =>
 	sum(...tree.map((x) => (x instanceof Array ? levelCount(x) : 0)))
 
 export const treeReverseLR = <Type = any>(tree: ArrayTree<Type>) =>
-	tree instanceof Array ? tree.reverse().map(treeReverseLR) : tree
+	tree instanceof Array ? mutate(tree.reverse(), treeReverseLR) : tree

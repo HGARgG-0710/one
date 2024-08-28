@@ -141,6 +141,7 @@ function limit(maxsize: number, limitor?: string): (x: string): string
 A function returning a function that replaces the remainder of `x` after the maximum allowed length of `maxsize` with string `limitor`.
 
 <br>
+<br>
 
 #### `function`
 
@@ -160,17 +161,23 @@ const b = (x) => (y) => x + y // b == ndepth(a)(2)
 
 Useful for treating multivariable functions as a call-sequence of single-variable ones.
 
+<br/>
+
 ```ts
 function or(...fs: Function[]): (...x: any[]): any
 ```
 
 Iterates over the list of functions `fs`, returning the most truthy value of the returned (otherwise, the first function's value is returned).
 
+<br/>
+
 ```ts
 function and(...fs: Function[]): (...x: any[]): any
 ```
 
 The 'and'-counterpart of the `or` function.
+
+<br/>
 
 ```ts
 function trivialCompose(...fs: Function[]): (...x: any[]): any
@@ -180,11 +187,15 @@ Returns a result of composition of single-variable functions with a (possibly) m
 
 The calling of the result is the same as `f1(f2(...(fn(...x))))`.
 
+<br/>
+
 ```ts
 function iterations(f: Function, n: number, j?: number): any[]
 ```
 
 Returns the result of iterations of function `f` from `0` to `n - 1` with a jump `j` (1 by default).va
+
+<br/>
 
 ```ts
 function sequence(f: Function, n: number): (...args: any[]): any[]
@@ -192,11 +203,15 @@ function sequence(f: Function, n: number): (...args: any[]): any[]
 
 Returns the list of results of 1-variable iteration of `f` upon itself from `1` to `n` times.
 
+<br/>
+
 ```ts
 function repeat(f: Function, n: number): void
 ```
 
 Calls the function `f` for values from `0` to `n-1`.
+
+<br/>
 
 ```ts
 function arrayCompose(...fs: ((...x: any[]): any[])[]): (...x): any

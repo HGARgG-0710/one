@@ -1,3 +1,4 @@
+import { mutate } from "src/inplace/inplace.js"
 import { last, lastOut } from "../arrays/arrays.js"
 
 export const curry = (f: Function) => {
@@ -27,25 +28,18 @@ export const trivialCompose =
 			.reduce((last, curr) => curr(last), last(fs)(...x))
 
 export const iterations = (f: Function, n: number, j = 1) =>
-	Array(Math.floor(n / j))
-		.fill(0)
-		.map((_x, i) => f(j * i))
+	mutate(Array(Math.floor(n / j)).fill(0), (_x, i) => f(j * i))
 
 export const sequence =
 	(f: Function, n: number) =>
-	(...args: any[]) =>
-		Array(n)
-			.fill(undefined)
-			.map((_x, i) => i + 1)
-			.reduce(
-				(prev, curr) =>
-					prev.concat(trivialCompose(...Array(curr).fill(f))(...args)),
-				[]
-			)
+	(...args: any[]) => {
+		const seqres = n ? [f(...args)] : []
+		for (let i = 0; i < n; ++i) seqres.push(f(last(seqres)))
+		return seqres
+	}
 
 export const repeat = (f: Function, n: number) => {
-	const vals = Array(n).fill(0)
-	for (let i = 0; i < vals.length; ++i) f(i)
+	for (let i = 0; i < n; ++i) f(i)
 }
 
 // ^ Same thing as 'trivialCompose', but functions return arrays and get expanded as one another's signatures (requires them to return arrays);

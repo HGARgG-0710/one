@@ -1,4 +1,4 @@
-import { capitalize, extract, count, limit } from "../src/strings/strings.js"
+import { capitalize, extract, count, limit } from "../../dist/src/strings/strings.js"
 
 // * 'capitalize'
 console.log(capitalize("JJBJBJKBLAAfdad"))

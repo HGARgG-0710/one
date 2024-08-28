@@ -1,5 +1,5 @@
 import {
-	ndepth,
+	curry,
 	or,
 	and,
 	trivialCompose,
@@ -10,18 +10,24 @@ import {
 	tupleSlice,
 	tuplePick,
 	cache
-} from "../src/functions/functions.js"
-import { sum, product } from "../src/numbers/numbers.js"
+} from "../../dist/src/functions/functions.js"
+import { sum, product } from "../../dist/src/numbers/numbers.js"
 
-// * 'ndepth'
-const a = (x, y, z, d) =>
-	((x) => (!isNaN(x) && typeof d === "number" ? d * x : d + x))(x + y + z)
-const [b, c, d, e] = [
-	[1],
-	[2, 14, 20],
-	[3, "X", "Y", "SOMETHINGELSE"],
-	[4, 1, 1, "29"]
-].map((x) => ndepth(a)(...x))
+// * 'curry'
+const a = (
+	x: number | string,
+	y: number | string,
+	z: number | string,
+	d: number | string
+) =>
+	((x) =>
+		!isNaN(x as unknown as number) && typeof d === "number"
+			? d * (x as unknown as number)
+			: d + x)((x as string) + y + z)
+
+const [b, c, d, e] = [[], [14, 20], ["X", "Y", "SOMETHINGELSE"], [1, 1, "29"]].map(
+	(x: any[], i: number) => curry(a)(i + 1, ...x)
+)
 
 console.log(b.toString())
 console.log(b(1, 2, 3, 4))
@@ -35,7 +41,7 @@ console.log()
 const orred = or(
 	...["number", "string", "boolean"].map(
 		(y) =>
-			(...x) =>
+			(...x: any[]) =>
 				x.every((x) => typeof x === y)
 	)
 )
@@ -65,11 +71,11 @@ console.log()
 // * 'trivialCompose'
 
 const polynomial = trivialCompose(
-	(x) => x ** 3 + 0.2 * x - 1,
-	(x) => x ** 2,
-	(x) => x - 15
+	(x: number) => x ** 3 + 0.2 * x - 1,
+	(x: number) => x ** 2,
+	(x: number) => x - 15
 )
-const evaled = (x) => (x - 15) ** 6 + 0.2 * (x - 15) ** 2 - 1
+const evaled = (x: number) => (x - 15) ** 6 + 0.2 * (x - 15) ** 2 - 1
 const testArr = [15, 20, 11]
 
 console.log(testArr.map(polynomial))
@@ -88,7 +94,7 @@ console.log(sequence((x) => 2 * x, 20)(1))
 console.log()
 
 // * 'repeat'
-let i = 14
+let i: number | string = 14
 repeat((j) => (i += String(j)), 10)
 console.log(i)
 console.log()
@@ -111,7 +117,7 @@ console.log(testPick(77, 29, -2, 30, -1))
 console.log()
 
 // * 'cache'
-const cacheRes = cache((x) => x + 3, [9998, 20])
+const cacheRes = cache((x: number) => x + 3, [9998, 20])
 console.log(cacheRes.get(9998))
 console.log(cacheRes.get(20))
 console.log(cacheRes)
