@@ -9,4 +9,4 @@ export const dekv = (kv: ObjectKeyValues): object =>
 export const structCheck =
 	(...properties: (string | symbol | number)[]) =>
 	(x: any): x is object =>
-		isObject(x) && !!x && properties.flat().every((y) => y in x)
+		isObject(x) && !!x && properties.every((y) => y in x)

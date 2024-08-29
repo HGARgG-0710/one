@@ -25,15 +25,16 @@ const a = (
 			? d * (x as unknown as number)
 			: d + x)((x as string) + y + z)
 
+const C = curry(a)
 const [b, c, d, e] = [[], [14, 20], ["X", "Y", "SOMETHINGELSE"], [1, 1, "29"]].map(
-	(x: any[], i: number) => curry(a)(i + 1, ...x)
+	(x: any[], i: number) => C(i + 1, ...x)
 )
 
 console.log(b.toString())
 console.log(b(1, 2, 3, 4))
 console.log(c(-4)(2))
 console.log(d()(11)())
-console.log(e()()()(3))
+console.log(e()()()(3)) // note: the multiplication also tries conversion of strings to Number;
 
 console.log()
 
@@ -57,7 +58,7 @@ console.log()
 const anded = and(
 	...["number", "string", "boolean"].map(
 		(y) =>
-			(...x) =>
+			(...x: any[]) =>
 				x.some((x) => typeof x === y)
 	)
 )
@@ -85,12 +86,12 @@ console.log()
 
 // * 'iterations'
 
-console.log(iterations((x) => x + 3, 7))
-console.log(iterations((x) => x + 3, 10, 2))
+console.log(iterations((x: number) => x + 3, 7))
+console.log(iterations((x: number) => x + 3, 10, 2))
 console.log()
 
 // * 'sequence'
-console.log(sequence((x) => 2 * x, 20)(1))
+console.log(sequence((x: number) => 2 * x, 20)(1))
 console.log()
 
 // * 'repeat'

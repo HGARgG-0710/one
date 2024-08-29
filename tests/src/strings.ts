@@ -16,6 +16,7 @@ console.log(count("JooouleoIo", "o"))
 console.log()
 
 // * limit
-console.log(limit(8, ".exe")("pleasedonrunmeimmalicious.exe"))
-console.log(limit(800, ".exe")("pleasedonrunmeimmalicious.exe"))
+const limitString = "pleasedontrunmeimmalicious.exe"
+console.log(limit(8, ".exe")(limitString))
+console.log(limit(800, ".exe")(limitString))
 console.log()

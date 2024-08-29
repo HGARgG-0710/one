@@ -29,3 +29,8 @@ export const swap = (array: any[], i: number, j: number) => {
 	array[j] = temp
 	return array
 }
+
+export const replace = (array: any[], index: number, ...values: any[]) => {
+	array.splice(index, 1, ...values)
+	return array
+}

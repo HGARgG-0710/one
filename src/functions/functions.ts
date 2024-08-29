@@ -1,4 +1,4 @@
-import { mutate } from "src/inplace/inplace.js"
+import { mutate } from "../inplace/inplace.js"
 import { last, lastOut } from "../arrays/arrays.js"
 
 export const curry = (f: Function) => {

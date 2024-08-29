@@ -1,7 +1,5 @@
-1. Fixes: 
+1. Documentation; 
+2. To Add [possibly, future]: 
 
-	3.1. USE the 'mutate' instead of '.map' THROUGHOUT the library (lesser memory consumption); 
-	3.2. GET RID of the '.forEach'; 
-
-2. Documentation; 
-3. Testing [write the new modules, RE-CHECK USE THE OLD ONES!]; 
+	2.1. 'cached';
+		A function that is cached upon first calling (unlike 'cache', which CALLS the thing first, and only THEN caches it...);

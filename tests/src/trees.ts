@@ -7,27 +7,23 @@ import {
 	treeReverseLR,
 	type ArrayTree
 } from "../../dist/src/trees/trees.js"
+import { isNumber, isString } from "../../dist/src/typeof/typeof.js"
+
+const testTree: ArrayTree<any> = [["hello!"], [[[4431]]], "19"]
 
 // * 'depth'
-console.log(depth([["hello!"], [[[4431]]], "19"] as ArrayTree<any>))
+console.log(depth(testTree))
 console.log(depth([]))
 console.log()
 
 // * 'recursiveIndexation'
-console.log(recursiveIndexation([["hello!"], [[[4431]]], "19"] as ArrayTree<any>, [0, 0]))
-console.log(
-	recursiveIndexation([["hello!"], [[[4431]]], "19"] as ArrayTree<any>, [1, 0, 0, 0])
-)
-console.log(recursiveIndexation([["hello!"], [[[4431]]], "19"] as ArrayTree<any>, [2]))
+console.log(recursiveIndexation(testTree, [0, 0]))
+console.log(recursiveIndexation(testTree, [1, 0, 0, 0]))
+console.log(recursiveIndexation(testTree, [2]))
 console.log()
 
 // * 'treeCount'
-console.log(
-	treeCount(
-		[["hello!"], [[[4431]]], "19"] as ArrayTree<any>,
-		(x) => typeof x === "string"
-	)
-)
+console.log(treeCount(testTree, isString))
 console.log(
 	treeCount([[9910, 909085], [[[4431, -7, -99907]]], 3, 34, 234, [[1094, 20], 623]])
 )
@@ -40,12 +36,7 @@ console.log(levelCount([]))
 console.log()
 
 // * 'deepSearch'
-console.log(
-	deepSearch(
-		[["hello!"], [[[4431]]], "19"] as ArrayTree<any>,
-		(x) => typeof x === "number"
-	)
-)
+console.log(deepSearch(testTree, isNumber))
 console.log()
 
 // * 'treeReverseLR'

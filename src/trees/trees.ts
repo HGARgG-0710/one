@@ -1,6 +1,6 @@
 // * Methods for working with array trees;
 
-import { mutate } from "src/inplace/inplace.js"
+import { mutate } from "../inplace/inplace.js"
 import { last, lastOut } from "../arrays/arrays.js"
 import { sum } from "../numbers/numbers.js"
 import { isArray } from "../typeof/typeof.js"
@@ -30,7 +30,7 @@ export const treeCount = <Type = any>(
 	tree: ArrayTree<Type>,
 	prop: (x: any) => any = (x) => x,
 	start: any = 0
-): number | boolean | string =>
+): number | string =>
 	tree
 		.map((x) =>
 			(isArray(x) ? (x: ArrayTree<Type>) => treeCount(x, prop, start) : prop)(
