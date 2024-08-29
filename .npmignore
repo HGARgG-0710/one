@@ -1,4 +1,6 @@
-todos.txt
-ignore-notes.txt
-tests
-src
+/todos.txt
+/ignore-notes.txt
+/tests
+/src
+/*.ts
+tsconfig.json

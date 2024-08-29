@@ -4,7 +4,7 @@ import {
 	levelCount,
 	recursiveIndexation,
 	treeCount,
-	treeReverseLR,
+	treeReverse,
 	type ArrayTree
 } from "../../dist/src/trees/trees.js"
 import { isNumber, isString } from "../../dist/src/typeof/typeof.js"
@@ -39,9 +39,9 @@ console.log()
 console.log(deepSearch(testTree, isNumber))
 console.log()
 
-// * 'treeReverseLR'
+// * 'treeReverse'
 console.log(
-	treeReverseLR([
+	treeReverse([
 		"79S",
 		[[[["Saari", "K"], "oopop"], "LUPO"]],
 		["ESQ.", [[3277], 9098, 90251, 3213, "SIEGBRAU", false, [true, [97]]]],

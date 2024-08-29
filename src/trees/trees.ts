@@ -59,5 +59,5 @@ export const levelCount = <Type = any>(tree: ArrayTree<Type>) =>
 	+(tree instanceof Array) +
 	sum(...tree.map((x) => (x instanceof Array ? levelCount(x) : 0)))
 
-export const treeReverseLR = <Type = any>(tree: ArrayTree<Type>) =>
-	tree instanceof Array ? mutate(tree.reverse(), treeReverseLR) : tree
+export const treeReverse = <Type = any>(tree: ArrayTree<Type>) =>
+	tree instanceof Array ? mutate(tree.reverse(), treeReverse) : tree

@@ -16,14 +16,16 @@ The library provides organizes its exports in separate modules.
 
 They are:
 
-1. `array`
-2. `string`
-3. `function`
-4. `tree`
-5. `object`
-6. `set`
-7. `map`
-8. `number`
+1. [`array`](#array)
+2. [`string`](#string)
+3. [`function`](#function)
+4. [`tree`](#tree)
+5. [`object`](#object)
+6. [`set`](#set)
+7. [`map`](#map)
+8. [`number`](#number)
+9. [`inplace`](#inplace)
+10. [`typeof`](#typeof)
 
 #### `array`
 
@@ -31,19 +33,25 @@ They are:
 function lastOut(x: any[]): any[]
 ```
 
-A function that returns a copy of the given array without its last element.
+Returns a copy of the given array without its last element.
+
+<br>
 
 ```ts
 function last(x: any[]): any
 ```
 
-A function that returns an array's last element.
+Returns the given array's last element.
+
+<br>
 
 ```ts
-function clear(x: any[]): 0
+function clear(x: any[]): number
 ```
 
-Sets the array's length to `0`, returning it.
+Sets the array's length to `0`
+
+<br>
 
 ```ts
 function insert(x: any[], index: number, ...values: any[]): any[]
@@ -51,11 +59,15 @@ function insert(x: any[], index: number, ...values: any[]): any[]
 
 Inserts the `values` into `x` at index `index` and returns the result (new array is created).
 
+<br>
+
 ```ts
 function replace(arr: any[], index: number, ...values: any[]): any[]
 ```
 
-Replaces the element of `arr` at `index` with `values` (creates a new array).
+Returns a copy of `arr`, in which the value at index `index` was replaced by `values`.
+
+<br>
 
 ```ts
 function out(arr: any[], index: number): any[]
@@ -63,11 +75,15 @@ function out(arr: any[], index: number): any[]
 
 Returns a copy of `arr`, in which the element at position `index` is absent.
 
+<br>
+
 ```ts
 function swapped(x: any[], i: number, j: number): any[]
 ```
 
-Returns a new array in which `x` values at indexes `i` and `j` are swapped places.
+Returns a copy of `x`, in which indexes `i` and `j` are swapped places.
+
+<br>
 
 ```ts
 function firstOut(x: any[]): any[]
@@ -75,11 +91,15 @@ function firstOut(x: any[]): any[]
 
 Returns the copy of the given array without the first element (`x[0]`).
 
+<br>
+
 ```ts
 function first(x: any[]): any
 ```
 
 Returns the first element of the given array.
+
+<br>
 
 ```ts
 function propPreserve(f: (x: object): any[]): (x: object): any[]
@@ -91,11 +111,15 @@ of the argument `x` upon the result of `f(x)`.
 Intended for convertion of functions in terms of array to be able to preserve the custom properties
 (and thus, be able to use arrays the same way as one would normally do with plain objects).
 
+<br>
+
 ```ts
 function iterator(x: any[]): GeneratorFunction
 ```
 
 Creates and returns a new iterator function defined in terms of the given array.
+
+<br>
 
 ```ts
 function middleOutP(x: any[]): any[]
@@ -104,6 +128,8 @@ function middleOutP(x: any[]): any[]
 Discards the middle element from the copy of original array
 (with preference to the latter half in even-`.length`ed ones),
 and returns the copy.
+
+<br>
 
 ```ts
 function middleOutN(x: any[]): any[]
@@ -122,17 +148,23 @@ function capitalize(x: string): string
 
 Returns capitalized version of the string - first character is brought to its upper case, while the rest are brought to their lower case.
 
+<br>
+
 ```ts
 function extract(x: string, toExtract: string | RegExp): string
 ```
 
 Returns the new string derived from `x` without the appearences of `toExtract`.
 
+<br>
+
 ```ts
 function count(x: string, sub: string | RegExp): number
 ```
 
 Counts the number of appearences of substring `sub` inside of `x`.
+
+<br>
 
 ```ts
 function limit(maxsize: number, limitor?: string): (x: string): string
@@ -141,12 +173,11 @@ function limit(maxsize: number, limitor?: string): (x: string): string
 A function returning a function that replaces the remainder of `x` after the maximum allowed length of `maxsize` with string `limitor`.
 
 <br>
-<br>
 
 #### `function`
 
 ```ts
-function ndepth(f: Function): (n: number, ...argsArr: any[]): any
+function curry(f: Function): (n: number, ...argsArr: any[]): any
 ```
 
 Returns a sequence of nested function with call depth of `n` that reduces to `f(x1, x2, ..., xn, ...argsArr)`.
@@ -154,9 +185,8 @@ Returns a sequence of nested function with call depth of `n` that reduces to `f(
 NOTE: same as doing manually:
 
 ```ts
-// * was
-const a = (x, y) => x + y
-const b = (x) => (y) => x + y // b == ndepth(a)(2)
+const a = (x, y) => x + y // * was
+const b = (x) => (y) => x + y // equiv: b = curry(a)(2)
 ```
 
 Useful for treating multivariable functions as a call-sequence of single-variable ones.
@@ -221,13 +251,15 @@ A function that accepts an array of functions, each of which returns an array.
 The functions are then composed in a fashion that uses the output of each (an array)
 as signature for the next function (that being, the result of the next function are expanded).
 
+<br>
+
 ```ts
 function cache(f: (x: any): any, keys: any[]): Map
 ```
 
 Creates a new `Map`, with keys of `keys` and values of `f(key)` for each `key` in `keys`.
 
-This, effectively, caches a portion of a function so that its cached values can be retrieved like:
+This, effectively, caches a portion of the function's domain so that its cached values can be retrieved like:
 
 ```ts
 const f = ...
@@ -242,6 +274,8 @@ function tuplePick(...inds: ((x: any, i: number, arr: any[]): boolean)[]): (...f
 A function that returns a sequence of functions that result in a tuple consisting of
 values returned from each of functions from `fs` function array, with values
 being from `x` array, and `i`th function only using the values `x.filter((inds[i] || (() => true))`.
+
+<br>
 
 ```ts
 function tupleSlice(...inds: [number?, number?][]): (...fs: (...x: any[]): any): (...x: any[]): any
@@ -262,11 +296,15 @@ function depth(tree: any[]): number
 
 Returns the maximum depth of a tree.
 
+<br>
+
 ```ts
 function treeFlatten(tree: any[]): any[]
 ```
 
 Returns the completely flattened tree.
+
+<br>
 
 ```ts
 function recursiveIndexation(tree: any[], multindex: number[]): any
@@ -274,11 +312,15 @@ function recursiveIndexation(tree: any[], multindex: number[]): any
 
 Returns the value obtained after recursively indexing the tree using the values from `multindex` number array.
 
+<br>
+
 ```ts
 function recursiveSetting(tree: any[], multindex: number[], value: any): any
 ```
 
 Sets the value of `tree` at multi-index `multindex` to `value`.
+
+<br>
 
 ```ts
 function treeCount(
@@ -291,11 +333,15 @@ function treeCount(
 Returns the 'recursive sum' of all the elements inside the tree (can be a kind of count or a string concatenation).
 The default return value, `start` (by default, `0`), is appended every time a level is passed.
 
+<br>
+
 ```ts
 function levelCount(tree: any[]): number
 ```
 
 Counts the number of levels inside the tree (including the initial one).
+
+<br>
 
 ```ts
 function deepSearch(tree: any[], prop: (x: any): boolean): number[]
@@ -303,8 +349,10 @@ function deepSearch(tree: any[], prop: (x: any): boolean): number[]
 
 Finds the first value `x` inside the `tree` such that `!!prop(x) == true` and returns its multi-index.
 
+<br>
+
 ```ts
-function treeReverseLR(tree: any[]): any[]
+function treeReverse(tree: any[]): any[]
 ```
 
 Reverses the tree from "left" to "right" - recursively applies `x.reverse()`
@@ -320,14 +368,18 @@ function kv(x: object): [string[], any[]]
 
 Returns the pair of key-values of the given object.
 
+<br>
+
 ```ts
 function dekv(x: [string[], any[]]): object
 ```
 
-Reverses the `kv`.
+Inverse of `kv`
+
+<br>
 
 ```ts
-function structCheck(...props: (string | string[])[]): (x: any): boolean
+function structCheck(...props: (string | symbol | number)[]): (x: any): boolean
 ```
 
 Creates and returns a new function that checks whether:
@@ -339,6 +391,8 @@ Creates and returns a new function that checks whether:
 Allows to create handy predicates for checking structural adherence of `x` to
 a certain necessary objects' "class" without needing to use more complex constructions
 like prototype chains.
+
+<br>
 
 ```ts
 function toMap(x: object): Map
@@ -356,6 +410,8 @@ function same(a: Set, b: Set): boolean
 
 Checks if sets are the same.
 
+<br>
+
 ```ts
 function norepetitions(x: any[]): any[]
 ```
@@ -372,11 +428,15 @@ function kv(map: Map): [any[], any[]]
 
 A `Map` version of `object.kv`.
 
+<br>
+
 ```ts
 function dekv(x: [any[], any[]]): Map
 ```
 
 A `Map` version of `object.dekv`.
+
+<br>
 
 ```ts
 function toObject(map: Map): object
@@ -394,8 +454,131 @@ function sum(...x: string[] | number[]): number | string
 
 Returns the sum of the given items `x`.
 
+<br>
+
 ```ts
 function product(...x: number[]): number
 ```
 
 Returns the product of the given items `x`.
+
+<br>
+
+#### `inplace`
+
+This library module contains various simple expressions pertaining to mutations of various structures (as of present - primarily arrays). It exists in contrast of the others, which are not as memory-efficient (ex: `array`);
+
+```ts
+function mutate(array: any[], mutation: (x: any, i: number, array: any[]) => any): any[]
+```
+
+The function walks through the given array `array`, and applies the `mutation` function to each of its elements (in a fashion similar to `Array.prototype.map`), assigning the result to the corresponding array index.
+
+The return value is the reference to the original array.
+
+<br>
+
+```ts
+function insert(array: any[], index: number, ...values: any[]): any[]
+```
+
+Mutates the given array `array` by inserting the given `values` at index `index`.
+The return value is the reference to the original array.
+
+<br>
+
+```ts
+function out(array: any[], index: number, count?: number)
+```
+
+Deletes `count` values of `array`, starting from the index `index`. Default value of `count` is `1`.
+
+<br>
+
+```ts
+function lastOut(array: any[]): any[]
+```
+
+Deletes the last item from the array, returns the reference to it.
+
+<br>
+
+```ts
+function firstOut(array: any[]): any[]
+```
+
+Deletes the first element from the given array. Returns the reference to the array.
+
+<br>
+
+```ts
+function swap(array: any[], i: number, j: number): any[]
+```
+
+Swaps two positions `i` and `j` of an array.
+
+<br>
+
+```ts
+function replace(array: any[], index: number, ...values: any[]): any[]
+```
+
+Replaces the value at a given index `index` of the array `array` with `values`, returning the reference to it.
+
+#### `typeof`
+
+This module provides functions that can be used for type-checking of given values (particularly useful in conjunction with TypeScript).
+
+```ts
+function isNumber(x: any): x is number
+```
+
+Returns `true` whenever `x` is a `number` primitive
+
+<br>
+
+```ts
+function isFunction(x: any): x is Function
+```
+
+Returns `true` whenever the argument is a `Function`
+
+<br>
+
+```ts
+function isString(x: any): x is string
+```
+
+Returns `true` whenever `x` is a `string` primitive
+
+<br>
+
+```ts
+function isBoolean(x: any): x is boolean
+```
+
+Returns `true` whenever `x` is either `true` of `false`
+
+<br>
+
+```ts
+function isSymbol(x: any): x is symbol
+```
+
+Returns `true` whenever `x` is a `symbol`
+
+<br>
+
+```ts
+function isObject(x: any): x is object
+```
+
+Returns `true` whenever `x` is an `object`
+
+<br>
+
+```ts
+function isArray(x: any): x is any[]
+```
+
+Returns `true` whenever `x` is an `Array`
