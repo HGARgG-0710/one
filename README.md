@@ -26,6 +26,7 @@ They are:
 8. [`number`](#number)
 9. [`inplace`](#inplace)
 10. [`typeof`](#typeof)
+11. [`boolean`](#boolean)
 
 #### `array`
 
@@ -267,6 +268,8 @@ const cached = cache(f, ...)
 const value = c.get(...)
 ```
 
+<br>
+
 ```ts
 function tuplePick(...inds: ((x: any, i: number, arr: any[]): boolean)[]): (...fs: (...x: any[]): any): (...x: any[]): any
 ```
@@ -274,6 +277,19 @@ function tuplePick(...inds: ((x: any, i: number, arr: any[]): boolean)[]): (...f
 A function that returns a sequence of functions that result in a tuple consisting of
 values returned from each of functions from `fs` function array, with values
 being from `x` array, and `i`th function only using the values `x.filter((inds[i] || (() => true))`.
+
+<br>
+
+```ts
+function cached(base: Function): {
+	(x: any) => any
+	cache: Map<any, any>
+}
+```
+
+Given a function `base`, creates a new one that is cached upon every call;
+Good for saving memory on `cache`-functions that may not need to be used (and that are static);
+`.cache` property has domain items as keys and obtained `base` return values as values;
 
 <br>
 
@@ -379,7 +395,7 @@ Inverse of `kv`
 <br>
 
 ```ts
-function structCheck(...props: (string | symbol | number)[]): (x: any): boolean
+function structCheck<Type extends object = object>(...props: (string | symbol | number)[]): (x: any): x is Type
 ```
 
 Creates and returns a new function that checks whether:
@@ -391,6 +407,10 @@ Creates and returns a new function that checks whether:
 Allows to create handy predicates for checking structural adherence of `x` to
 a certain necessary objects' "class" without needing to use more complex constructions
 like prototype chains.
+
+Now with additional TypeScript support
+(type predicates - very handy for connecting the "actual" JS properties 
+with those that are perceived by the static type analyzer); 
 
 <br>
 
@@ -582,3 +602,15 @@ function isArray(x: any): x is any[]
 ```
 
 Returns `true` whenever `x` is an `Array`
+
+<br>
+
+#### `boolean`
+
+This module contains operations that are common to the `boolean` type;
+
+```ts
+function not(x: any): boolean
+```
+
+Equivalent of the `!x` expression;

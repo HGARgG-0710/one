@@ -1,4 +1,1 @@
-1. To Add [possibly, future]: 
-	1.1. 'cached';
-		Creates a function that is cached upon first calling
-			(unlike 'cache', which CALLS first, and only THEN caches its values into a Map, without possibility of likewise extension...);
+1. Update the Docs; 

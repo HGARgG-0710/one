@@ -11,7 +11,13 @@ console.log(dekv(kv({})))
 console.log()
 
 // * 'structCheck'
-const check = structCheck("A", "B", "D", "kar")
+interface K {
+	A: any
+	B: any
+	D: any
+	Kar: any
+}
+const check = structCheck<K>("A", "B", "D", "kar")
 console.log(check({ A: 33, D: 334, C: 23 }))
 console.log(check(2))
 console.log(check(null))

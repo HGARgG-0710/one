@@ -7,6 +7,6 @@ export const dekv = (kv: ObjectKeyValues): object =>
 	((x, y) => x.reduce((prev, curr, i) => ({ ...prev, [curr]: y[i] }), {}))(...kv)
 
 export const structCheck =
-	(...properties: (string | symbol | number)[]) =>
-	(x: any): x is object =>
+	<Type extends object = object>(...properties: (string | symbol | number)[]) =>
+	(x: any): x is Type =>
 		isObject(x) && !!x && properties.every((y) => y in x)

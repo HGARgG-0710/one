@@ -9,7 +9,8 @@ import {
 	arrayCompose,
 	tupleSlice,
 	tuplePick,
-	cache
+	cache,
+	cached
 } from "../../dist/src/functions/functions.js"
 import { sum, product } from "../../dist/src/numbers/numbers.js"
 
@@ -122,3 +123,13 @@ const cacheRes = cache((x: number) => x + 3, [9998, 20])
 console.log(cacheRes.get(9998))
 console.log(cacheRes.get(20))
 console.log(cacheRes)
+console.log()
+
+// * 'cached'
+const cachedResult = cached((x: number) => x + 443)
+console.log(cachedResult.cache.has(29))
+console.log(cachedResult(29))
+console.log(cachedResult.cache.has(29))
+console.log(cachedResult(29))
+console.log(cachedResult(49))
+console.log([...cachedResult.cache.values()])

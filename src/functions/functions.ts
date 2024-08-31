@@ -62,3 +62,14 @@ export const tuplePick =
 	(...fs: Function[]) =>
 	(...x: any[]) =>
 		fs.map((f, i) => f(...x.filter(inds[i] || (() => true))))
+
+export const cached = (base: Function) => {
+	const cachedResult = function (x: any) {
+		if (cachedResult.cache.has(x)) return cachedResult.cache.get(x)
+		const retres = base(x)
+		cachedResult.cache.set(x, retres)
+		return retres
+	}
+	cachedResult.cache = new Map()
+	return cachedResult
+}
