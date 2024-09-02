@@ -43,7 +43,7 @@ console.log(isObject(null))
 console.log()
 
 // * 'isArray'
-console.log(isArray(["ddslk", 4324]))
+console.log(isArray<number | string>(["ddslk", 4324]))
 console.log(isArray(null))
 console.log(isArray(44))
 console.log()

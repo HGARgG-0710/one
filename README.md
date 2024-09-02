@@ -395,22 +395,31 @@ Inverse of `kv`
 <br>
 
 ```ts
-function structCheck<Type extends object = object>(...props: (string | symbol | number)[]): (x: any): x is Type
+function structCheck<Type extends object = object>(props: (string | symbol | number)[] | {[x: string | symbol | number]: (x: any) => boolean}): (x: any): x is Type
 ```
 
-Creates and returns a new function that checks whether:
+Creates and returns a new type-checking function.
+
+If the given value is an array, it returns `true` when:
 
 1. `typeof x === 'object'`
 2. `!!x`
 3. `props.every((p) => p in x)`
+
+If the given value is an object, it checks:
+
+1. `typeof x === 'object'`
+2. `!!x`
+3. `Object.keys(props).every((p) => p in x)`
+4. `Object.values(props).every((p, i) => p(x[Object.keys(props)[i]]))`
 
 Allows to create handy predicates for checking structural adherence of `x` to
 a certain necessary objects' "class" without needing to use more complex constructions
 like prototype chains.
 
 Now with additional TypeScript support
-(type predicates - very handy for connecting the "actual" JS properties 
-with those that are perceived by the static type analyzer); 
+(type predicates - very util for connecting the "actual" JS properties
+with those that are perceived by the static type analyzer);
 
 <br>
 
@@ -598,7 +607,7 @@ Returns `true` whenever `x` is an `object`
 <br>
 
 ```ts
-function isArray(x: any): x is any[]
+function isArray<Type = any>(x: any): x is Type[]
 ```
 
 Returns `true` whenever `x` is an `Array`
@@ -614,3 +623,15 @@ function not(x: any): boolean
 ```
 
 Equivalent of the `!x` expression;
+
+```ts
+function T(): true
+```
+
+Equivalent of the `() => true` expression
+
+```ts
+function F(): false
+```
+
+Equivalent of the `() => false` expression

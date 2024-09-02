@@ -1,4 +1,4 @@
-import { isObject } from "../typeof/typeof.js"
+import { isArray, isObject } from "../typeof/typeof.js"
 
 export type ObjectKeyValues = [string[], any[]]
 
@@ -6,7 +6,16 @@ export const kv = (obj: object): ObjectKeyValues => [Object.keys(obj), Object.va
 export const dekv = (kv: ObjectKeyValues): object =>
 	((x, y) => x.reduce((prev, curr, i) => ({ ...prev, [curr]: y[i] }), {}))(...kv)
 
-export const structCheck =
-	<Type extends object = object>(...properties: (string | symbol | number)[]) =>
-	(x: any): x is Type =>
-		isObject(x) && !!x && properties.every((y) => y in x)
+export function structCheck<Type extends object = object>(
+	properties:
+		| (string | symbol | number)[]
+		| { [x: string | symbol | number]: (x: any) => boolean }
+) {
+	const propsArr = isArray(properties) ? properties : Object.keys(properties)
+	const propsPredicateArrays = isArray(properties) ? [] : Object.values(properties)
+	return (x: any): x is Type =>
+		isObject(x) &&
+		!!x &&
+		propsArr.every((y) => y in x) &&
+		propsPredicateArrays.every((pred, i) => pred(x[propsArr[i]]))
+}

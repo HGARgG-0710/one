@@ -5,4 +5,4 @@ export const isBoolean = (x: any): x is boolean => typeof x === "boolean"
 export const isSymbol = (x: any): x is symbol => typeof x === "symbol"
 export const isObject = (x: any): x is object => typeof x === "object"
 
-export const isArray = (x: any): x is any[] => x instanceof Array
+export const isArray = <Type = any>(x: any): x is Type[] => x instanceof Array
