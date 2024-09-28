@@ -1,0 +1,16 @@
+1. Add new functions: 
+	1. [module] 'functions': 
+		1.1. id = (x) => x
+		1.2. void = () => {}
+	2. [module] 'object'
+		2.1.???[maybe] Various methods for conversion from a 'pairs-list' to an object; 
+		2.2. Allow the user to RESTRICT certain properties on object from occurring; 
+		2.3. Allow the user to have a STRICT type (one that is described completely by the given properties); 
+	3. [module] 'boolean'
+		3.1. equals := (x, y) => x === y
+	4. [module] 'typeof': 
+		4.1. isNull 	 := (x) => x === null
+		4.2. isUndefined := (x) => x === undefined
+
+2. Optimize (what little there is): 
+	2.1. Minimize copying; 

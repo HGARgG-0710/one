@@ -4,7 +4,11 @@ export type ObjectKeyValues = [string[], any[]]
 
 export const kv = (obj: object): ObjectKeyValues => [Object.keys(obj), Object.values(obj)]
 export const dekv = (kv: ObjectKeyValues): object =>
-	((x, y) => x.reduce((prev, curr, i) => ({ ...prev, [curr]: y[i] }), {}))(...kv)
+	((keys, values) =>
+		keys.reduce((prev, curr, i) => {
+			prev[curr] = values[i]
+			return prev
+		}, {}))(...kv)
 
 export function structCheck<Type extends object = object>(
 	properties:
