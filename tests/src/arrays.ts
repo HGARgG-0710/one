@@ -5,13 +5,16 @@ import {
 	insert,
 	replace,
 	out,
-	swapped,
 	firstOut,
 	first,
 	propPreserve,
-	iterator,
 	middleOutN,
-	middleOutP
+	middleOutP,
+	filter,
+	map,
+	copy,
+	reduce,
+	reduceRight
 } from "../../dist/src/arrays/arrays.js"
 
 // * lastOut
@@ -49,7 +52,8 @@ console.log()
 
 // * 'insert'
 
-console.log(insert(["jujuju", "fafafa", "rarirurirurira"], 2, true))
+console.log(insert<any>(["jujuju", "fafafa", "rarirurirurira"], 2, true))
+console.log()
 
 // * 'replace'
 
@@ -58,13 +62,6 @@ console.log()
 
 // * 'out'
 console.log(out(["a", false, "b"], 1))
-console.log()
-
-// * swapped
-console.log(swapped(["a", "b", "c"], 0, 2))
-console.log(swapped(["a", "b", "c"], 2, 0))
-console.log(swapped(["a", "b", "c"], 2, 1))
-
 console.log()
 
 // * 'firstOut'
@@ -95,15 +92,54 @@ console.log(_t === _tPlus)
 
 console.log()
 
-// * 'iterator'
-
-const A = { [Symbol.iterator]: iterator([393920, 109098, "STIRNG!"]) }
-console.log(...A)
-console.log()
-
 // * 'middleOutN' and  'middleOutP'
 
 console.log(middleOutN([0, 1, 2, 3, 4, 5, 6, 7, 8]))
 console.log(middleOutN([0, 1, 2, 3, 4, 5, 6, 7, 8, 9]))
 console.log(middleOutP([0, 1, 2, 3, 4, 5, 6, 7, 8]))
 console.log(middleOutP([0, 1, 2, 3, 4, 5, 6, 7, 8, 9]))
+console.log()
+
+// * 'filter'
+const origFilter = [0, 1345, 0.32, 0.97, 0.551, 0.41]
+const filtered = filter(origFilter, (x: number) => x < 0.5)
+console.log(filtered)
+console.log(filtered === origFilter)
+console.log()
+
+// * 'map'
+const origMap = [1, 22, 90, 5190]
+const mapped = map(origMap, (x: number) => (x < 100 ? x ** x : x ** 2))
+console.log(mapped)
+console.log(origMap === mapped)
+console.log()
+
+// * 'copy'
+console.log(copy(origFilter) === origFilter)
+console.log(copy(origFilter))
+console.log()
+
+// * 'reduce'
+console.log(
+	reduce(
+		origFilter,
+		(lastArr: number[], y) => {
+			lastArr.push(reduce(lastArr, (x: number, y: number) => x + y, 0) + y)
+			return lastArr
+		},
+		[]
+	)
+)
+console.log()
+
+// * 'reduceRight'
+console.log(
+	reduceRight(
+		origFilter,
+		(x: number[], y: any) => {
+			x.push(y)
+			return x
+		},
+		[]
+	)
+)

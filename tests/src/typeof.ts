@@ -5,7 +5,10 @@ import {
 	isBoolean,
 	isSymbol,
 	isObject,
-	isArray
+	isArray,
+	isNull,
+	isUndefined,
+	typeOf
 } from "../../dist/src/typeof/typeof.js"
 
 // * 'isNumber'
@@ -46,4 +49,21 @@ console.log()
 console.log(isArray<number | string>(["ddslk", 4324]))
 console.log(isArray(null))
 console.log(isArray(44))
+console.log()
+
+// * 'isNull'
+console.log(isNull(null))
+console.log(isNull(true))
+console.log(isNull(undefined))
+console.log()
+
+// * 'isUndefined'
+console.log(isUndefined(null))
+console.log(isUndefined(undefined))
+console.log(isUndefined(53))
+console.log()
+
+// * 'typeOf'
+console.log(typeOf(0) === typeof 0)
+console.log(typeOf.toString())
 console.log()

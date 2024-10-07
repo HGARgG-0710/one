@@ -1,4 +1,3 @@
-import { mutate } from "../inplace/inplace.js"
 import { last, lastOut } from "../arrays/arrays.js"
 
 export const curry = (f: Function) => {
@@ -23,18 +22,16 @@ export const and =
 export const trivialCompose =
 	(...fs: Function[]) =>
 	(...x: any[]) =>
-		lastOut(fs)
-			.reverse()
-			.reduce((last, curr) => curr(last), last(fs)(...x))
+		lastOut(fs).reduceRight((last, curr) => curr(last), last(fs)(...x))
 
 export const iterations = (f: Function, n: number, j = 1) =>
-	mutate(Array(Math.floor(n / j)).fill(0), (_x, i) => f(j * i))
+	Array.from({ length: Math.floor(n / j) }, (_x, i) => f(j * i))
 
 export const sequence =
 	(f: Function, n: number) =>
 	(...args: any[]) => {
 		const seqres = n ? [f(...args)] : []
-		for (let i = 0; i < n; ++i) seqres.push(f(last(seqres)))
+		for (let i = 0; i < n; ++i) seqres.push(f(last(seqres), i, seqres))
 		return seqres
 	}
 
@@ -46,7 +43,7 @@ export const repeat = (f: Function, n: number) => {
 export const arrayCompose =
 	(...fs: Function[]) =>
 	(...x: any[]) =>
-		fs.reverse().reduce((last, curr) => curr(...last), x)
+		fs.reduceRight((last, curr) => curr(...last), x)
 
 export const cache = (f: Function, keys: any): Map<any, any> =>
 	new Map(keys.map((x: any) => [x, f(x)]))
@@ -73,3 +70,6 @@ export const cached = (base: Function) => {
 	cachedResult.cache = new Map()
 	return cachedResult
 }
+
+export const id = <Type = any>(x: Type) => x
+export const nil = () => {}

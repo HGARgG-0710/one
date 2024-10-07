@@ -10,7 +10,9 @@ import {
 	tupleSlice,
 	tuplePick,
 	cache,
-	cached
+	cached,
+	nil,
+	id
 } from "../../dist/src/functions/functions.js"
 import { sum, product } from "../../dist/src/numbers/numbers.js"
 
@@ -133,3 +135,13 @@ console.log(cachedResult.cache.has(29))
 console.log(cachedResult(29))
 console.log(cachedResult(49))
 console.log([...cachedResult.cache.values()])
+console.log()
+
+// * 'id'
+console.log(id(4))
+console.log(id("?24"))
+console.log()
+
+// * 'nil'
+console.log(nil())
+console.log(nil.toString())
