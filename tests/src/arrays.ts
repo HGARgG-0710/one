@@ -89,6 +89,8 @@ _t.S = 333
 const _tPlus = propCheck(_t)
 console.log(_tPlus)
 console.log(_t === _tPlus)
+console.log(_tPlus)
+console.log(..._tPlus)
 
 console.log()
 
@@ -130,6 +132,14 @@ console.log(
 		[]
 	)
 )
+
+console.log(
+	reduce(
+		origFilter,
+		(lastVal: number, y, i) =>
+			reduce(origFilter.slice(0, i), (x: number, y: number) => x + y) + lastVal
+	)
+)
 console.log()
 
 // * 'reduceRight'
@@ -143,3 +153,4 @@ console.log(
 		[]
 	)
 )
+console.log(reduceRight(origFilter, (x: number, y: number) => x / Math.max(y, 0.01)))

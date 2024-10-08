@@ -8,7 +8,8 @@ import {
 	isArray,
 	isNull,
 	isUndefined,
-	typeOf
+	typeOf,
+	isNumberConvertible
 } from "../../dist/src/typeof/typeof.js"
 
 // * 'isNumber'
@@ -66,4 +67,16 @@ console.log()
 // * 'typeOf'
 console.log(typeOf(0) === typeof 0)
 console.log(typeOf.toString())
+console.log()
+
+// * 'isNumberConvertible'
+console.log(isNumberConvertible(109))
+console.log(isNumberConvertible("109"))
+console.log(isNumberConvertible(false))
+console.log(isNumberConvertible(null))
+console.log(isNumberConvertible(undefined))
+console.log(isNumberConvertible(NaN))
+console.log(isNumberConvertible("Marius"))
+console.log(isNumberConvertible(""))
+console.log(isNumberConvertible(Symbol("9098")))
 console.log()

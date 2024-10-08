@@ -31,7 +31,7 @@ They are:
 #### `array`
 
 ```ts
-function lastOut(x: any[]): any[]
+function lastOut<Type = any>(x: Type[]): Type[]
 ```
 
 Returns a copy of the given array without its last element.
@@ -39,7 +39,7 @@ Returns a copy of the given array without its last element.
 <br>
 
 ```ts
-function last(x: any[]): any
+function last<Type = any>(x: Type[]): Type
 ```
 
 Returns the given array's last element.
@@ -47,7 +47,7 @@ Returns the given array's last element.
 <br>
 
 ```ts
-function clear(x: any[]): number
+function clear<Type = any>(x: Type[]): number
 ```
 
 Sets the array's length to `0`
@@ -55,7 +55,7 @@ Sets the array's length to `0`
 <br>
 
 ```ts
-function insert(x: any[], index: number, ...values: any[]): any[]
+function insert<Type = any>(x: Type[], index: number, ...values: Type[]): Type[]
 ```
 
 Inserts the `values` into `x` at index `index` and returns the result (new array is created).
@@ -63,7 +63,7 @@ Inserts the `values` into `x` at index `index` and returns the result (new array
 <br>
 
 ```ts
-function replace(arr: any[], index: number, ...values: any[]): any[]
+function replace<Type = any>(arr: Type[], index: number, ...values: Type[]): any[]
 ```
 
 Returns a copy of `arr`, in which the value at index `index` was replaced by `values`.
@@ -71,7 +71,7 @@ Returns a copy of `arr`, in which the value at index `index` was replaced by `va
 <br>
 
 ```ts
-function out(arr: any[], index: number): any[]
+function out<Type = any>(arr: Type[], index: number): Type[]
 ```
 
 Returns a copy of `arr`, in which the element at position `index` is absent.
@@ -79,15 +79,7 @@ Returns a copy of `arr`, in which the element at position `index` is absent.
 <br>
 
 ```ts
-function swapped(x: any[], i: number, j: number): any[]
-```
-
-Returns a copy of `x`, in which indexes `i` and `j` are swapped places.
-
-<br>
-
-```ts
-function firstOut(x: any[]): any[]
+function firstOut<Type = any>(x: Type[]): Type[]
 ```
 
 Returns the copy of the given array without the first element (`x[0]`).
@@ -95,7 +87,7 @@ Returns the copy of the given array without the first element (`x[0]`).
 <br>
 
 ```ts
-function first(x: any[]): any
+function first<Type = any>(x: Type[]): Type
 ```
 
 Returns the first element of the given array.
@@ -103,10 +95,58 @@ Returns the first element of the given array.
 <br>
 
 ```ts
-function propPreserve(f: (x: object): any[]): (x: object): any[]
+function filter<Type = any>(array: Type[], prop: (item?: Type, index?: number, array?: Type[]) => boolean): Type[]
 ```
 
-Creates and returns a new function based off the givn one that preserves the non-numeric properties
+A rewrite of the `Array.prototype.filter`. In V8, serves to be faster on certain large enough arrays. 
+
+<br>
+
+```ts
+function map<TypeFrom = any, TypeTo = any>(array: TypeFrom[], f: (item?: TypeFrom, index?: number, array?: TypeFrom[]) => TypeTo): TypeTo[]
+```
+
+A rewrite of the `Array.prototype.map`. In v8, serves to be faster on certain large enough arrays.
+
+<br>
+
+```ts
+function copy<Type = any>(array: Type[]): Type[]
+```
+
+Copies the given array. 
+
+<br>
+
+```ts
+function reduce(	
+	array: Type[],
+	f: (item?: any, curr?: Type, i?: number) => any,
+	init: any
+)
+```
+
+A rewrite of the `Array.prototype.reduce`. In V8, serves to be faster on certain large enough arrays. 
+
+<br>
+
+```ts
+function reduceRight(
+	array: Type[],
+	f: (item?: any, curr?: Type, i?: number) => any,
+	init: any
+)
+```
+
+A rewrite of the `Array.prototype.reduceRight`. In V8, serves to be faster on certain large enough arrays. 
+
+<br>
+
+```ts
+function propPreserve(f: (x: object) => any[]): (x: object) => any[]
+```
+
+Creates and returns a new function based off the given one that preserves the non-numeric own properties
 of the argument `x` upon the result of `f(x)`.
 
 Intended for convertion of functions in terms of array to be able to preserve the custom properties
@@ -115,15 +155,7 @@ Intended for convertion of functions in terms of array to be able to preserve th
 <br>
 
 ```ts
-function iterator(x: any[]): GeneratorFunction
-```
-
-Creates and returns a new iterator function defined in terms of the given array.
-
-<br>
-
-```ts
-function middleOutP(x: any[]): any[]
+function middleOutP<Type = any>(x: Type[]): Type[]
 ```
 
 Discards the middle element from the copy of original array
@@ -133,7 +165,7 @@ and returns the copy.
 <br>
 
 ```ts
-function middleOutN(x: any[]): any[]
+function middleOutN<Type = any>(x: Type[]): Type[]
 ```
 
 Same as `middleOutP`, but with preference to the former part in
@@ -168,7 +200,7 @@ Counts the number of appearences of substring `sub` inside of `x`.
 <br>
 
 ```ts
-function limit(maxsize: number, limitor?: string): (x: string): string
+function limit(maxsize: number, limitor?: string): (x: string) => string
 ```
 
 A function returning a function that replaces the remainder of `x` after the maximum allowed length of `maxsize` with string `limitor`.
@@ -178,7 +210,7 @@ A function returning a function that replaces the remainder of `x` after the max
 #### `function`
 
 ```ts
-function curry(f: Function): (n: number, ...argsArr: any[]): any
+function curry(f: Function): (n: number, ...argsArr: any[]) => any
 ```
 
 Returns a sequence of nested function with call depth of `n` that reduces to `f(x1, x2, ..., xn, ...argsArr)`.
@@ -195,7 +227,7 @@ Useful for treating multivariable functions as a call-sequence of single-variabl
 <br/>
 
 ```ts
-function or(...fs: Function[]): (...x: any[]): any
+function or(...fs: Function[]): (...x: any[]) => any
 ```
 
 Iterates over the list of functions `fs`, returning the most truthy value of the returned (otherwise, the first function's value is returned).
@@ -203,7 +235,7 @@ Iterates over the list of functions `fs`, returning the most truthy value of the
 <br/>
 
 ```ts
-function and(...fs: Function[]): (...x: any[]): any
+function and(...fs: Function[]): (...x: any[]) => any
 ```
 
 The 'and'-counterpart of the `or` function.
@@ -211,7 +243,7 @@ The 'and'-counterpart of the `or` function.
 <br/>
 
 ```ts
-function trivialCompose(...fs: Function[]): (...x: any[]): any
+function trivialCompose(...fs: Function[]): (...x: any[]) => any
 ```
 
 Returns a result of composition of single-variable functions with a (possibly) multi-variable one (last function).
@@ -229,7 +261,7 @@ Returns the result of iterations of function `f` from `0` to `n - 1` with a jump
 <br/>
 
 ```ts
-function sequence(f: Function, n: number): (...args: any[]): any[]
+function sequence(f: Function, n: number): (...args: any[]) => any[]
 ```
 
 Returns the list of results of 1-variable iteration of `f` upon itself from `1` to `n` times.
@@ -245,7 +277,7 @@ Calls the function `f` for values from `0` to `n-1`.
 <br/>
 
 ```ts
-function arrayCompose(...fs: ((...x: any[]): any[])[]): (...x): any
+function arrayCompose(...fs: ((...x: any[]) => any[])[]): (...x) => any
 ```
 
 A function that accepts an array of functions, each of which returns an array.
@@ -255,7 +287,7 @@ as signature for the next function (that being, the result of the next function 
 <br>
 
 ```ts
-function cache(f: (x: any): any, keys: any[]): Map
+function cache(f: (x: any) => any, keys: any[]): Map
 ```
 
 Creates a new `Map`, with keys of `keys` and values of `f(key)` for each `key` in `keys`.
@@ -271,7 +303,7 @@ const value = c.get(...)
 <br>
 
 ```ts
-function tuplePick(...inds: ((x: any, i: number, arr: any[]): boolean)[]): (...fs: (...x: any[]): any): (...x: any[]): any
+function tuplePick(...inds: ((x: any, i: number, arr: any[]) => boolean)[]): (...fs: (...x: any[]) => any) => (...x: any[]) => any
 ```
 
 A function that returns a sequence of functions that result in a tuple consisting of
@@ -294,11 +326,27 @@ Good for saving memory on `cache`-functions that may not need to be used (and th
 <br>
 
 ```ts
-function tupleSlice(...inds: [number?, number?][]): (...fs: (...x: any[]): any): (...x: any[]): any
+function tupleSlice(...inds: [number?, number?][]): (...fs: (...x: any[]) => any) =>  (...x: any[]) => any
 ```
 
 Similar to `tuplePick`, but operates on `.slice`-ranges from `inds` instead
 (the array of indexes for `i`th function is sliced using `inds[i]`).
+
+<br>
+
+```ts
+function nil(): void
+```
+
+A no-op function `() => {}`. Useful as an alias [style consistency]
+
+<br>
+
+```ts
+function id<Type = any>(x: Type) => Type
+```
+
+The identity function `(x) => x`. Useful as an alias [style consistency].
 
 <br>
 
@@ -341,7 +389,7 @@ Sets the value of `tree` at multi-index `multindex` to `value`.
 ```ts
 function treeCount(
 	tree: any[],
-	prop: (x: any): boolean | number | string,
+	prop: (x: any) => boolean | number | string,
 	start?: any
 ): boolean | number | string
 ```
@@ -360,7 +408,7 @@ Counts the number of levels inside the tree (including the initial one).
 <br>
 
 ```ts
-function deepSearch(tree: any[], prop: (x: any): boolean): number[]
+function deepSearch(tree: any[], prop: (x: any) => boolean): number[]
 ```
 
 Finds the first value `x` inside the `tree` such that `!!prop(x) == true` and returns its multi-index.
@@ -379,47 +427,125 @@ upon each of its elements, returns the tree's copy.
 #### `object`
 
 ```ts
-function kv(x: object): [string[], any[]]
+function kv(x: object): [(string | symbol)[], any[]]
 ```
 
-Returns the pair of key-values of the given object.
+Returns the pair of `[keys(x), values(x)]` of the given object.
 
 <br>
 
 ```ts
-function dekv(x: [string[], any[]]): object
+function dekv(x: [(string | symbol)[], any[]]): object
 ```
 
-Inverse of `kv`
+Creates an object from given pair of arrays, treating first one as own keys, 
+and the second one as own values. 
 
 <br>
 
 ```ts
-function structCheck<Type extends object = object>(props: (string | symbol | number)[] | {[x: string | symbol | number]: (x: any) => boolean}): (x: any): x is Type
+function keys(x: object): (string | symbol)[]
+```
+
+Returns all the string and symbolic keys from the given object, and all of its prototypes.
+
+<br>
+
+```ts
+function values(x: object): any[]
+```
+
+Returns all the values of all the symbolic and string properties from the given object, and all of its prototypes.
+
+<br>
+
+```ts
+function recursiveStringKeys(x: object): string[]
+```
+
+Returns all the string keys of the given object, and all of its prototypes.
+
+<br>
+
+```ts
+function recursiveStringValues(x: object): any[]
+```
+
+Returns all the values of string keys of the given object, and all of its prototypes.
+
+<br>
+
+```ts
+function recursiveSymbolKeys(x: object): symbol[]
+```
+
+Returns all the symbolic keys of the given object, and all of its prototypes.
+
+<br>
+
+```ts
+function recursiveSymbolValues(x: object): any[]
+```
+
+Returns all the values of the symbolic keys of the given object, and all of its prototypes.
+
+<br>
+
+```ts
+function ownProperties(x: object): [(string | symbol)[], any[]]
+```
+
+Returns a pair of arrays of own keys and own values of `x`. 
+
+<br>
+
+```ts
+function ownKeys(x: object): (string | symbol)[]
+```
+
+Returns an array of own keys of the given object.
+
+<br>
+
+```ts
+function ownValues(x: object): any[]
+```
+
+Returns an array of own keys' values of the given object.
+
+<br>
+
+```ts
+function structCheck<Type extends object = object>(props: (string | symbol | number)[] | {[x: string | symbol | number]: (x: any) => boolean}, lackingProps?: (string | symbol | number)[], isStrict?: boolean): (x: any) => x is Type
 ```
 
 Creates and returns a new type-checking function.
 
-If the given value is an array, it returns `true` when:
+If `props` is an array, it returns `true` when:
 
 1. `typeof x === 'object'`
 2. `!!x`
 3. `props.every((p) => p in x)`
+4. `lackingProps.every((p) => !(p in x))`
+5. `!isStrict || keys(x).length === props.length`
 
-If the given value is an object, it checks:
+If `props` is an object, it checks:
 
 1. `typeof x === 'object'`
 2. `!!x`
 3. `Object.keys(props).every((p) => p in x)`
 4. `Object.values(props).every((p, i) => p(x[Object.keys(props)[i]]))`
+5. `lackingProps.every((p) => !(p in x))`
+6. `!isStrict || keys(x).length === keys(props).length`
+
+By default, `lackingProperties = []` and `isStrict = false`. 
 
 Allows to create handy predicates for checking structural adherence of `x` to
-a certain necessary objects' "class" without needing to use more complex constructions
-like prototype chains.
+a certain necessary objects' "class" without needing to use more complex constructions like prototype chains [even though, it does permit prototyping on the object `props` used for setting the type's signature]. 
 
 Now with additional TypeScript support
 (type predicates - very util for connecting the "actual" JS properties
-with those that are perceived by the static type analyzer);
+with those that are perceived by the static type analyzer, and when thorough checking is desired; example: test-writing);
 
 <br>
 
@@ -434,7 +560,7 @@ Converts the given object to a `Map`.
 #### `set`
 
 ```ts
-function same(a: Set, b: Set): boolean
+function same<Type = any>(a: Set<Type>, b: Set<Type>): boolean
 ```
 
 Checks if sets are the same.
@@ -442,7 +568,7 @@ Checks if sets are the same.
 <br>
 
 ```ts
-function norepetitions(x: any[]): any[]
+function norepetitions<Type = any>(x: Iterable<T>): Type[]
 ```
 
 Returns a new array with the elements of `x`, but without repetitions.
@@ -498,7 +624,7 @@ Returns the product of the given items `x`.
 This library module contains various simple expressions pertaining to mutations of various structures (as of present - primarily arrays). It exists in contrast of the others, which are not as memory-efficient (ex: `array`);
 
 ```ts
-function mutate(array: any[], mutation: (x: any, i: number, array: any[]) => any): any[]
+function mutate<Type = any>(array: Type[], mutation: (x: Type, i: number, array: Type[]) => any): any[]
 ```
 
 The function walks through the given array `array`, and applies the `mutation` function to each of its elements (in a fashion similar to `Array.prototype.map`), assigning the result to the corresponding array index.
@@ -508,7 +634,7 @@ The return value is the reference to the original array.
 <br>
 
 ```ts
-function insert(array: any[], index: number, ...values: any[]): any[]
+function insert<Type = any>(array: Type[], index: number, ...values: Type[]): Type[]
 ```
 
 Mutates the given array `array` by inserting the given `values` at index `index`.
@@ -517,7 +643,7 @@ The return value is the reference to the original array.
 <br>
 
 ```ts
-function out(array: any[], index: number, count?: number)
+function out<Type = any>(array: Type[], index: number, count?: number): Type[]
 ```
 
 Deletes `count` values of `array`, starting from the index `index`. Default value of `count` is `1`.
@@ -525,7 +651,7 @@ Deletes `count` values of `array`, starting from the index `index`. Default valu
 <br>
 
 ```ts
-function lastOut(array: any[]): any[]
+function lastOut<Type = any>(array: Type[]): Type[]
 ```
 
 Deletes the last item from the array, returns the reference to it.
@@ -533,7 +659,7 @@ Deletes the last item from the array, returns the reference to it.
 <br>
 
 ```ts
-function firstOut(array: any[]): any[]
+function firstOut<Type = any>(array: Type[]): Type[]
 ```
 
 Deletes the first element from the given array. Returns the reference to the array.
@@ -541,7 +667,7 @@ Deletes the first element from the given array. Returns the reference to the arr
 <br>
 
 ```ts
-function swap(array: any[], i: number, j: number): any[]
+function swap<Type = any>(array: Type[], i: number, j: number): Type[]
 ```
 
 Swaps two positions `i` and `j` of an array.
@@ -549,7 +675,7 @@ Swaps two positions `i` and `j` of an array.
 <br>
 
 ```ts
-function replace(array: any[], index: number, ...values: any[]): any[]
+function replace<Type = any>(array: Type[], index: number, ...values: Type[]): Type[]
 ```
 
 Replaces the value at a given index `index` of the array `array` with `values`, returning the reference to it.
@@ -599,10 +725,13 @@ Returns `true` whenever `x` is a `symbol`
 <br>
 
 ```ts
-function isObject(x: any): x is object
+function isObject<Type extends object = object>(x: any): x is Type
 ```
 
-Returns `true` whenever `x` is an `object`
+Returns `true` whenever `x` is an `object`.
+Via the Generic argument, TypeScript static type analyzer
+can be made to know that the type of the item in question is more
+than just an `object` (useful when context is known).
 
 <br>
 
@@ -611,6 +740,48 @@ function isArray<Type = any>(x: any): x is Type[]
 ```
 
 Returns `true` whenever `x` is an `Array`
+
+<br>
+
+```ts
+function isNull(x: any): x is null
+```
+
+Checks that `x === null`.
+[TypeScript] For cases when `strictNullChecks` is set to `true` in `tsconfig.json`.
+
+<br>
+
+```ts
+function isUndefined(x: any): x is undefined
+```
+
+Checks that `x === undefined`.
+[TypeScript] For cases when `strictNullChecks` is set to `true` in `tsconfig.json`.
+
+<br>
+
+```ts
+function typeOf(x: any): typeof x
+```
+
+Returns `typeof x`. Can be used as a functional wrapper.
+
+<br>
+
+```ts
+function isNumberConvertible(x: any): boolean
+```
+
+Returns `true`, only when one of the following holds: 
+
+1. `x === null`
+2. `typeof x === "number" && !isNaN(x)`
+3. `typeof x === "string" && !isNaN(Number(x)) && !!x.length`
+4. `typeof x === "boolean"`
+
+The condition is equivalent to `x` being `Number` convertible validly, while not being an empty string.
+Useful for safe `Number` conversions (in particular - when trying `Number(Symbol(...))`, one will encounter an error; Prior checking through the `isNumberConvertible(x)` in question permits one to safely avoid this).
 
 <br>
 
@@ -635,3 +806,9 @@ function F(): false
 ```
 
 Equivalent of the `() => false` expression
+
+```ts
+function equals<Type = any>(x: Type, y: Type): boolean
+```
+
+Equivalent of `(x, y) => x === y` expression

@@ -11,3 +11,12 @@ export const isUndefined = (x: any): x is undefined => x === undefined
 export const typeOf = (x: any) => typeof x
 
 export const isArray = <Type = any>(x: any): x is Type[] => x && x.constructor === Array
+
+export function isNumberConvertible(x: any): boolean {
+	return (
+		(isNumber(x) && !isNaN(x)) ||
+		(isString(x) && !isNaN(Number(x)) && !!x.length) ||
+		isBoolean(x) ||
+		isNull(x)
+	)
+}

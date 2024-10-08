@@ -62,3 +62,18 @@ export function recursiveSymbolKeys(object: object) {
 
 export const recursiveSymbolValues = (object: object) =>
 	recursiveSymbolKeys(object).map((key) => object[key])
+
+export const ownProperties = (object: object): [(string | symbol)[], any[]] => [
+	ownKeys(object),
+	ownValues(object)
+]
+
+export function ownKeys(object: object) {
+	const keys: (string | symbol)[] = Object.getOwnPropertyNames(object)
+	keys.push(...Object.getOwnPropertySymbols(object))
+	return keys
+}
+
+export function ownValues(object: object) {
+	return ownKeys(object).map((key) => object[key])
+}

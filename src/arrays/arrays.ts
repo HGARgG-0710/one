@@ -1,4 +1,5 @@
-import { kv } from "../objects/main.js"
+import { isNumberConvertible, isUndefined } from "../typeof/typeof.js"
+import { ownProperties } from "../objects/main.js"
 
 export const lastOut = <Type = any>(x: Type[]) => x.slice(0, x.length - 1)
 export const last = <Type = any>(x: Type[]) => x[x.length - 1]
@@ -18,16 +19,18 @@ export const out = <Type = any>(array: Type[], index: number) =>
 export const firstOut = <Type = any>(x: Type[]) => x.slice(1)
 export const first = <Type = any>(x: Type[]) => x[0]
 
-export const propPreserve = (f: Function) => (x: object) => {
-	const result = f(x)
-	const [keys, values] = kv(x)
-	let i = keys.length
-	while (i--) {
-		const key = keys[i]
-		if (isNaN(Number(key))) result[key] = values[i]
+export const propPreserve =
+	(f: Function, excluded: Set<string | symbol> = new Set()) =>
+	(x: object) => {
+		const result = f(x)
+		const [keys, values] = ownProperties(x)
+		let i = keys.length
+		while (i--) {
+			const key = keys[i]
+			if (!isNumberConvertible(key) && !excluded.has(key)) result[key] = values[i]
+		}
+		return result
 	}
-	return result
-}
 
 export const [middleOutP, middleOutN] = [0, 1].map(
 	(x) =>
@@ -60,20 +63,22 @@ export function filter<Type = any>(
 export function reduce<Type = any>(
 	array: Type[],
 	f: (item?: any, curr?: Type, i?: number) => any,
-	init: any
+	init?: any
 ) {
-	let last = init
-	for (let i = 0; i < array.length; ++i) last = f(last, array[i], i)
-	return last
+	const initLacking = isUndefined(init)
+	let result = initLacking ? array[0] : init
+	for (let i = +initLacking; i < array.length; ++i) result = f(result, array[i], i)
+	return result
 }
 
 export function reduceRight<Type = any>(
 	array: Type[],
 	f: (item?: any, curr?: Type, i?: number) => any,
-	init: any
+	init?: any
 ) {
-	let last = init
-	let i = array.length
-	while (i--) last = f(last, array[i], i)
-	return last
+	const initLacking = isUndefined(init)
+	let result = initLacking ? last(array) : init
+	let i = array.length - +initLacking
+	while (i--) result = f(result, array[i], i)
+	return result
 }
