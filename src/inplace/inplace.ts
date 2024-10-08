@@ -1,10 +1,10 @@
-export function mutate<Type = any>(
+export function mutate<Type = any, OutType = any>(
 	array: Type[],
-	mutation: (x: Type, i: number, arr: Type[]) => any
-) {
+	mutation: (x: Type, i: number, arr: Type[]) => OutType
+): OutType[] {
 	let i = array.length
-	while (i--) array[i] = mutation(array[i], i, array)
-	return array
+	while (i--) array[i] = mutation(array[i], i, array) as any
+	return array as unknown as OutType[]
 }
 
 export const insert = <Type = any>(array: Type[], index: number, ...values: Type[]) => {

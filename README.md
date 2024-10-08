@@ -95,15 +95,21 @@ Returns the first element of the given array.
 <br>
 
 ```ts
-function filter<Type = any>(array: Type[], prop: (item?: Type, index?: number, array?: Type[]) => boolean): Type[]
+function filter<Type = any>(
+	array: Type[],
+	prop: (item?: Type, index?: number, array?: Type[]) => boolean
+): Type[]
 ```
 
-A rewrite of the `Array.prototype.filter`. In V8, serves to be faster on certain large enough arrays. 
+A rewrite of the `Array.prototype.filter`. In V8, serves to be faster on certain large enough arrays.
 
 <br>
 
 ```ts
-function map<TypeFrom = any, TypeTo = any>(array: TypeFrom[], f: (item?: TypeFrom, index?: number, array?: TypeFrom[]) => TypeTo): TypeTo[]
+function map<TypeFrom = any, TypeTo = any>(
+	array: TypeFrom[],
+	f: (item?: TypeFrom, index?: number, array?: TypeFrom[]) => TypeTo
+): TypeTo[]
 ```
 
 A rewrite of the `Array.prototype.map`. In v8, serves to be faster on certain large enough arrays.
@@ -114,19 +120,15 @@ A rewrite of the `Array.prototype.map`. In v8, serves to be faster on certain la
 function copy<Type = any>(array: Type[]): Type[]
 ```
 
-Copies the given array. 
+Copies the given array.
 
 <br>
 
 ```ts
-function reduce(	
-	array: Type[],
-	f: (item?: any, curr?: Type, i?: number) => any,
-	init: any
-)
+function reduce(array: Type[], f: (item?: any, curr?: Type, i?: number) => any, init: any)
 ```
 
-A rewrite of the `Array.prototype.reduce`. In V8, serves to be faster on certain large enough arrays. 
+A rewrite of the `Array.prototype.reduce`. In V8, serves to be faster on certain large enough arrays.
 
 <br>
 
@@ -138,7 +140,7 @@ function reduceRight(
 )
 ```
 
-A rewrite of the `Array.prototype.reduceRight`. In V8, serves to be faster on certain large enough arrays. 
+A rewrite of the `Array.prototype.reduceRight`. In V8, serves to be faster on certain large enough arrays.
 
 <br>
 
@@ -303,7 +305,9 @@ const value = c.get(...)
 <br>
 
 ```ts
-function tuplePick(...inds: ((x: any, i: number, arr: any[]) => boolean)[]): (...fs: (...x: any[]) => any) => (...x: any[]) => any
+function tuplePick(
+	...inds: ((x: any, i: number, arr: any[]) => boolean)[]
+): (...fs: (...x: any[]) => any) => (...x: any[]) => any
 ```
 
 A function that returns a sequence of functions that result in a tuple consisting of
@@ -326,7 +330,9 @@ Good for saving memory on `cache`-functions that may not need to be used (and th
 <br>
 
 ```ts
-function tupleSlice(...inds: [number?, number?][]): (...fs: (...x: any[]) => any) =>  (...x: any[]) => any
+function tupleSlice(
+	...inds: [number?, number?][]
+): (...fs: (...x: any[]) => any) => (...x: any[]) => any
 ```
 
 Similar to `tuplePick`, but operates on `.slice`-ranges from `inds` instead
@@ -438,8 +444,8 @@ Returns the pair of `[keys(x), values(x)]` of the given object.
 function dekv(x: [(string | symbol)[], any[]]): object
 ```
 
-Creates an object from given pair of arrays, treating first one as own keys, 
-and the second one as own values. 
+Creates an object from given pair of arrays, treating first one as own keys,
+and the second one as own values.
 
 <br>
 
@@ -495,7 +501,7 @@ Returns all the values of the symbolic keys of the given object, and all of its 
 function ownProperties(x: object): [(string | symbol)[], any[]]
 ```
 
-Returns a pair of arrays of own keys and own values of `x`. 
+Returns a pair of arrays of own keys and own values of `x`.
 
 <br>
 
@@ -516,7 +522,13 @@ Returns an array of own keys' values of the given object.
 <br>
 
 ```ts
-function structCheck<Type extends object = object>(props: (string | symbol | number)[] | {[x: string | symbol | number]: (x: any) => boolean}, lackingProps?: (string | symbol | number)[], isStrict?: boolean): (x: any) => x is Type
+function structCheck<Type extends object = object>(
+	props:
+		| (string | symbol | number)[]
+		| { [x: string | symbol | number]: (x: any) => boolean },
+	lackingProps?: (string | symbol | number)[],
+	isStrict?: boolean
+): (x: any) => x is Type
 ```
 
 Creates and returns a new type-checking function.
@@ -538,10 +550,10 @@ If `props` is an object, it checks:
 5. `lackingProps.every((p) => !(p in x))`
 6. `!isStrict || keys(x).length === keys(props).length`
 
-By default, `lackingProperties = []` and `isStrict = false`. 
+By default, `lackingProperties = []` and `isStrict = false`.
 
 Allows to create handy predicates for checking structural adherence of `x` to
-a certain necessary objects' "class" without needing to use more complex constructions like prototype chains [even though, it does permit prototyping on the object `props` used for setting the type's signature]. 
+a certain necessary objects' "class" without needing to use more complex constructions like prototype chains [even though, it does permit prototyping on the object `props` used for setting the type's signature].
 
 Now with additional TypeScript support
 (type predicates - very util for connecting the "actual" JS properties
@@ -624,7 +636,10 @@ Returns the product of the given items `x`.
 This library module contains various simple expressions pertaining to mutations of various structures (as of present - primarily arrays). It exists in contrast of the others, which are not as memory-efficient (ex: `array`);
 
 ```ts
-function mutate<Type = any>(array: Type[], mutation: (x: Type, i: number, array: Type[]) => any): any[]
+function mutate<Type = any, OutType = any>(
+	array: Type[],
+	mutation: (x: Type, i: number, array: Type[]) => OutType
+): OutType[]
 ```
 
 The function walks through the given array `array`, and applies the `mutation` function to each of its elements (in a fashion similar to `Array.prototype.map`), assigning the result to the corresponding array index.
@@ -773,7 +788,7 @@ Returns `typeof x`. Can be used as a functional wrapper.
 function isNumberConvertible(x: any): boolean
 ```
 
-Returns `true`, only when one of the following holds: 
+Returns `true`, only when one of the following holds:
 
 1. `x === null`
 2. `typeof x === "number" && !isNaN(x)`
