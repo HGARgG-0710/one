@@ -1,0 +1,8 @@
+1. Fix: 
+	1.1. for 'string.capitalize': allow accepting empty strings; 
+		Currently, the 'capitalize("")' 'throw's, whereas it should be: 
+			'capitalize("") === ""'; 
+	1.2. BUG: 'string.count()' returns the 'count' value that is lesser than the require amount; 
+2. Add: 
+	2.1. string.extract(), add third optional argument 'toReplaceWith?: string', which defaults to ""; 
+		Then, the function becomes: '(...) => string.split(toExtract).join(toReplaceWith)'; 

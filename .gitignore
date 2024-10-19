@@ -2,3 +2,4 @@ ignore-notes.txt
 dist
 tests/out
 node_modules
+/git
