@@ -6,3 +6,9 @@
 2. Add: 
 	2.1. string.extract(), add third optional argument 'toReplaceWith?: string', which defaults to ""; 
 		Then, the function becomes: '(...) => string.split(toExtract).join(toReplaceWith)'; 
+	2.2. 'const never = (() => {}) as () => never' - IMMENSELY useful for signifying unreachable return-paths in the application; 
+	2.3. 'const unreachable = (x: never) => {}' - like 2.2, but this time - for variable values; 
+	2.4. 'const sum = (...strings: string) => string' - FOR summing up strings; 
+3. Delete: 
+	3.1. The 'declarationMap: true' option - ONLY WASTES SPACE; 
+		It doesn't do ANYTHING useful when there are no '.ts' files provided; 
