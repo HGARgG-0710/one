@@ -1,14 +1,34 @@
+[v0.4]
+
 1. Fix: 
 	1.1. for 'string.capitalize': allow accepting empty strings; 
 		Currently, the 'capitalize("")' 'throw's, whereas it should be: 
 			'capitalize("") === ""'; 
 	1.2. BUG: 'string.count()' returns the 'count' value that is lesser than the require amount; 
+	1.3. Change the '.constructor === Array' to 'instanceof Array' in 'isArray' function [optimization has proven false...];
+
+	1.4. The export names for submodules; 
+		Some of those are _RESERVED__KEYWORDS_!
+		That is not acceptable; 
+		Ideas: 
+
+			1. typeof -> type 
+			2. function -> functional
+		
 2. Add: 
 	2.1. string.extract(), add third optional argument 'toReplaceWith?: string', which defaults to ""; 
 		Then, the function becomes: '(...) => string.split(toExtract).join(toReplaceWith)'; 
 	2.2. 'const never = (() => {}) as () => never' - IMMENSELY useful for signifying unreachable return-paths in the application; 
 	2.3. 'const unreachable = (x: never) => {}' - like 2.2, but this time - for variable values; 
 	2.4. 'const sum = (...strings: string) => string' - FOR summing up strings; 
+	2.5. 'array.empty = () => []' 
+	2.6. 'object.empty = () => ({})'
+	2.7. 'object.propertyDescriptors' - get all the property descriptors (recursively, including the '.prototype'-s); 
+	2.8. 'array.BadIndex = -1' ; This is a VERY commonplace constant; 
+	2.9. 'min, max' = 'Math.min()' and 'Math.max'; 
+
+	2.10. [done] string.lastOut
+
 3. Delete: 
-	3.1. The 'declarationMap: true' option - ONLY WASTES SPACE; 
+	3.1 [done]. The 'declarationMap: true' option - ONLY WASTES SPACE; 
 		It doesn't do ANYTHING useful when there are no '.ts' files provided; 

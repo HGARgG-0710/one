@@ -1,8 +1,8 @@
 import { isNumberConvertible, isUndefined } from "../typeof/typeof.js"
 import { ownProperties } from "../objects/main.js"
 
-export const lastOut = <Type = any>(x: Type[] | string) => x.slice(0, x.length - 1)
-export const last = <Type = any>(x: Type[] | string) => x[x.length - 1]
+export const lastOut = <Type = any>(x: Type[]) => x.slice(0, x.length - 1)
+export const last = <Type = any>(x: Type[]) => x[x.length - 1]
 export const clear = <Type = any>(x: Type[]) => (x.length = 0)
 export const insert = <Type = any>(x: Type[], index: number, ...values: Type[]) =>
 	x.slice(0, index).concat(values).concat(x.slice(index))

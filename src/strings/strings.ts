@@ -13,3 +13,5 @@ export const limit =
 		`${string.slice(0, Math.min(string.length, maxsize))}${
 			string.length > maxsize ? limitor : ""
 		}`
+
+export const lastOut = (x: string) => x.slice(0, x.length - 1)
