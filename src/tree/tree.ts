@@ -1,9 +1,9 @@
 // * Methods for working with array trees;
 
 import { mutate } from "../inplace/inplace.js"
-import { last, lastOut } from "../arrays/arrays.js"
-import { sum } from "../numbers/numbers.js"
-import { isArray } from "../typeof/typeof.js"
+import { last, lastOut } from "../array/array.js"
+import { sum } from "../number/number.js"
+import { isArray } from "../type/type.js"
 
 export type ArrayTree<Type = any> = (ArrayTree<Type> | Type)[]
 

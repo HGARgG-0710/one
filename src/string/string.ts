@@ -1,11 +1,14 @@
 export const capitalize = (x: string) =>
-	`${x[0].toUpperCase()}${x.slice(1).toLowerCase()}`
+	x.length ? `${x[0].toUpperCase()}${x.slice(1).toLowerCase()}` : ""
 
-export const extract = (string: string, toExtract: string | RegExp) =>
-	string.split(toExtract).join("")
+export const extract = (
+	string: string,
+	toExtract: string | RegExp,
+	toReplaceWith: string = ""
+) => string.split(toExtract).join(toReplaceWith)
 
 export const count = (string: string, substring: string | RegExp) =>
-	string.split(substring).length - 1
+	string.split(substring).length
 
 export const limit =
 	(maxsize: number, limitor = "") =>
@@ -15,3 +18,6 @@ export const limit =
 		}`
 
 export const lastOut = (x: string) => x.slice(0, x.length - 1)
+
+export const sum = (...numbers: string[]) =>
+	numbers.reduce((last, curr) => last + curr, "")

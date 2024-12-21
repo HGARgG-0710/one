@@ -1,12 +1,17 @@
 [v0.4]
 
 1. Fix: 
+	[Done]
 	1.1. for 'string.capitalize': allow accepting empty strings; 
 		Currently, the 'capitalize("")' 'throw's, whereas it should be: 
 			'capitalize("") === ""'; 
+	[Done]
 	1.2. BUG: 'string.count()' returns the 'count' value that is lesser than the require amount; 
+
+	[Done]
 	1.3. Change the '.constructor === Array' to 'instanceof Array' in 'isArray' function [optimization has proven false...];
 
+	[Done]
 	1.4. The export names for submodules; 
 		Some of those are _RESERVED__KEYWORDS_!
 		That is not acceptable; 
@@ -16,19 +21,69 @@
 			2. function -> functional
 		
 2. Add: 
+	[Done]
 	2.1. string.extract(), add third optional argument 'toReplaceWith?: string', which defaults to ""; 
 		Then, the function becomes: '(...) => string.split(toExtract).join(toReplaceWith)'; 
-	2.2. 'const never = (() => {}) as () => never' - IMMENSELY useful for signifying unreachable return-paths in the application; 
-	2.3. 'const unreachable = (x: never) => {}' - like 2.2, but this time - for variable values; 
-	2.4. 'const sum = (...strings: string) => string' - FOR summing up strings; 
-	2.5. 'array.empty = () => []' 
-	2.6. 'object.empty = () => ({})'
-	2.7. 'object.propertyDescriptors' - get all the property descriptors (recursively, including the '.prototype'-s); 
-	2.8. 'array.BadIndex = -1' ; This is a VERY commonplace constant; 
-	2.9. 'min, max' = 'Math.min()' and 'Math.max'; 
 
-	2.10. [done] string.lastOut
+	[Done]
+	2.2. 'const never = (() => {}) as () => never' - IMMENSELY useful for signifying unreachable return-paths in the application; 
+	
+	[Done]
+	2.4. 'const sum = (...strings: string) => string' - FOR summing up strings; 
+
+	[Done]
+	2.5. 'array.empty = () => []' 
+	
+	[Done]
+	2.6. 'object.empty = () => ({})'
+	
+	[Done]
+	2.7. 'object.propertyDescriptors' - get all the property descriptors (recursively, including the '.prototype'-s); 
+
+	[Done]
+	2.8. 'array.isPair' - common pattern; 
+		
+		[Done]
+		2.8.1. More generally - 'array.isTuple(n)(x) => isArray(x) && x.length === n'; 
+
+	[Done]
+	2.9. 'number. min, max' = 'Math.min()' and 'Math.max'; 
+
+	[Done]
+	2.10. A 'array.Pairs<T, K> = Pair<T, K>[]' type; 
+
+		NOTE: do not separate these pieces via exports! 
+
+	2.11. [done] string.lastOut
+
+
+	[Done]
+	2.13. 'type.isTruthy = id'; This is a convinience alias; 
+
+	[Done]
+	2.15. 'object.prototype = Object.getPrototypeOf' [convinience method]
+
+	[Done]
+	2.16. 'object.findOwnMissing'; 
+
+	[Done]
+	2.17. 'object.copy'
+
+	[Done]
+	2.18. 'array.tuple'
+	
+	2.19. JSDoc - look in 'Docs'
 
 3. Delete: 
 	3.1 [done]. The 'declarationMap: true' option - ONLY WASTES SPACE; 
 		It doesn't do ANYTHING useful when there are no '.ts' files provided; 
+
+4. Docs: 
+
+	2.12. JSDoc
+
+		Use prior documentation, 
+			THIS TIME - use the 'GitHub Wiki', namely - the 'Github Wiki' REFERENCES the JSDoc; 
+			Reason for that - easier [faster] to see online once, then use ALL THE TIME inside the editor, than the reverse;
+			And 'one.js' is so small, it actually makes sense (the user will be remembering names + purposes of functions and needing to look them up A LOT, 
+				NOT remembering a lib/framework and knowing what this is automatically); 

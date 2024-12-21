@@ -1,4 +1,4 @@
-import { last, lastOut } from "../arrays/arrays.js"
+import { last, lastOut } from "../array/array.js"
 
 export const curry = (f: Function) => {
 	const T = (n: number, ...argsArr: any[]) => {

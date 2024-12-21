@@ -1,3 +1,5 @@
+import { id } from "../functional/functional.js"
+
 export const isNumber = (x: any): x is number => typeof x === "number"
 export const isFunction = (x: any): x is Function => typeof x === "function"
 export const isString = (x: any): x is string => typeof x === "string"
@@ -10,7 +12,7 @@ export const isNull = (x: any): x is null => x === null
 export const isUndefined = (x: any): x is undefined => x === undefined
 export const typeOf = (x: any) => typeof x
 
-export const isArray = <Type = any>(x: any): x is Type[] => x && x.constructor === Array
+export const isArray = <Type = any>(x: any): x is Type[] => x instanceof Array
 
 export function isNumberConvertible(x: any): boolean {
 	return (
@@ -20,3 +22,7 @@ export function isNumberConvertible(x: any): boolean {
 		isNull(x)
 	)
 }
+
+export const isTruthy = id
+
+export const never = (() => {}) as () => never

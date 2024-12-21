@@ -1,5 +1,51 @@
-import { isNumberConvertible, isUndefined } from "../typeof/typeof.js"
-import { ownProperties } from "../objects/main.js"
+import { isArray, isNumberConvertible, isUndefined } from "../type/type.js"
+import { ownProperties } from "../object/main.js"
+
+export type Pair<A = any, B = A> = [A, B]
+export type Pairs<A = any, B = A> = Pair<A, B>[]
+
+export type Tuple<
+	Type,
+	LowLim extends number,
+	UpLim extends number = LowLim
+> = LowLim extends LowLim
+	? number extends LowLim
+		? Type[]
+		: LowLim extends UpLim
+		? _TupleOfBase<Type, LowLim, []>
+		: _TupleOf<Type, Tuple<Type, LowLim>, Tuple<Type, UpLim>, []>
+	: never
+
+type _TupleOfBase<
+	Type,
+	Limit extends number,
+	Rem extends unknown[]
+> = Rem["length"] extends Limit ? Rem : _TupleOfBase<Type, Limit, [...Rem, Type]>
+
+type _TupleOf<
+	Type,
+	LowLim extends unknown[],
+	UpLim extends unknown[],
+	Rem extends unknown[]
+> = LowLim["length"] extends 0
+	? [] | (UpLim["length"] extends 0 ? never : _TupleOf<Type, [Type], UpLim, []>)
+	: Rem["length"] extends LowLim["length"]
+	? Rem
+	:
+			| _TupleOf<Type, LowLim, UpLim, [...Rem, Type]>
+			| (LowLim["length"] extends UpLim["length"]
+					? never
+					: _TupleOf<Type, [...LowLim, Type], UpLim, Rem>)
+
+export const isTuple =
+	<Items extends number>(n: number) =>
+	<Type>(x: any): x is Tuple<Type, Items> =>
+		isArray(x) && x.length === n
+
+export const isPair = <A = any, B = any>(x: any): x is Pair<A, B> =>
+	isArray(x) && x.length === 2
+
+export const tuple = <T extends any[]>(...args: T): T => args
 
 export const lastOut = <Type = any>(x: Type[]) => x.slice(0, x.length - 1)
 export const last = <Type = any>(x: Type[]) => x[x.length - 1]
@@ -82,3 +128,5 @@ export function reduceRight<Type = any>(
 	while (i--) result = f(result, array[i], i)
 	return result
 }
+
+export const empty = () => []

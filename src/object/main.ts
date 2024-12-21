@@ -1,4 +1,4 @@
-import { isArray, isObject } from "../typeof/typeof.js"
+import { isArray, isObject } from "../type/type.js"
 
 export const kv = (obj: object): [(string | symbol)[], any[]] => [keys(obj), values(obj)]
 export const dekv = (kv: [(string | symbol)[], any[]]): object => {
@@ -54,8 +54,8 @@ export function recursiveStringValues(object: object) {
 
 export function recursiveSymbolKeys(object: object) {
 	const symbolProperties = Object.getOwnPropertySymbols(object)
-	let proto
-	while (Object.prototype !== (proto = Object.getPrototypeOf(object)))
+	let proto: object
+	while (prototype(Object) !== (proto = prototype(object)))
 		symbolProperties.push(...Object.getOwnPropertySymbols((object = proto)))
 	return symbolProperties
 }
@@ -77,3 +77,31 @@ export function ownKeys(object: object) {
 export function ownValues(object: object) {
 	return ownKeys(object).map((key) => object[key])
 }
+
+export const prototype = Object.getPrototypeOf
+
+export const copy = (x: object) => ({ ...x })
+
+export function propertyDescriptors(object: object) {
+	let currPrototype = object
+	let final = {}
+
+	while (currPrototype)
+		final = {
+			...final,
+			...findOwnMissing(
+				final,
+				Object.getOwnPropertyDescriptors(
+					(currPrototype = prototype(currPrototype))
+				)
+			)
+		}
+}
+
+export function findOwnMissing(inobj: object, atobj: object) {
+	const final = {}
+	for (const x of ownKeys(atobj)) if (!(x in inobj)) final[x] = atobj[x]
+	return final
+}
+
+export const empty = () => ({})
