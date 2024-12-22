@@ -54,7 +54,8 @@
 
 		NOTE: do not separate these pieces via exports! 
 
-	2.11. [done] string.lastOut
+	[done]
+	2.11.  string.lastOut
 
 
 	[Done]
@@ -74,9 +75,28 @@
 	
 	2.19. JSDoc - look in 'Docs'
 
+	[Done]
+	2.20. 'array.insertion'; 
+
+	[Done]
+	2.21. 'functional.constant'; 
+
+	[DONE]
+	2.22. 'array.out' - a new (last) argument 'count'; 
+
+	[DONE]
+	2.23. 'array.lastOut' - a new (last) argument 'count'; 
+
+
 3. Delete: 
 	3.1 [done]. The 'declarationMap: true' option - ONLY WASTES SPACE; 
 		It doesn't do ANYTHING useful when there are no '.ts' files provided; 
+
+	[Done]
+	3.2. middleOutN
+	
+	[Done]
+	3.3. middleOutP
 
 4. Docs: 
 
@@ -87,3 +107,20 @@
 			Reason for that - easier [faster] to see online once, then use ALL THE TIME inside the editor, than the reverse;
 			And 'one.js' is so small, it actually makes sense (the user will be remembering names + purposes of functions and needing to look them up A LOT, 
 				NOT remembering a lib/framework and knowing what this is automatically); 
+
+			
+		1. array
+		2. boolean
+		3. functional
+		4. inplace
+		5. map
+		6. number
+		7. object
+		8. set
+		9. string
+		10. tree
+		11. type
+
+5. Tests
+
+6. Logs [write the changelogs]; 

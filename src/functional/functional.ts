@@ -73,3 +73,5 @@ export const cached = (base: Function) => {
 
 export const id = <Type = any>(x: Type) => x
 export const nil = () => {}
+
+export const constant = <T = any>(x: T) => () => x

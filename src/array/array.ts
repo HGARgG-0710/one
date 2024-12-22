@@ -1,9 +1,27 @@
 import { isArray, isNumberConvertible, isUndefined } from "../type/type.js"
 import { ownProperties } from "../object/main.js"
+import { constant } from "../functional/functional.js"
 
 export type Pair<A = any, B = A> = [A, B]
 export type Pairs<A = any, B = A> = Pair<A, B>[]
 
+/**
+ * A generic type for representation of N-tuples with the same type.
+ *
+ * Creates a type of `[Type, ...]` (`LowLim` items) `| [Type, ...]` (`LowLim + 1` items) `| ... | [Type, ...]` (`UpLim` items).
+ *
+ * Example:
+ *
+ * `type Z = Tuple<number, 0, 3>`
+ *
+ * `type O = Tuple<string, 4>`
+ *
+ * Are the same as:
+ *
+ * `type Z = [] | [number] | [number, number] | [number, number, number]`
+ *
+ * `type O = [string, string, string, string]`
+ */
 export type Tuple<
 	Type,
 	LowLim extends number,
@@ -37,34 +55,82 @@ type _TupleOf<
 					? never
 					: _TupleOf<Type, [...LowLim, Type], UpLim, Rem>)
 
+/**
+ * Returns a predicate, purpose of which is to indicate that the argument `x` is a `Tuple`,
+ * with '.length' being precisely `n`.
+ */
 export const isTuple =
 	<Items extends number>(n: number) =>
 	<Type>(x: any): x is Tuple<Type, Items> =>
 		isArray(x) && x.length === n
 
-export const isPair = <A = any, B = any>(x: any): x is Pair<A, B> =>
-	isArray(x) && x.length === 2
+/**
+ * A predicate, purpose of which is to determine that the given item is an array of length 2.
+ */
+export const isPair = isTuple(2) as <A = any, B = any>(x: any) => x is Pair<A, B>
 
+/**
+ * A type-only no-op function, purpose of which is to treat the given arguments as an array of respective specific type.
+ */
 export const tuple = <T extends any[]>(...args: T): T => args
 
-export const lastOut = <Type = any>(x: Type[]) => x.slice(0, x.length - 1)
+/**
+ * A function for creating a copy of the given array without the last `count` elements (by default - 1)
+ */
+export const lastOut = <Type = any>(x: Type[], count = 1) => x.slice(0, x.length - count)
+
+/**
+ * A function for obtaining the last element of the given array.
+ */
 export const last = <Type = any>(x: Type[]) => x[x.length - 1]
+
+/**
+ * A function for mutating the given array via setting its' `.length` to `0`.
+ */
 export const clear = <Type = any>(x: Type[]) => (x.length = 0)
-export const insert = <Type = any>(x: Type[], index: number, ...values: Type[]) =>
-	x.slice(0, index).concat(values).concat(x.slice(index))
 
-export const replace = <Type = any>(arr: Type[], index: number, ...values: Type[]) =>
-	arr
-		.slice(0, index)
-		.concat(values)
-		.concat(arr.slice(index + 1))
+/**
+ * A function for creating a copy of the array with `values` inserted into it at `index`, and `replaceNum(x)` items skipped.
+ */
+export const insertion =
+	(replaceNum: (x: any[]) => number) =>
+	<Type = any>(x: Type[], index: number, ...values: Type[]) =>
+		x
+			.slice(0, index)
+			.concat(values)
+			.concat(x.slice(index + replaceNum(x)))
 
-export const out = <Type = any>(array: Type[], index: number) =>
-	array.slice(0, index).concat(array.slice(index + 1))
+/**
+ * Same as `insertion(constant(0))`. Creates a copy, which is a result of inserting items at a given index without any removal
+ */
+export const insert = insertion(constant(0))
 
-export const firstOut = <Type = any>(x: Type[]) => x.slice(1)
+/**
+ * Same as `insertion(constant(1))`. Creates a copy, which is a result of inserting items at a given index, removing only a single item
+ */
+export const replace = insertion(constant(1))
+
+/**
+ * Creates a copy of a given array, which is a result of removal of `count` items from the given index (default - a single item);
+ */
+export const out = <Type = any>(array: Type[], index: number, count = 1) =>
+	array.slice(0, index).concat(array.slice(index + count))
+
+/**
+ * Creates a copy of a given array, with the first `count` items removed (by default - 1)
+ */
+export const firstOut = <Type = any>(x: Type[], count = 1) => x.slice(count)
+
+/**
+ * Gets the first item of the array
+ */
 export const first = <Type = any>(x: Type[]) => x[0]
 
+/**
+ * Calls `f` on `x`, assigning all the own keys on `x`, that are not in `excluded` to `x`.
+ *
+ * Useful for creating "hybrid" arrays from existing objects.
+ */
 export const propPreserve =
 	(f: Function, excluded: Set<string | symbol> = new Set()) =>
 	(x: object) => {
@@ -78,14 +144,16 @@ export const propPreserve =
 		return result
 	}
 
-export const [middleOutP, middleOutN] = [0, 1].map(
-	(x) =>
-		<Type = any>(arr: Type[]) =>
-			out(arr, Math.floor(arr.length / 2) - x * ((arr.length + 1) % 2))
-)
-
+/**
+ * Creates a copy of the given array
+ */
 export const copy = <Type = any>(x: Type[]) => ([] as Type[]).concat(x)
 
+/**
+ * Creates and returns a new array. Same functionality as `array.map(f)`.
+ *
+ * Better performance for much larger inputs (no engine input size optimizations)
+ */
 export function map<TypeFrom = any, TypeTo = any>(
 	array: TypeFrom[],
 	f: (item?: TypeFrom, index?: number, array?: TypeFrom[]) => TypeTo
@@ -96,6 +164,11 @@ export function map<TypeFrom = any, TypeTo = any>(
 	return mapped
 }
 
+/**
+ * Creates and returns a new array. Same functionality as `array.prop(f)`.
+ *
+ * Better performance for much larger inputs (no engine input size optimizations)
+ */
 export function filter<Type = any>(
 	array: Type[],
 	prop: (item?: Type, index?: number, array?: Type[]) => boolean
@@ -106,6 +179,11 @@ export function filter<Type = any>(
 	return filtered
 }
 
+/**
+ * Creates and returns a new array. Same functionality as `array.reduce(f, init)`.
+ *
+ * Better performance for much larger inputs (no engine input size optimizations)
+ */
 export function reduce<Type = any>(
 	array: Type[],
 	f: (item?: any, curr?: Type, i?: number) => any,
@@ -117,6 +195,11 @@ export function reduce<Type = any>(
 	return result
 }
 
+/**
+ * Creates and returns a new array. Same functionality as `array.reduceRight(f, init)`
+ *
+ * Better performance for much larger inputs (no engine input size optimizations)
+ */
 export function reduceRight<Type = any>(
 	array: Type[],
 	f: (item?: any, curr?: Type, i?: number) => any,
@@ -129,4 +212,7 @@ export function reduceRight<Type = any>(
 	return result
 }
 
-export const empty = () => []
+/**
+ * Allocates and returns a new empty array.
+ */
+export const empty = (): [] => []
