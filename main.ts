@@ -1,8 +1,6 @@
-export * as set from "./src/set/set.js"
 export * as string from "./src/string/string.js"
 export * as functional from "./src/functional/functional.js"
 export * as array from "./src/array/array.js"
-export * as tree from "./src/tree/tree.js"
 export * as map from "./src/map/map.js"
 export * as object from "./src/object/object.js"
 export * as number from "./src/number/number.js"

@@ -1,57 +1,170 @@
-import { isArray, isObject } from "../type/type.js"
+import { T } from "../boolean/boolean.js"
+import { isArray, isObject, TypePredicate } from "../type/type.js"
 
+/**
+ * Type for representing a converted object key
+ */
+export type ObjectKey = string | symbol
+export type FinalKeys = ObjectKey[]
+
+/**
+ * Type for representing an object key
+ */
+export type FullKey = ObjectKey | number
+export type KeyArray = FullKey[]
+
+/**
+ * Type for representing a shape of an object
+ */
+export type ShapeArg = KeyArray | { [x: FullKey]: (x: any) => boolean | null }
+
+/**
+ * Returns the pair of keys and values of the given object
+ */
 export const kv = (obj: object): [(string | symbol)[], any[]] => [keys(obj), values(obj)]
-export const dekv = (kv: [(string | symbol)[], any[]]): object => {
-	const [keys, values] = kv
-	const result = {}
+
+/**
+ * Creates a new object using the pair of keys and values
+ */
+export const dekv = ([keys, values]: [(string | symbol)[], any[]]): object => {
+	const result = empty()
 	for (let i = 0; i < keys.length; ++i) result[keys[i]] = values[i]
 	return result
 }
 
+/**
+ * Creates a predicate for type-checking object-shapes.
+ *
+ * For `true`, mandates that argument be of `typeof x === "object"`. For `null`, returns `false`
+ *
+ * @param properties The basic object shape. If an array - items from the array are treated as keys to be checked for presence on the passed `x`. Otherwise - an object, keys of which correspond to property names to be proven to be present, and to be passing of the predicates assigned to the respective keys. Defaults to `[]`
+ * @param lacks The array of keys to be shown to definitively not be present on the object. Defaults to `[]`
+ * @param optional The array of properties to be allowed on the object in the event that `isStrict` is set to `true`. Defaults to `[]`
+ * @param isStrict The flag for indicating whether the shape to be checked for is "strict", meaning - whether any properties other than `properties` and `optional` are allowed. Defaults to `false`
+ *
+ * @example
+ *
+ * interface IThing {
+ * 	eatable: any
+ * 	fruit: bool
+ * }
+ *
+ * interface Fruit extends IThing {
+ * 	eatable: true
+ * 	fruit: true
+ * }
+ *
+ * interface Shelf extends IThing {
+ * 	fruit: false
+ * 	eatable: "maybe???"
+ * 	robust: true
+ * }
+ *
+ * const makeThing = (eatable: any, fruit: bool): IThing => ({ eatable, fruit })
+ * const makeFruit = (): Fruit => makeThing(true, true)
+ * const makeShelf = (): Shelf => { ...makeThing("maybe???", false), robust: true }
+ *
+ * const isThing = structCheck<IThing>({
+ * 	eatable: T,
+ * 	fruit: isBoolean,
+ * })
+ *
+ * const isThingExact = structCheck<IThing>({
+ * 	eatable: T,
+ * 	fruit: isBoolean,
+ * }, [], [], true)
+ *
+ * const isFruit = structCheck<Fruit>({
+ * 	eatable: eqcurry(true),
+ * 	fruit: eqcurry(true),
+ * })
+ *
+ * const isShelf = structCheck<Shelf>({
+ * 	eatable: eqcurry("maybe???"),
+ * 	fruit: eqcurry(false)
+ * })
+ *
+ * const apple = makeFruit()
+ * const shelf = makeShelf()
+ *
+ * isThing(shelf) // true
+ * isFruit(shelf) // false
+ * isShelf(shelf) // true
+ *
+ * isThing(fruit) // true
+ * isFruit(fruit) // true
+ * isShelf(fruit) // false
+ */
 export function structCheck<Type extends object = object>(
-	properties:
-		| (string | symbol | number)[]
-		| { [x: string | symbol | number]: (x: any) => boolean },
-	lackingProps: (string | symbol | number)[] = [],
-	isStrict: boolean = false
-) {
-	const propsArr = isArray(properties)
-		? Array.from(new Set(properties))
-		: keys(properties)
+	properties: ShapeArg,
+	lacks: KeyArray = [],
+	optional: KeyArray = [],
+	isStrict = false
+): TypePredicate<Type> {
+	const props = isArray(properties) ? Array.from(new Set(properties)) : keys(properties)
 	const propsPredicateArrays = isArray(properties) ? [] : values(properties)
-	return (x: any): x is Type =>
-		isObject(x) &&
-		!!x &&
-		propsArr.every((p) => p in x) &&
-		lackingProps.every((p) => !(p in x)) &&
-		propsPredicateArrays.every((pred, i) => pred(x[propsArr[i]])) &&
-		(!isStrict || propsArr.length === keys(x).length)
+	return (x: any): x is Type => {
+		if (
+			!(
+				isObject(x) &&
+				!!x &&
+				props.every((p) => p in x) &&
+				lacks.every((p) => !(p in x)) &&
+				propsPredicateArrays.every((pred, i) => (pred || T)(x[props[i]]))
+			)
+		)
+			return false
+
+		if (!isStrict) return true
+
+		const keyslen = keys(x).length
+		return (
+			props.length === keyslen ||
+			(keyslen - props.length === optional.length &&
+				optional.every((opprop) => opprop in x))
+		)
+	}
 }
 
-export function keys(object: object) {
-	const props: (string | symbol)[] = recursiveStringKeys(object)
+/**
+ * Returns the list of keys of a given object [includes the prototypes]
+ */
+export function keys(object: object): FinalKeys {
+	const props: FinalKeys = recursiveStringKeys(object)
 	props.push(...recursiveSymbolKeys(object))
 	return props
 }
 
+/**
+ * Returns the array of object values [includes the prototypes]
+ */
 export function values(object: object) {
 	const vals: any[] = recursiveStringValues(object)
 	vals.push(...recursiveSymbolValues(object))
 	return vals
 }
 
+/**
+ * Returns the array of string keys of a given object [includes the prototypes]
+ */
 export function recursiveStringKeys(object: object) {
 	const props: string[] = []
 	for (const p in object) props.push(p)
 	return props
 }
 
+/**
+ * Returns the array of values of a given object at string keys [includes the prototypes]
+ */
 export function recursiveStringValues(object: object) {
 	const props: any[] = []
 	for (const p in object) props.push(object[p])
 	return props
 }
 
+/**
+ * Returns the array of symbol keys of a given object [includes the prototypes]
+ */
 export function recursiveSymbolKeys(object: object) {
 	const symbolProperties = Object.getOwnPropertySymbols(object)
 	let proto: object
@@ -60,31 +173,52 @@ export function recursiveSymbolKeys(object: object) {
 	return symbolProperties
 }
 
+/**
+ * Returns the array of values of a given object at symbol keys [includes the prototypes]
+ */
 export const recursiveSymbolValues = (object: object) =>
 	recursiveSymbolKeys(object).map((key) => object[key])
 
-export const ownProperties = (object: object): [(string | symbol)[], any[]] => [
+/**
+ * Returns the pair of own keys and own properties of a given object
+ */
+export const ownProperties = (object: object): [FinalKeys, any[]] => [
 	ownKeys(object),
 	ownValues(object)
 ]
 
+/**
+ * Returns the own keys of a given object
+ */
 export function ownKeys(object: object) {
 	const keys: (string | symbol)[] = Object.getOwnPropertyNames(object)
 	keys.push(...Object.getOwnPropertySymbols(object))
 	return keys
 }
 
+/**
+ * Returns the own values of a given object
+ */
 export function ownValues(object: object) {
 	return ownKeys(object).map((key) => object[key])
 }
 
+/**
+ * Alias of 'Object.getPrototypeOf'
+ */
 export const prototype = Object.getPrototypeOf
 
+/**
+ * Makes a shallow copy of a given object
+ */
 export const copy = (x: object) => ({ ...x })
 
+/**
+ * Returns the object containing all the property descriptors on a given object [includes the prototypes, respects inheritance]
+ */
 export function propertyDescriptors(object: object) {
 	let currPrototype = object
-	let final = {}
+	let final = object
 
 	while (currPrototype)
 		final = {
@@ -96,12 +230,20 @@ export function propertyDescriptors(object: object) {
 				)
 			)
 		}
+
+	return final
 }
 
+/**
+ * Returns the object containing all the properties of `atobj` not present in `inobj`
+ */
 export function findOwnMissing(inobj: object, atobj: object) {
-	const final = {}
+	const final = empty()
 	for (const x of ownKeys(atobj)) if (!(x in inobj)) final[x] = atobj[x]
 	return final
 }
 
+/**
+ * Allocates a new empty array
+ */
 export const empty = () => ({})

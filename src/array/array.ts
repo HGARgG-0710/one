@@ -1,6 +1,7 @@
 import { isArray, isNumberConvertible, isUndefined } from "../type/type.js"
 import { ownProperties } from "../object/main.js"
 import { constant } from "../functional/functional.js"
+import { equals } from "../boolean/boolean.js"
 
 export type Pair<A = any, B = A> = [A, B]
 export type Pairs<A = any, B = A> = Pair<A, B>[]
@@ -216,3 +217,26 @@ export function reduceRight<Type = any>(
  * Allocates and returns a new empty array.
  */
 export const empty = (): [] => []
+
+/**
+ * Conducts the comparison of two iterables `a` and `b`
+ * by converting them to arrays and using element-by-element 'pred(a[i], b[i])'.
+ *
+ * For comparison to yield `true`, it is required for both arrays to have the same length.
+ *
+ * `pred` defaults to `(x, y) => x === y`
+ */
+export const same = (
+	a: Iterable<any>,
+	b: Iterable<any>,
+	pred: (x?: any, y?: any) => boolean = equals
+) => {
+	const [aarr, barr] = [a, b].map(Array.from)
+	return aarr.length === barr.length && aarr.every((x, i) => pred(x, barr[i]))
+}
+
+/**
+ * Creates the array consisting of all the unique items of the given 
+ * Iterable, in the order in which they appear
+*/
+export const uniqueArr = <T = any>(x: Iterable<T>) => Array.from(new Set<T>(x))

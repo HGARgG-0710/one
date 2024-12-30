@@ -1,13 +1,18 @@
-export type MapKeyValues = [any[], any[]]
+import { Pair } from "../array/array.js"
 
-export const kv = (map: Map<any, any>): MapKeyValues => [
+/**
+ * Returns the pair of arrays of keys and values of the given `Map`
+ */
+export const kv = (map: Map<any, any>): Pair<any[]> => [
 	Array.from(map.keys()),
 	Array.from(map.values())
 ]
 
-export const dekv = (kv: MapKeyValues): Map<any, any> =>
-	((x, y) =>
-		x.reduce((prev: Map<any, any>, curr, i) => {
-			prev.set(curr, y[i])
-			return prev
-		}, new Map()))(...kv)
+/**
+ * Returns the new `Map` built from the key-value pairs passed
+ */
+export const dekv = ([keys, values]: Pair<any[]>): Map<any, any> => {
+	const map = new Map()
+	for (let i = 0; i < keys.length; ++i) map.set(keys[i], values[i])
+	return map
+}
