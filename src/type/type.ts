@@ -60,6 +60,11 @@ export const typeOf = (x: any) => typeof x
 export const isArray = <Type = any>(x: any): x is Type[] => x instanceof Array
 
 /**
+ * Returns whether `x` is a `Set`
+ */
+export const isSet = <Type = any>(x: any): x is Set<Type> => x instanceof Set
+
+/**
  * Returns a bool indicating whether it is possible to call `Number(x)` without:
  *
  * 1. getting `NaN`

@@ -1,4 +1,13 @@
-import {
+import test, { suite } from "node:test"
+import assert from "assert"
+import { array } from "../../dist/main.js"
+import { isArray } from "../../dist/src/type/type.js"
+
+const {
+	isTuple,
+	isPair,
+	tuple,
+	same,
 	lastOut,
 	last,
 	clear,
@@ -8,149 +17,159 @@ import {
 	firstOut,
 	first,
 	propPreserve,
-	middleOutN,
-	middleOutP,
-	filter,
-	map,
 	copy,
+	map,
+	filter,
 	reduce,
-	reduceRight
-} from "../../dist/src/arrays/arrays.js"
+	reduceRight,
+	empty,
+	uniqueArr
+} = array
 
-// * lastOut
-console.log(
-	lastOut(
-		lastOut(["Artorias", "Gwyn", "Four Kings", "Nito", "Bed of Chaos", "Kapra Demon"])
-	)
-)
-console.log(lastOut([]))
-console.log()
+const getArray = () => [0, 1, 2, 3]
 
-// * 'last'
-console.log(
-	last([
-		"BABABA",
-		"It's all a load of nonsense, really",
-		"...",
-		"...?",
-		"I'm supposed to be picked!"
-	])
-)
-console.log(last([]))
-console.log()
+suite("array", () => {
+	test("isTuple", () => {
+		const isTriple = isTuple(3)
+		assert(isTriple(["1", "2", "3"]))
+		assert(!isTriple([0, 1]))
+		assert(!isTriple(false))
+	})
 
-// * 'clear'
+	test("isPair", () => {
+		assert(isPair([0, 1]))
+		assert(!isPair([0, 1, 2]))
+		assert(!isPair(false))
+	})
 
-const t = ["AAAAAAAAAAAAAAAAA", "WE'RE GOING TO DIEEEEIEIEIEIEIE!", "whatevers..."]
-clear(t)
-console.log(t)
+	test("tuple", () => {
+		const X = getArray()
+		assert(same(tuple(...X), X))
+	})
 
-const r = []
-clear(r)
-console.log(r)
-console.log()
+	test("lastOut", () => {
+		const X = getArray()
+		assert(same(lastOut(X), [0, 1, 2]))
+	})
 
-// * 'insert'
+	test("last", () => {
+		const X = getArray()
+		assert.strictEqual(last(X), 3)
+	})
 
-console.log(insert<any>(["jujuju", "fafafa", "rarirurirurira"], 2, true))
-console.log()
+	test("clear", () => {
+		const X = getArray()
+		assert.strictEqual(X.length, 4)
+		clear(X)
+		assert(same(X, []))
+	})
 
-// * 'replace'
+	test("insert", () => {
+		const X = getArray()
+		assert(same(insert(X, 1, -1, -2, -3), [0, -1, -2, -3, 1, 2, 3]))
+		assert(same(insert(X, 0, 14, 29), [14, 29, 0, 1, 2, 3]))
+	})
 
-console.log(replace(["a", false, null], 1, "kklklkl", null, null, null, true))
-console.log()
+	test("replace", () => {
+		const X: any[] = getArray()
+		assert(same(replace(X, 0, "R", "A", "9"), ["R", "A", "9", 1, 2, 3]))
+		assert(same(replace(X, 1, true), [0, true, 2, 3]))
+	})
 
-// * 'out'
-console.log(out(["a", false, "b"], 1))
-console.log()
+	test("out", () => {
+		const X = getArray()
+		assert(same(out(X, 0), [1, 2, 3]))
+		assert(same(out(out(X, 2), 1), [0, 3]))
+	})
 
-// * 'firstOut'
-console.log(
-	firstOut([
-		"TARTAR",
-		"You know, if not for the zeroth one, all'd be well!",
-		"I second that!"
-	])
-)
-console.log(firstOut([]))
+	test("firstOut", () => {
+		const X = getArray()
+		assert(same(firstOut(X), [1, 2, 3]))
+		assert(same(firstOut(firstOut(X)), [2, 3]))
+		assert(same(firstOut([]), []))
+	})
 
-console.log()
+	test("first", () => {
+		const X = getArray()
+		assert.strictEqual(first(X), 0)
+		assert.strictEqual(first(firstOut(X)), 1)
+	})
 
-// * 'first'
-console.log(first([888, 0, 1, 2, 3]))
-console.log(first([]))
+	test("propPreserve", () => {
+		interface ArrHaving {
+			arr: any[]
+		}
 
-console.log()
+		const mapPropPreserve = propPreserve((x: ArrHaving) => x.arr, new Set(["length"]))
+		const X1 = mapPropPreserve({
+			T: 90,
+			arr: [40, 40, 19]
+		})
 
-// * 'propPreserve'
-const propCheck = propPreserve((x: any[]) => x.map((x) => x + 3))
-const _t: { [x: string]: any } & any[] = [0, 2, 3, 5]
-_t.S = 333
-const _tPlus = propCheck(_t)
-console.log(_tPlus)
-console.log(_t === _tPlus)
-console.log(_tPlus)
-console.log(..._tPlus)
+		assert.strictEqual(X1.T, 90)
+		assert(isArray(X1))
 
-console.log()
+		const X2 = mapPropPreserve({
+			length: 90,
+			R: 20,
+			arr: ["a", "b", "c"]
+		})
 
-// * 'middleOutN' and  'middleOutP'
+		assert.strictEqual(X2.length, 3)
+		assert.strictEqual(X2.R, 20)
+		assert(isArray(X2))
+	})
 
-console.log(middleOutN([0, 1, 2, 3, 4, 5, 6, 7, 8]))
-console.log(middleOutN([0, 1, 2, 3, 4, 5, 6, 7, 8, 9]))
-console.log(middleOutP([0, 1, 2, 3, 4, 5, 6, 7, 8]))
-console.log(middleOutP([0, 1, 2, 3, 4, 5, 6, 7, 8, 9]))
-console.log()
+	test("copy", () => {
+		const X = getArray()
+		const XC = copy(X)
+		assert(same(X, XC))
+		assert.notStrictEqual(X, XC)
+	})
 
-// * 'filter'
-const origFilter = [0, 1345, 0.32, 0.97, 0.551, 0.41]
-const filtered = filter(origFilter, (x: number) => x < 0.5)
-console.log(filtered)
-console.log(filtered === origFilter)
-console.log()
+	test("map", () => {
+		const X = getArray()
+		const square = (x: number) => x ** 2
+		assert(same(X.map(square), map(X, square)))
+	})
 
-// * 'map'
-const origMap = [1, 22, 90, 5190]
-const mapped = map(origMap, (x: number) => (x < 100 ? x ** x : x ** 2))
-console.log(mapped)
-console.log(origMap === mapped)
-console.log()
+	test("filter", () => {
+		const X = getArray()
+		const pred = (x: number) => x % 2 === 1
+		assert(same(X.filter(pred), filter(X, pred)))
+	})
 
-// * 'copy'
-console.log(copy(origFilter) === origFilter)
-console.log(copy(origFilter))
-console.log()
+	test("reduce", () => {
+		const X = getArray()
+		const reductor = (x: number, y: number) => x - y
+		assert.strictEqual(X.reduce(reductor), reduce(X, reductor))
+	})
 
-// * 'reduce'
-console.log(
-	reduce(
-		origFilter,
-		(lastArr: number[], y) => {
-			lastArr.push(reduce(lastArr, (x: number, y: number) => x + y, 0) + y)
-			return lastArr
-		},
-		[]
-	)
-)
+	test("reduceRight", () => {
+		const X = getArray()
+		const reductor = (x: number, y: number) => x - y + x ** y
+		assert.strictEqual(X.reduceRight(reductor), reduceRight(X, reductor))
+	})
 
-console.log(
-	reduce(
-		origFilter,
-		(lastVal: number, y, i) =>
-			reduce(origFilter.slice(0, i), (x: number, y: number) => x + y) + lastVal
-	)
-)
-console.log()
+	test("empty", () => {
+		assert(same(empty(), []))
+		assert.notStrictEqual(empty(), empty())
+	})
 
-// * 'reduceRight'
-console.log(
-	reduceRight(
-		origFilter,
-		(x: number[], y: any) => {
-			x.push(y)
-			return x
-		},
-		[]
-	)
-)
-console.log(reduceRight(origFilter, (x: number, y: number) => x / Math.max(y, 0.01)))
+	test("same", () => {
+		const X = getArray()
+		assert(same(X, getArray()))
+		assert(
+			same(
+				X.map((x) => x ** 3),
+				X,
+				(x, y) => x === y ** 3
+			)
+		)
+	})
+
+	test("uniqueArr", () => {
+		const X = [0, 1, 1, 2, 2, 2, 3, 1]
+		assert(same(uniqueArr(X), getArray()))
+	})
+})

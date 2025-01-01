@@ -231,12 +231,12 @@ export const same = (
 	b: Iterable<any>,
 	pred: (x?: any, y?: any) => boolean = equals
 ) => {
-	const [aarr, barr] = [a, b].map(Array.from)
+	const [aarr, barr] = [a, b].map((x) => Array.from(x))
 	return aarr.length === barr.length && aarr.every((x, i) => pred(x, barr[i]))
 }
 
 /**
- * Creates the array consisting of all the unique items of the given 
+ * Creates the array consisting of all the unique items of the given
  * Iterable, in the order in which they appear
-*/
+ */
 export const uniqueArr = <T = any>(x: Iterable<T>) => Array.from(new Set<T>(x))

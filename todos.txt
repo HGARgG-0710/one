@@ -131,6 +131,87 @@
 
 5. Tests
 
+	1. Rewrite the existing tests from scratch (using the Node's 'test' + 'assert')
+	2. Modules to make new tests for: 
+
+		2. boolean
+			1. not
+			2. T
+			3. F
+			4. equals
+			5. eqcurry
+		3. functional
+			1. or
+			2. and
+			3. trivialCompose
+			4. iterations
+			5. sequence
+			6. repeat
+			7. arrayCompose
+			8. cache
+			9. tupleSlice
+			10. tuplePick
+			11. cached
+			12. id
+			13. nil
+			14. constant
+		4. inplace
+			1. mutateva
+			2. insert
+			3. out
+			4. lastOut
+			5. firstOut
+			6. swap
+			7. replace
+		5. map
+			1. kv
+			2. dekv
+			3. toObject
+		6. number
+			1. sum
+			2. product
+			3. min
+			4. max
+		7. object
+			1. kv
+			2. dekv
+			3. structCheck
+			4. keys
+			5. values
+			6. recursiveStringKeys
+			7. recursiveSymbolKeys
+			8. ownProperties
+			9. ownKeys
+			10. ownValues
+			11. prototype
+			12. copy
+			13. propertyDescriptors
+			14. findOwnMissing
+			15. empty
+		8. string
+			1. capitalize
+			2. extract
+			3. count
+			4. limit
+			5. lastOut
+			6. concat
+			7. cover
+		9. type
+			1. isNumber
+			2. isFunction
+			3. isString
+			4. isBoolean
+			5. isSymbol
+			6. isObject
+			7. isNull
+			8. isUndefined
+			9. isNullary
+			10. typeOf
+			11. isArray
+			12. isSet
+			13. isNumberConvertible
+			14. isTruthy
+
 6. Logs [write the changelogs]; 
 
 7. Future: 
@@ -194,3 +275,10 @@
 				2. number -> functional 
 				3. map -> object/map [note: this is a submodule of the 'object.js' separate module]
 				4. string -> functional/string [note: this is a submodule of the functional library]
+
+	8. 'scale.js' - a scalable utility library. 
+		It would contain various functions, such as 'array.map', 'array.filter' [which execute BETTER than '.map' and '.filter' WHEN the inputs are large enough/have certain properties].
+			The library would provide 'fastMap', 'fastFilter', ..., to work with large pieces of data [for which it is more optimal to choose these manual solutions than the builtin Array.prototype methods]; 
+			THIS WAY, let the 'array.js' [and other such libraries] be USED by the 'scale.js'; 
+
+			TODO: create more similar functions for non-Array datatypes
