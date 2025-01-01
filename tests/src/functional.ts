@@ -1,147 +1,128 @@
-import {
-	curry,
+import test, { suite } from "node:test"
+import assert from "node:assert"
+
+import { isNumber, isString } from "../../dist/src/type/type.js"
+
+import { functional } from "../../dist/main.js"
+import { max } from "../../dist/src/number/number.js"
+import { same } from "../../dist/src/array/array.js"
+const {
 	or,
+	id,
 	and,
 	trivialCompose,
 	iterations,
 	sequence,
 	repeat,
 	arrayCompose,
-	tupleSlice,
-	tuplePick,
 	cache,
-	cached,
-	nil,
-	id
-} from "../../dist/src/functions/functions.js"
-import { sum, product } from "../../dist/src/numbers/numbers.js"
+} = functional
 
-// * 'curry'
-const a = (
-	x: number | string,
-	y: number | string,
-	z: number | string,
-	d: number | string
-) =>
-	((x) =>
-		!isNaN(x as unknown as number) && typeof d === "number"
-			? d * (x as unknown as number)
-			: d + x)((x as string) + y + z)
+suite("functional", () => {
+	test("or", () => {
+		const isEveryNum = (...x: any[]) => x.every(isNumber)
+		const or1 = or(isEveryNum, (...x: any[]) => x.every(isString))
+		const or2 = or(isEveryNum, isString)
+		const or3 = or(id)
 
-const C = curry(a)
-const [b, c, d, e] = [[], [14, 20], ["X", "Y", "SOMETHINGELSE"], [1, 1, "29"]].map(
-	(x: any[], i: number) => C(i + 1, ...x)
-)
+		assert(or1())
+		assert(or2())
+		assert(!or3())
 
-console.log(b.toString())
-console.log(b(1, 2, 3, 4))
-console.log(c(-4)(2))
-console.log(d()(11)())
-console.log(e()()()(3)) // note: the multiplication also tries conversion of strings to Number;
+		assert(or1(3, 2, 1))
+		assert(or1("3", "2", "1"))
+		assert(!or1("3", "2", null))
 
-console.log()
+		assert(or2(3, 2, 1))
+		assert(!or2(3, "A", 1))
+		assert(!or2(3, "A", "B"))
+		assert(or2("C", "A", "B"))
+		assert(or2("C", 2, 1))
 
-// * 'or'
-const orred = or(
-	...["number", "string", "boolean"].map(
-		(y) =>
-			(...x: any[]) =>
-				x.every((x) => typeof x === y)
-	)
-)
-console.log(orred(12340, "323", false))
-console.log(orred(true, true, true))
-console.log(orred(1, 2, 3))
-console.log(orred("I", "Am", "A", "Bug", "Called", "Loosey!"))
+		assert(!or3(false, false, false))
+		assert.strictEqual(or3(null, false, false), null)
+		assert.strictEqual(or3(false, false), false)
+		assert(or3(true, false, false))
+		assert(or3(true, true, true))
+	})
 
-console.log()
+	test("and", () => {
+		const and1 = and(
+			(...x: any[]) => x.some(isNumber),
+			(...x: any[]) => x.some(isString)
+		)
 
-// * 'and'
+		const and2 = and(id)
 
-const anded = and(
-	...["number", "string", "boolean"].map(
-		(y) =>
-			(...x: any[]) =>
-				x.some((x) => typeof x === y)
-	)
-)
-console.log(anded(12340, "323", false))
-console.log(anded(false, false, false))
-console.log(anded(1, "string"))
-console.log(anded("I", true))
+		assert(!and1())
+		assert(!and2())
 
-console.log()
+		assert(and1(10, 90, "S", "R"))
+		assert(!and1(10, 90))
+		assert(!and1("S", "R"))
 
-// * 'trivialCompose'
+		assert(and2(10, true, "S"))
+		assert(!and2(false))
+		assert.strictEqual(and2(0), 0)
+		assert.strictEqual(and2(10, 19, 44), 10)
+	})
 
-const polynomial = trivialCompose(
-	(x: number) => x ** 3 + 0.2 * x - 1,
-	(x: number) => x ** 2,
-	(x: number) => x - 15
-)
-const evaled = (x: number) => (x - 15) ** 6 + 0.2 * (x - 15) ** 2 - 1
-const testArr = [15, 20, 11]
+	test("trivialCompose", () => {
+		assert.strictEqual(
+			trivialCompose(
+				(x: number) => x - 7,
+				(x: number) => x ** 2,
+				(...x: number[]) => max(...x) + 5
+			)(20, 11, -94),
+			618
+		)
+	})
 
-console.log(testArr.map(polynomial))
-console.log(testArr.map(evaled))
+	test("iterations", () => {
+		const f = (i: number) => i ** 2
+		const iter1 = iterations(f, 5)
+		const iter2 = iterations(f, 10, 3)
 
-console.log()
+		assert(same(iter1, [0, 1, 2, 3, 4].map(f)))
+		assert(same(iter2, [0, 3, 6, 9].map(f)))
+	})
 
-// * 'iterations'
+	test("sequence", () =>
+		assert(
+			same(
+				sequence((x: number) => 2 * x, 20)(1),
+				[1].concat(
+					Array(20)
+						.fill(0)
+						.map((_, i) => 2 ** (i + 1))
+				)
+			)
+		))
 
-console.log(iterations((x: number) => x + 3, 7))
-console.log(iterations((x: number) => x + 3, 10, 2))
-console.log()
+	test("repeat", () => {
+		let i = 0
+		repeat((j: number) => (i += j), 11)
+		assert.strictEqual(i, 55)
+	})
 
-// * 'sequence'
-console.log(sequence((x: number) => 2 * x, 20)(1))
-console.log()
+	test("arrayCompose", () => {
+		const f = arrayCompose(
+			(x: number, y: number, z: number) => (x + y + z) / 2,
+			(x: number, y: number) => [x ** 2, x * y + 3, (x + y) ** 2],
+			(x: number) => [x + 3, x ** 2]
+		)
 
-// * 'repeat'
-let i: number | string = 14
-repeat((j) => (i += String(j)), 10)
-console.log(i)
-console.log()
+		assert.strictEqual(f(1), 24)
+		assert.strictEqual(f(10), 7120.5)
+	})
 
-// * 'arrayCompose', 'tupleSlice' and 'tuplePick':
-const testSlice = arrayCompose(
-	sum,
-	tupleSlice([0, 3], [1, 2], [3])(...Array(3).fill(product))
-)
-console.log(testSlice(77, 29, -2, 30, -1))
-const testPick = arrayCompose(
-	sum,
-	tuplePick(
-		(x, i) => [0, 3].includes(i),
-		(x, i) => [1, 2].includes(i),
-		(x, i) => i === 3
-	)(...Array(3).fill(product))
-)
-console.log(testPick(77, 29, -2, 30, -1))
-console.log()
+	test("cache", () => {
+		const prequoted = cache(
+			(quote: string) => (a: string) => `${quote}${a}`,
+			["'", '"']
+		)
 
-// * 'cache'
-const cacheRes = cache((x: number) => x + 3, [9998, 20])
-console.log(cacheRes.get(9998))
-console.log(cacheRes.get(20))
-console.log(cacheRes)
-console.log()
-
-// * 'cached'
-const cachedResult = cached((x: number) => x + 443)
-console.log(cachedResult.cache.has(29))
-console.log(cachedResult(29))
-console.log(cachedResult.cache.has(29))
-console.log(cachedResult(29))
-console.log(cachedResult(49))
-console.log([...cachedResult.cache.values()])
-console.log()
-
-// * 'id'
-console.log(id(4))
-console.log(id("?24"))
-console.log()
-
-// * 'nil'
-console.log(nil())
-console.log(nil.toString())
+		assert.strictEqual(prequoted.get("'")!("stapleton"), "'stapleton")
+		assert.strictEqual(prequoted.get('"')!("?"), '"?')
+	})
+})

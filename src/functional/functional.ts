@@ -34,7 +34,7 @@ export const trivialCompose =
  * Returns the array, containing the values of `f(j * i)` for `0 <= i <= floor(n / j)`
  */
 export const iterations = (f: Function, n: number, j = 1) =>
-	Array.from({ length: Math.floor(n / j) }, (_x, i) => f(j * i))
+	Array.from({ length: Math.floor(n / j) + +(j > 1) }, (_x, i) => f(j * i))
 
 /**
  * Creates a new array `X` = [init],
@@ -66,8 +66,13 @@ export const arrayCompose =
 /**
  * Creates and returns a `Map`, filled with key-value pairs of `[x, f(x)]` with `x` being in `keys`
  */
-export const cache = (f: Function, keys: any): Map<any, any> =>
-	new Map(keys.map((x: any) => [x, f(x)]))
+export const cache = <
+	KeyType = any,
+	FunctionType extends (...args: any[]) => any = (...args: any[]) => any
+>(
+	f: FunctionType,
+	keys: KeyType[]
+): Map<KeyType, ReturnType<typeof f>> => new Map(keys.map((x) => [x, f(x)]))
 
 /**
  * Breaks the given inputs' array `x` into (possibly intersecting) segments using `x.slice(inds[i])`,
@@ -77,8 +82,8 @@ export const cache = (f: Function, keys: any): Map<any, any> =>
  * A missing `x.slice`-interval defaults to `[]` (whole signature copying)
  */
 export const tupleSlice =
-	(...inds: ([number?, number?] | undefined)[]) =>
 	(...fs: Function[]) =>
+	(...inds: ([number?, number?] | undefined)[]) =>
 	(...x: any[]) =>
 		fs.map((f, i) => f(...x.slice(...(inds[i] || []))))
 
@@ -89,8 +94,8 @@ export const tupleSlice =
  * Like with `tupleSlice`, the default is copying of the entire signature `.filter(T)`
  */
 export const tuplePick =
-	(...inds: ((value?: any, index?: number, array?: any[]) => any)[]) =>
 	(...fs: Function[]) =>
+	(...inds: ((value?: any, index?: number, array?: any[]) => any)[]) =>
 	(...x: any[]) =>
 		fs.map((f, i) => f(...x.filter(inds[i] || T)))
 

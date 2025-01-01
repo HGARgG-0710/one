@@ -20,6 +20,9 @@
 
 			1. typeof -> type 
 			2. function -> functional
+
+	[Done]
+	1.5. Changed signature for 'tupleSlice', 'tuplePick'; 
 		
 2. Add: 
 	[Done]
@@ -135,14 +138,6 @@
 	2. Modules to make new tests for: 
 
 		3. functional
-			1. or
-			2. and
-			3. trivialCompose
-			4. iterations
-			5. sequence
-			6. repeat
-			7. arrayCompose
-			8. cache
 			9. tupleSlice
 			10. tuplePick
 			11. cached
@@ -150,7 +145,7 @@
 			13. nil
 			14. constant
 		4. inplace
-			1. mutateva
+			1. mutate
 			2. insert
 			3. out
 			4. lastOut
