@@ -1,12 +1,25 @@
-import { equals, F, not, T } from "../../dist/src/boolean/boolean.js"
+import test, { suite } from "node:test"
+import assert from "node:assert"
 
-console.log(not(332))
-console.log(not(null))
-console.log()
+import { boolean } from "../../dist/main.js"
+const { not, T, F, equals, eqcurry } = boolean
 
-console.log(T())
-console.log(F())
-console.log()
+suite("boolean", () => {
+	test("not", () => assert(not(false)))
+	test("T", () => assert.strictEqual(T(), true))
+	test("F", () => assert.strictEqual(F(), false))
 
-console.log(equals(4, 5))
-console.log(equals(5, 5))
+	test("equals", () => {
+		assert(equals(3, 3))
+		assert(!equals({}, {}))
+		assert(!equals(true, false))
+		assert(!equals(null, undefined))
+	})
+
+	test("eqcurry", () => {
+		assert(eqcurry(3)(3))
+		assert(!eqcurry({})({}))
+		assert(!eqcurry(true)(false))
+		assert(!eqcurry(null)(undefined))
+	})
+})

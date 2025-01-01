@@ -1,9 +1,19 @@
+import { constant } from "../functional/functional.js"
+
 /**
  * The functional version of `!x`
  */
 export const not: (x: any) => boolean = (x: any) => !x
-export const T: () => true = () => true
-export const F: () => false = () => false
+
+/**
+ * Returns `true`. Good for functional applications
+ */
+export const T = constant<true>(true)
+
+/**
+ * Returns `false`. Good for functional applications
+ */
+export const F = constant<false>(false)
 
 /**
  * The functional version of `x === y`

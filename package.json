@@ -1,7 +1,7 @@
 {
 	"name": "@hgargg-0710/one",
 	"author": "hgargg-0710",
-	"version": "0.4",
+	"version": "0.4.0",
 	"description": "A tiny npm library purposed for providing beautiful solutions to frequent miniature (ex: one-line/one-expression) tasks for various JS datatypes.",
 	"type": "module",
 	"main": "./dist/main.js",
@@ -9,7 +9,8 @@
 	"scripts": {
 		"build": "tsc --project .",
 		"test": "cd tests && tsc --project tsconfig.json && cd ..",
-		"all": "npm run build && npm run test"
+		"all": "npm run build && npm run test",
+		"paranoid": "npm run all && npm publish"
 	},
 	"license": "MIT",
 	"bugs": {

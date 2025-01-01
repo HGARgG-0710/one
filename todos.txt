@@ -134,12 +134,6 @@
 	1. Rewrite the existing tests from scratch (using the Node's 'test' + 'assert')
 	2. Modules to make new tests for: 
 
-		2. boolean
-			1. not
-			2. T
-			3. F
-			4. equals
-			5. eqcurry
 		3. functional
 			1. or
 			2. and
@@ -282,3 +276,8 @@
 			THIS WAY, let the 'array.js' [and other such libraries] be USED by the 'scale.js'; 
 
 			TODO: create more similar functions for non-Array datatypes
+
+	9. About 'npm run paranoid' - [note for self: generally, when trying out the WSL - introduce into this scheme 2 more items: 
+		1. pre-testing [via pre-npm-run-test + a specialized run-all script]
+		2. publishing ONLY if the tests pass successfully [possibly - write a specialized npm module/gist for that? So that the user may import the respective function into their own script and be done with it???]
+	]
