@@ -1,4 +1,4 @@
-import { constant } from "../functional/functional.js"
+import { constant } from "../functional/constant.js"
 
 /**
  * The functional version of `!x`

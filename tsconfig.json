@@ -9,7 +9,9 @@
 		"module": "node16",
 		"moduleResolution": "node16",
 		"declaration": true,
-		"strictNullChecks": true
+		"strictNullChecks": true,
+		// * this is temp
+		"sourceMap": true
 	},
 	"include": [
 		"./**/*.ts"

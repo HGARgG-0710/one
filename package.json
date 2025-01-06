@@ -9,8 +9,7 @@
 	"scripts": {
 		"build": "tsc --project .",
 		"test": "cd tests && tsc --project tsconfig.json && cd ..",
-		"all": "npm run build && npm run test",
-		"paranoid": "npm run all && npm publish"
+		"all": "npm run build && npm run test"
 	},
 	"license": "MIT",
 	"bugs": {

@@ -10,6 +10,7 @@ const {
 	same,
 	lastOut,
 	last,
+	setLast,
 	clear,
 	insert,
 	replace,
@@ -23,7 +24,9 @@ const {
 	reduce,
 	reduceRight,
 	empty,
-	uniqueArr
+	uniqueArr,
+	and,
+	or
 } = array
 
 const getArray = () => [0, 1, 2, 3]
@@ -55,6 +58,12 @@ suite("array", () => {
 	test("last", () => {
 		const X = getArray()
 		assert.strictEqual(last(X), 3)
+	})
+
+	test("setLast", () => {
+		const X = getArray()
+		assert.strictEqual(setLast(X, 97), 97)
+		assert.strictEqual(last(X), 97)
 	})
 
 	test("clear", () => {
@@ -171,5 +180,19 @@ suite("array", () => {
 	test("uniqueArr", () => {
 		const X = [0, 1, 1, 2, 2, 2, 3, 1]
 		assert(same(uniqueArr(X), getArray()))
+	})
+
+	test("and", () => {
+		const X = getArray()
+		const Y = firstOut(X)
+		assert.strictEqual(and(X), 0)
+		assert.strictEqual(and(Y), 3)
+	})
+
+	test("or", () => {
+		const X = getArray()
+		const Y = Array(4).fill(0).concat([false])
+		assert.strictEqual(or(X), 1)
+		assert.strictEqual(or(Y), false)
 	})
 })

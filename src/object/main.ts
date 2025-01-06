@@ -16,7 +16,9 @@ export type KeyArray = FullKey[]
 /**
  * Type for representing a shape of an object
  */
-export type ShapeArg = KeyArray | { [x: FullKey]: (x: any) => boolean | null }
+export type ShapeArg =
+	| KeyArray
+	| { [x: FullKey]: ((x: any) => boolean) | null | undefined }
 
 /**
  * Returns the pair of keys and values of the given object

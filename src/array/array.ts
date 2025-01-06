@@ -1,6 +1,6 @@
 import { isArray, isNumberConvertible, isUndefined } from "../type/type.js"
 import { ownProperties } from "../object/main.js"
-import { constant } from "../functional/functional.js"
+import { constant } from "../functional/constant.js"
 import { equals } from "../boolean/boolean.js"
 
 export type Pair<A = any, B = A> = [A, B]
@@ -84,6 +84,12 @@ export const lastOut = <Type = any>(x: Type[], count = 1) => x.slice(0, x.length
  * A function for obtaining the last element of the given array.
  */
 export const last = <Type = any>(x: Type[]) => x[x.length - 1]
+
+/**
+ * Sets the value of the last element of the array `x` to be `v`.
+ * @returns `v`
+ */
+export const setLast = <T = any>(x: T[], v: T) => (x[x.length - 1] = v)
 
 /**
  * A function for mutating the given array via setting its' `.length` to `0`.
@@ -220,7 +226,7 @@ export const empty = (): [] => []
 
 /**
  * Conducts the comparison of two iterables `a` and `b`
- * by converting them to arrays and using element-by-element 'pred(a[i], b[i])'.
+ * by converting them to arrays and using element-by-element 'pred(a[i], b[i], i)'.
  *
  * For comparison to yield `true`, it is required for both arrays to have the same length.
  *
@@ -229,10 +235,10 @@ export const empty = (): [] => []
 export const same = (
 	a: Iterable<any>,
 	b: Iterable<any>,
-	pred: (x?: any, y?: any) => boolean = equals
+	pred: (x?: any, y?: any, i?: any) => boolean = equals
 ) => {
 	const [aarr, barr] = [a, b].map((x) => Array.from(x))
-	return aarr.length === barr.length && aarr.every((x, i) => pred(x, barr[i]))
+	return aarr.length === barr.length && aarr.every((x, i) => pred(x, barr[i], i))
 }
 
 /**
@@ -240,3 +246,19 @@ export const same = (
  * Iterable, in the order in which they appear
  */
 export const uniqueArr = <T = any>(x: Iterable<T>) => Array.from(new Set<T>(x))
+
+/**
+ * Returns either the first truthy element of `x`, or `last(x)`
+ */
+export const or = <T = any>(x: T[]) => {
+	for (const curr of x) if (curr) return curr
+	return last(x)
+}
+
+/**
+ * Returns either the first falsy element of `x` or `last(x)`
+ */
+export const and = <T = any>(x: T[]) => {
+	for (const curr of x) if (!curr) return curr
+	return last(x)
+}

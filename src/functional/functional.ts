@@ -1,4 +1,4 @@
-import { last, lastOut } from "../array/array.js"
+import { last, lastOut, Tuple } from "../array/array.js"
 import { T } from "../boolean/boolean.js"
 import { isUndefined } from "../type/type.js"
 
@@ -82,10 +82,13 @@ export const cache = <
  * A missing `x.slice`-interval defaults to `[]` (whole signature copying)
  */
 export const tupleSlice =
-	(...fs: Function[]) =>
-	(...inds: ([number?, number?] | undefined)[]) =>
+	<FunctionTuple extends Function[] = Function[]>(...fs: FunctionTuple) =>
+	(...inds: ([number?, number?] | undefined | null)[]) =>
 	(...x: any[]) =>
-		fs.map((f, i) => f(...x.slice(...(inds[i] || []))))
+		fs.map((f, i) => f(...x.slice(...(inds[i] || [])))) as Tuple<
+			any,
+			FunctionTuple["length"]
+		>
 
 /**
  * Similar to `tupleSlice`, only difference being that `inds` are now predicates,
@@ -94,10 +97,19 @@ export const tupleSlice =
  * Like with `tupleSlice`, the default is copying of the entire signature `.filter(T)`
  */
 export const tuplePick =
-	(...fs: Function[]) =>
-	(...inds: ((value?: any, index?: number, array?: any[]) => any)[]) =>
+	<FunctionTuple extends Function[] = Function[]>(...fs: FunctionTuple) =>
+	(
+		...inds: (
+			| ((value?: any, index?: number, array?: any[]) => any)
+			| null
+			| undefined
+		)[]
+	) =>
 	(...x: any[]) =>
-		fs.map((f, i) => f(...x.filter(inds[i] || T)))
+		fs.map((f, i) => f(...x.filter(inds[i] || T))) as Tuple<
+			any,
+			FunctionTuple["length"]
+		>
 
 /**
  * Returns a function, the inputs of which are cached on each call.
@@ -124,10 +136,4 @@ export const id = <Type = any>(x: Type) => x
  */
 export const nil = () => {}
 
-/**
- * A function that returns a function, that returns `x`
- */
-export const constant =
-	<T = any>(x: T) =>
-	() =>
-		x
+export * from "./constant.js"

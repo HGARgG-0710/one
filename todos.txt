@@ -106,6 +106,18 @@
 	[Done]
 	2.28. 'string.concat'
 
+	[DOne]
+	2.29. 'array.setLast'
+
+	[Done]
+	2.30. 'array.or'
+
+	[DONe]
+	2.31. 'array.and'
+
+	[Done]
+	2.32. 'type.isFalsy'
+
 3. Delete: 
 	3.1 [done]. The 'declarationMap: true' option - ONLY WASTES SPACE; 
 		It doesn't do ANYTHING useful when there are no '.ts' files provided; 
@@ -137,13 +149,6 @@
 	1. Rewrite the existing tests from scratch (using the Node's 'test' + 'assert')
 	2. Modules to make new tests for: 
 
-		3. functional
-			9. tupleSlice
-			10. tuplePick
-			11. cached
-			12. id
-			13. nil
-			14. constant
 		4. inplace
 			1. mutate
 			2. insert
@@ -200,6 +205,7 @@
 			12. isSet
 			13. isNumberConvertible
 			14. isTruthy
+			15. isFalsy
 
 6. Logs [write the changelogs]; 
 

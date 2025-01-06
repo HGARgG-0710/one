@@ -1,7 +1,14 @@
+import { not } from "../boolean/boolean.js"
+
 /**
  * Type for signifying one-variable type predicates
  */
 export type TypePredicate<Type = any> = (x?: any) => x is Type
+
+/**
+ * A type of all the items `x`, such that `!x` is truthy
+ */
+export type Falsy = false | 0 | "" | null | undefined
 
 /**
  * Returns whether a given `x` is a number primitive
@@ -83,3 +90,8 @@ export function isNumberConvertible(x: any): boolean {
  * Returns whether `x` is a truthy value
  */
 export const isTruthy = (x: any) => !!x
+
+/**
+ * Checks whether the given `x` is `Falsy`
+ */
+export const isFalsy = not as (x: any) => x is Falsy

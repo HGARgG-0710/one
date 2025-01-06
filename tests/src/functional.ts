@@ -4,8 +4,9 @@ import assert from "node:assert"
 import { isNumber, isString } from "../../dist/src/type/type.js"
 
 import { functional } from "../../dist/main.js"
-import { max } from "../../dist/src/number/number.js"
+import { max, product, sum } from "../../dist/src/number/number.js"
 import { same } from "../../dist/src/array/array.js"
+
 const {
 	or,
 	id,
@@ -16,6 +17,10 @@ const {
 	repeat,
 	arrayCompose,
 	cache,
+	tupleSlice,
+	tuplePick,
+	constant,
+	cached
 } = functional
 
 suite("functional", () => {
@@ -124,5 +129,51 @@ suite("functional", () => {
 
 		assert.strictEqual(prequoted.get("'")!("stapleton"), "'stapleton")
 		assert.strictEqual(prequoted.get('"')!("?"), '"?')
+	})
+
+	test("tupleSlice", () => {
+		const f1 = (x: number, y = 3) => x + y
+		const f2 = (x = 40, y = 90) => x * y
+		const f3 = (x = 20, y = 40) => x / y
+
+		const unsliced = tupleSlice(f1, f2, f3)
+
+		const s1 = unsliced([0, 1], [1, 3], [3, 4])
+		const s2 = unsliced([0, 2], [2, 2], [2, 4])
+		const s3 = unsliced([0, 2], null, [0, 2])
+
+		assert(same(s1(40, 20, 9, 90), [43, 180, 9 / 4]))
+		assert(same(s2(9, 20, 3, 3), [29, 3600, 1]))
+		assert(same(s2(19, -1, 3, 17), [18, 3600, 3 / 17]))
+		assert(same(s3(7, 3), [10, 21, 7 / 3]))
+	})
+
+	test("tuplePick", () => {
+		const f1 = sum
+		const f2 = product
+
+		const picked = tuplePick(f1, f2)
+
+		const s1 = picked(null, (x) => x % 2 === 1)
+		const s2 = picked(
+			(x, i: number) => i < 3,
+			(x, i: number) => x > 7 && i % 2 === 0
+		)
+
+		assert(same(s1(1, 2, 3, 4, 5), [15, 15]))
+		assert(same(s2(3, 5, 10, 9, 40), [18, 400]))
+	})
+
+	test("cached", () => {
+		const cachedRoot = cached((x: number) => x ** (1 / 2))
+		const cacheSize = 100000
+		for (let i = 0; i < cacheSize; ++i) cachedRoot(i)
+		assert.strictEqual(cachedRoot.cache.size, cacheSize)
+	})
+
+	test("constant", () => {
+		assert.strictEqual(constant(5)(), 5)
+		assert.strictEqual(constant(false)(), false)
+		assert.strictEqual(constant("49")(), "49")
 	})
 })
