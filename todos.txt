@@ -124,6 +124,9 @@
 	[Done]
 	2.34. 'array.allocator'
 
+	[Done]
+	2.35. 'object.same'
+
 3. Delete: 
 	3.1 [done]. The 'declarationMap: true' option - ONLY WASTES SPACE; 
 		It doesn't do ANYTHING useful when there are no '.ts' files provided; 
@@ -154,10 +157,6 @@
 
 	2. Modules to make new tests for: 
 
-		5. map
-			1. kv
-			2. dekv
-			3. toObject
 		7. object
 			1. kv
 			2. dekv
@@ -175,6 +174,7 @@
 			14. findOwnMissing
 			15. empty
 			16. allocator
+			17. same
 		8. string
 			1. capitalize
 			2. extract

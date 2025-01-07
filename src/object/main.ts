@@ -1,6 +1,8 @@
 import { T } from "../boolean/boolean.js"
 import { isArray, isObject, TypePredicate } from "../type/type.js"
 
+import { same as array_same } from "../array/array.js"
+
 /**
  * Type for representing a converted object key
  */
@@ -170,7 +172,7 @@ export function recursiveStringValues(object: object) {
 export function recursiveSymbolKeys(object: object) {
 	const symbolProperties = Object.getOwnPropertySymbols(object)
 	let proto: object
-	while (prototype(Object) !== (proto = prototype(object)))
+	while ((proto = prototype(object)))
 		symbolProperties.push(...Object.getOwnPropertySymbols((object = proto)))
 	return symbolProperties
 }
@@ -252,5 +254,18 @@ export const empty = () => ({})
 
 /**
  * Creates a function that returns the shallow copy of `object` [useful for preserving the object's]
-*/
-export const allocator = <T extends object = object>(object: T) => () => copy(object)
+ */
+export const allocator =
+	<T extends object = object>(object: T) =>
+	() =>
+		copy(object)
+
+/**
+ * Returns whether the two given objects are the same up to direct equivalence of keys' names,
+ * and equivalence of values' arrays via 'array.same' with `pred` predicate
+ */
+export const same = (
+	x: object,
+	y: object,
+	pred?: (x?: any, y?: any, i?: number) => boolean
+) => array_same(keys(x), keys(y)) && array_same(values(x), values(y), pred)
