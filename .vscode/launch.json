@@ -7,11 +7,11 @@
 		{
 			"type": "node",
 			"request": "launch",
-			"name": "'functional' test",
+			"name": "current test",
 			"skipFiles": [
 				"<node_internals>/**"
 			],
-			"program": "${workspaceFolder}\\tests\\src\\functional.ts",
+			"program": "${file}",
 			"preLaunchTask": "npm: all",
 			"outFiles": [
 				"${workspaceFolder}\\tests\\out\\*.js",

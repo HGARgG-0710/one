@@ -262,3 +262,8 @@ export const and = <T = any>(x: T[]) => {
 	for (const curr of x) if (!curr) return curr
 	return last(x)
 }
+
+/**
+ * Creates a function returning new shallow copies of `array` [useful for factoring-out/remembering information about the array's contents]
+*/
+export const allocator = <T = any>(array: T[]) => () => copy(array)

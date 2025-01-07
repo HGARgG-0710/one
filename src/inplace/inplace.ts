@@ -23,34 +23,31 @@ export const insert = <Type = any>(array: Type[], index: number, ...values: Type
 /**
  * Deletes `count` items from `array` at `index`
  * @returns `array`
-*/
+ */
 export const out = <Type = any>(array: Type[], index: number, count: number = 1) => {
 	array.splice(index, count)
 	return array
 }
 
 /**
- * Deletes last item from `array`
+ * Deletes last `count` items from `array`
  * @returns `array`
-*/
-export const lastOut = <Type = any>(array: Type[]) => {
-	array.pop()
+ */
+export const lastOut = <Type = any>(array: Type[], count = 1) => {
+	array.length -= count
 	return array
 }
 
 /**
- * Deletes first item from `array`
+ * Deletes first `count` items from `array`
  * @returns `array`
-*/
-export const firstOut = <Type = any>(array: Type[]) => {
-	array.shift()
-	return array
-}
+ */
+export const firstOut = <Type = any>(array: Type[], count = 1) => out(array, 0, count)
 
 /**
  * Changes places items at indexes `i` and `j` in the array
  * @returns `array`
-*/
+ */
 export const swap = <Type = any>(array: Type[], i: number, j: number) => {
 	const temp = array[i]
 	array[i] = array[j]
@@ -61,7 +58,7 @@ export const swap = <Type = any>(array: Type[], i: number, j: number) => {
 /**
  * Replaces the value in `array` at `index` with `values`
  * @returns array
-*/
+ */
 export const replace = <Type = any>(array: Type[], index: number, ...values: Type[]) => {
 	array.splice(index, 1, ...values)
 	return array

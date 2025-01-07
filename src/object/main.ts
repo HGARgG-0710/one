@@ -213,7 +213,7 @@ export const prototype = Object.getPrototypeOf
 /**
  * Makes a shallow copy of a given object
  */
-export const copy = (x: object) => ({ ...x })
+export const copy = <T extends object = object>(x: T) => ({ ...x })
 
 /**
  * Returns the object containing all the property descriptors on a given object [includes the prototypes, respects inheritance]
@@ -249,3 +249,8 @@ export function findOwnMissing(inobj: object, atobj: object) {
  * Allocates a new empty array
  */
 export const empty = () => ({})
+
+/**
+ * Creates a function that returns the shallow copy of `object` [useful for preserving the object's]
+*/
+export const allocator = <T extends object = object>(object: T) => () => copy(object)

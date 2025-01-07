@@ -26,7 +26,8 @@ const {
 	empty,
 	uniqueArr,
 	and,
-	or
+	or,
+	allocator
 } = array
 
 const getArray = () => [0, 1, 2, 3]
@@ -194,5 +195,15 @@ suite("array", () => {
 		const Y = Array(4).fill(0).concat([false])
 		assert.strictEqual(or(X), 1)
 		assert.strictEqual(or(Y), false)
+	})
+
+	test("allocator", () => {
+		const T = ["Sss", "aa", 3]
+		const X1 = allocator(T)
+
+		assert.notStrictEqual(X1(), T)
+		assert.notStrictEqual(X1(), X1())
+		assert.notStrictEqual(X1(), T)
+		assert(same(X1(), T))
 	})
 })
