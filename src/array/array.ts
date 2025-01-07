@@ -83,13 +83,13 @@ export const lastOut = <Type = any>(x: Type[], count = 1) => x.slice(0, x.length
 /**
  * A function for obtaining the last element of the given array.
  */
-export const last = <Type = any>(x: Type[]) => x[x.length - 1]
+export const last = <Type = any>(x: Type[]) => x[lastIndex(x)]
 
 /**
  * Sets the value of the last element of the array `x` to be `v`.
  * @returns `v`
  */
-export const setLast = <T = any>(x: T[], v: T) => (x[x.length - 1] = v)
+export const setLast = <T = any>(x: T[], v: T) => (x[lastIndex(x)] = v)
 
 /**
  * A function for mutating the given array via setting its' `.length` to `0`.
@@ -265,5 +265,18 @@ export const and = <T = any>(x: T[]) => {
 
 /**
  * Creates a function returning new shallow copies of `array` [useful for factoring-out/remembering information about the array's contents]
-*/
-export const allocator = <T = any>(array: T[]) => () => copy(array)
+ */
+export const allocator =
+	<T = any>(array: T[]) =>
+	() =>
+		copy(array)
+
+/**
+ * Returns the last index of a given array
+ */
+export const lastIndex = (array: any[]) => array.length - 1
+
+/**
+ * @returns whether the given array is empty
+ */
+export const isEmpty = (array: any[]) => !array.length

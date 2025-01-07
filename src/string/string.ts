@@ -4,7 +4,7 @@
  *
  * If `x` is empty, returns empty string
  */
-export const capitalize = (x: string) =>
+export const capitalize = (x: string = "") =>
 	x.length ? `${x[0].toUpperCase()}${x.slice(1).toLowerCase()}` : ""
 
 /**
@@ -22,7 +22,7 @@ export const extract = (
  * Counts the number of (non-intersecting) occurences of `substring` inside the string
  */
 export const count = (string: string, substring: string | RegExp) =>
-	string.split(substring).length
+	string.split(substring).length - 1
 
 /**
  * Creates a function for limiting the `string` with `maxlength` length,
@@ -39,7 +39,7 @@ export const limit =
 /**
  * Returns the entirety of the string, except for the last symbol
  */
-export const lastOut = (x: string) => x.slice(0, x.length - 1)
+export const lastOut = (x: string) => x.slice(0, lastIndex(x))
 
 /**
  * Concatenates the `strings`, and returns the result
@@ -60,3 +60,13 @@ export const cover = (...strings: string[]) =>
 			`${covering}${covered.slice(covering.length)}`,
 		""
 	)
+
+/**
+ * A function returning whether the given string is empty.
+ */
+export const isEmpty = (x: string) => !x.length
+
+/**
+ * Returns the last index of a given string
+*/
+export const lastIndex = (x: string) => x.length - 1

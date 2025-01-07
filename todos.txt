@@ -127,6 +127,27 @@
 	[Done]
 	2.35. 'object.same'
 
+	[Done]
+	2.36. 'string.isEmpty'
+
+	[Done]
+	2.37. 'number.isEven'
+
+	[Done]
+	2.38. 'number.isOdd'
+
+	[Done]
+	2.39. 'number.makeEven'
+
+	[Done]
+	2.40. 'number.makeOdd'
+
+	[Done]
+	2.41. 'array.lastIndex'
+
+	[Done]
+	2.42. 'string.lastIndex'
+
 3. Delete: 
 	3.1 [done]. The 'declarationMap: true' option - ONLY WASTES SPACE; 
 		It doesn't do ANYTHING useful when there are no '.ts' files provided; 
@@ -175,14 +196,6 @@
 			15. empty
 			16. allocator
 			17. same
-		8. string
-			1. capitalize
-			2. extract
-			3. count
-			4. limit
-			5. lastOut
-			6. concat
-			7. cover
 		9. type
 			1. isNumber
 			2. isFunction
@@ -202,7 +215,42 @@
 
 6. Logs [write the changelogs]; 
 
-7. Future: 
+7. Publishing: 
+
+	1. Delete the 'source-map's [needed for debugging only]
+	2. Remove the 'dist' manually
+	3. Do 'npm run all'
+	4. Try doing 'npm pack' (until the moment that the list of exported stuff is precisely as it's supposed to be)
+	5. Do 'npm run publish'
+
+8. Future: 
+
+	0. prior to all this, however...
+		Add: 
+			1. string: 
+				1. camelCase - works on a spread list of words, combines them using camelCase
+				2. PascalCase - works like camelCase
+				3. kebab_case - [kebab-case] works like camelCase
+				4. snake_case - works like camelCase
+				5. MACRO_CASE - works like camelCase
+				6. flatcase - works like camelCase
+				7. UPPERCASE - works like camelCase
+				8. TRAIN_CASE - [TRAIN-CASE] works like camelCase
+				9. Title_Case  - works like camelCase
+				10. Http_Case - [Http-Case] works like camelCase
+				11. camel_Snake_Case - works like camelCase
+
+		Fix: 	
+
+			1. string: 
+				1. extract - add a 'global' call from the 'parsers.js' 'regex' submodule;
+					Reason - it's impossible to use '.split' with non-global 'regex'; 
+
+					For this to be good - SEPARATE the 'regex' submodule of 'parsers.js' into 'make-regex' npm package, 
+						which would (basically) be a whole new module. 
+
+					Then - one.js can import it [and subsequently EXPORT it, as part of the "combination-package" thing], TOGETHER
+						with 'parsers.js' [due to: 1. how conviniently it fits with parsers.js functionality; 2. that it already IS a dependency - why not export it as well?]
 
 	1. functional programming library in JavaScript: 
 		Let the 'functional' module be moved there...
@@ -275,3 +323,11 @@
 		1. pre-testing [via pre-npm-run-test + a specialized run-all script]
 		2. publishing ONLY if the tests pass successfully [possibly - write a specialized npm module/gist for that? So that the user may import the respective function into their own script and be done with it???]
 	]
+
+		Particularly, the 'npm run paranoid' should look something like in Bash: 
+
+			rm -rf dist && && npm run all && (npm pack > packing.txt)
+
+		With an updated 'npm run all' being: 	
+
+			npm run build && npm run test-compile && npm run test

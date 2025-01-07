@@ -19,3 +19,23 @@ export const min = Math.min
  * Returns the maximum value of the given numbers
  */
 export const max = Math.max
+
+/**
+ * @returns whether the given number is even
+ */
+export const isEven = (x: number) => x % 2 === 0
+
+/**
+ * @returns whether the given number is odd
+ */
+export const isOdd = (x: number) => x % 2 === 1
+
+/**
+ * Using the given number `x`, constructs and returns a new number guaranteed to be odd - `2 * x + 1`
+ */
+export const makeOdd = (x: number) => 2 * x + 1
+
+/**
+ * Using the given number `x`, constructs and returns a new number guaranteed to be even - "2 * x"
+ */
+export const makeEven = (x: number) => 2 * x
