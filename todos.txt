@@ -148,6 +148,9 @@
 	[Done]
 	2.42. 'string.lastIndex'
 
+	[Done]
+	2.43. 'type.isMap'
+
 3. Delete: 
 	3.1 [done]. The 'declarationMap: true' option - ONLY WASTES SPACE; 
 		It doesn't do ANYTHING useful when there are no '.ts' files provided; 
@@ -196,22 +199,6 @@
 			15. empty
 			16. allocator
 			17. same
-		9. type
-			1. isNumber
-			2. isFunction
-			3. isString
-			4. isBoolean
-			5. isSymbol
-			6. isObject
-			7. isNull
-			8. isUndefined
-			9. isNullary
-			10. typeOf
-			11. isArray
-			12. isSet
-			13. isNumberConvertible
-			14. isTruthy
-			15. isFalsy
 
 6. Logs [write the changelogs]; 
 

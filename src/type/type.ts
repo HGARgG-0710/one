@@ -1,4 +1,5 @@
 import { not } from "../boolean/boolean.js"
+import { isEmpty } from "../string/string.js"
 
 /**
  * Type for signifying one-variable type predicates
@@ -72,15 +73,22 @@ export const isArray = <Type = any>(x: any): x is Type[] => x instanceof Array
 export const isSet = <Type = any>(x: any): x is Set<Type> => x instanceof Set
 
 /**
+ * Returns whether `x` is a `Map`
+ */
+export const isMap = <KType = any, VType = any>(x: any): x is Map<KType, VType> =>
+	x instanceof Map
+
+/**
  * Returns a bool indicating whether it is possible to call `Number(x)` without:
  *
  * 1. getting `NaN`
  * 2. getting an error (this happens if `x` is a symbol)
+ * 3. `x` being an empty string
  */
 export function isNumberConvertible(x: any): boolean {
 	return (
 		(isNumber(x) && !isNaN(x)) ||
-		(isString(x) && !isNaN(Number(x)) && !!x.length) ||
+		(isString(x) && !isNaN(Number(x)) && !isEmpty(x)) ||
 		isBoolean(x) ||
 		isNull(x)
 	)
