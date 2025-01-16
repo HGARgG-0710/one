@@ -1,13 +1,32 @@
 import test, { suite } from "node:test"
 import assert from "node:assert"
 
-import type { KeyValues } from "../../dist/src/object/main.js"
+import { propertyDescriptors, type KeyValues } from "../../dist/src/object/main.js"
 
-import { recursiveSame } from "../../dist/src/array/array.js"
 import { isArray, isNumber, isString, isTruthy } from "../../dist/src/type/type.js"
+import {
+	recursiveSame as array_recursiveSame,
+	same as array_same
+} from "../../dist/src/array/array.js"
 
 import { object } from "../../dist/main.js"
-const { kv, same, dekv, prototype, structCheck, keys, values } = object
+const {
+	kv,
+	same,
+	dekv,
+	prototype,
+	structCheck,
+	keys,
+	values,
+	recursiveStringKeys,
+	recursiveSymbolKeys,
+	ownProperties,
+	ownKeys,
+	ownValues,
+	copy,
+	recursiveSame,
+	withoutProperties
+} = object
 
 const s = Symbol("R")
 const subObject = { K: null }
@@ -38,13 +57,36 @@ const kvTests = {
 	prototype: [
 		["1919", "meth", "A", "T", bs, s],
 		["kr40al", methFunction, 10, subObject, "55", true]
-	]
+	],
+	string: {
+		own: [
+			["A", "T"],
+			[10, subObject]
+		],
+		prototype: [
+			["1919", "meth", "A", "T"],
+			["kr40al", methFunction, 10, subObject]
+		]
+	},
+	symbol: {
+		own: [[s], [true]],
+		prototype: [
+			[bs, s],
+			["55", true]
+		]
+	},
+	ownOnly: {
+		prototype: [
+			["1919", "meth", bs],
+			["kr40al", methFunction, "55"]
+		]
+	}
 }
 
 suite("object", () => {
 	test("kv", () => {
-		assert(recursiveSame(kv(getObject()), kvTests.own))
-		assert(recursiveSame(kv(getPrototypeObject()), kvTests.prototype))
+		assert(array_recursiveSame(kv(getObject()), kvTests.own))
+		assert(array_recursiveSame(kv(getPrototypeObject()), kvTests.prototype))
 	})
 
 	test("dekv", () => {
@@ -248,12 +290,144 @@ suite("object", () => {
 	})
 
 	test("keys", () => {
-		assert(same(keys(getObject()), kvTests.own[0]))
-		assert(same(keys(getPrototypeObject()), kvTests.prototype[0]))
+		assert(array_same(keys(getObject()), kvTests.own[0]))
+		assert(array_same(keys(getPrototypeObject()), kvTests.prototype[0]))
 	})
 
 	test("values", () => {
 		assert(same(values(getObject()), kvTests.own[1]))
 		assert(same(values(getPrototypeObject()), kvTests.prototype[1]))
+	})
+
+	test("recursiveStringKeys", () => {
+		assert(array_same(recursiveStringKeys(getObject()), kvTests.string.own[0]))
+		assert(
+			array_same(
+				recursiveStringKeys(getPrototypeObject()),
+				kvTests.string.prototype[0]
+			)
+		)
+	})
+
+	test("recursiveSymbolKeys", () => {
+		assert(array_same(recursiveSymbolKeys(getObject()), kvTests.symbol.own[0]))
+		assert(
+			array_same(
+				recursiveSymbolKeys(getPrototypeObject()),
+				kvTests.symbol.prototype[0]
+			)
+		)
+	})
+
+	test("ownProperties", () => {
+		assert(array_recursiveSame(ownProperties(getObject()), kvTests.own))
+		assert(
+			array_recursiveSame(
+				ownProperties(getPrototypeObject()),
+				kvTests.ownOnly.prototype
+			)
+		)
+	})
+
+	test("ownKeys", () => {
+		assert(array_same(ownKeys(getObject()), kvTests.own[0]))
+		assert(array_same(ownKeys(getPrototypeObject()), kvTests.ownOnly.prototype[0]))
+	})
+
+	test("ownValues", () => {
+		assert(array_same(ownValues(getObject()), kvTests.own[1]))
+		assert(array_same(ownValues(getPrototypeObject()), kvTests.ownOnly.prototype[1]))
+	})
+
+	test("copy", () => {
+		const X = getObject()
+		assert.notStrictEqual(copy(X), X)
+		assert(same(copy(X), X))
+	})
+
+	suite("propertyDescriptors", () => {
+		const method = function () {
+			return true
+		}
+		const propDescSimple = {
+			method: { value: method, writable: true },
+			X: { value: 99 }
+		}
+
+		const expectedRetained = {
+			X: {
+				value: 99,
+				writable: false,
+				enumerable: false,
+				configurable: false
+			}
+		}
+
+		const expectedDescSimple = {
+			method: {
+				value: method,
+				writable: true,
+				enumerable: false,
+				configurable: false
+			},
+			...expectedRetained
+		}
+
+		class T {}
+		Object.defineProperties(T.prototype, propDescSimple)
+
+		const sansConstructor = withoutProperties(new Set(["constructor"]))
+
+		test("simple case", () =>
+			assert(
+				recursiveSame(
+					sansConstructor(propertyDescriptors(T.prototype)),
+					expectedDescSimple
+				)
+			))
+
+		const method2 = function () {
+			return 1911
+		}
+		const s99 = Symbol("99")
+		const propsAddition = {
+			method: { value: method2 },
+			L: { value: s99 }
+		}
+
+		const overridenPortion = {
+			method: {
+				value: method2,
+				writable: false,
+				enumerable: false,
+				configurable: false
+			}
+		}
+
+		const expectedPropsAddition = {
+			L: {
+				value: s99,
+				writable: false,
+				enumerable: false,
+				configurable: false
+			}
+		}
+
+		const expectedNewDescriptors = {
+			...overridenPortion,
+			...expectedPropsAddition,
+			...expectedRetained
+		}
+
+		class R extends T {}
+		Object.defineProperties(R.prototype, propsAddition)
+
+		test("recursive case", () =>
+			assert(
+				recursiveSame(
+					sansConstructor(propertyDescriptors(R.prototype)),
+					expectedNewDescriptors
+				)
+			))
 	})
 })

@@ -154,6 +154,12 @@
 	[Done]
 	2.44. `array.recursiveSame`
 
+	[Done]
+	2.45. 'object.recursiveSame'
+
+	[Done]
+	2.46. 'object.withoutProperties'
+
 3. Delete: 
 	3.1 [done]. The 'declarationMap: true' option - ONLY WASTES SPACE; 
 		It doesn't do ANYTHING useful when there are no '.ts' files provided; 
@@ -185,19 +191,13 @@
 	2. Modules to make new tests for: 
 
 		7. object
-			6. recursiveStringKeys
-			7. recursiveSymbolKeys
-			8. ownProperties
-			9. ownKeys
-			10. ownValues
-			11. prototype
-			12. copy
-			13. propertyDescriptors
 			14. findOwnMissing
 			15. empty
 			16. allocator
 			17. same
 			18. toMap
+			19. recursiveSame
+			20. withoutProperties
 
 6. Logs [write the changelogs]; 
 

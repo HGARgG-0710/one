@@ -1,4 +1,4 @@
-import { T } from "../boolean/boolean.js"
+import { equals, T } from "../boolean/boolean.js"
 import { isArray, isObject, TypePredicate } from "../type/type.js"
 
 import { same as array_same, Pair } from "../array/array.js"
@@ -228,13 +228,17 @@ export const prototype = Object.getPrototypeOf
 export const copy = <T extends object = object>(x: T) => ({ ...x })
 
 /**
- * Returns the object containing all the property descriptors on a given object [includes the prototypes, respects inheritance]
+ * Returns the object containing all the property descriptors on a given object `object` [includes the prototypes, respects inheritance],
+ * up to the point of meeting the object of `commonPrototype` in the prototype chain (defaults to `Object.prototype`).
  */
-export function propertyDescriptors(object: object) {
+export function propertyDescriptors(
+	object: object,
+	commonPrototype: object = Object.prototype
+) {
 	let currPrototype = object
-	let final = object
+	let final = Object.getOwnPropertyDescriptors(object)
 
-	while (currPrototype)
+	while (prototype(currPrototype) !== commonPrototype)
 		final = {
 			...final,
 			...findOwnMissing(
@@ -279,3 +283,36 @@ export const same = (
 	y: object,
 	pred?: (x?: any, y?: any, i?: number) => boolean
 ) => array_same(keys(x), keys(y)) && array_same(values(x), values(y), pred)
+
+/**
+ * Recursively compares the two objects `x` and `y`, applying
+ * `pred(x[i], y[i], i)` on all the values of `x` and `y` that aren't objects themselves.
+ *
+ * `pred` defaults to `equals`
+ */
+export function recursiveSame(
+	x: object,
+	y: object,
+	pred: (x?: any, y?: any, i?: number) => boolean = equals
+): boolean {
+	const yvals = values(y)
+	return (
+		array_same(keys(x), keys(y)) &&
+		values(x).every((x, i) =>
+			isObject(x) && isObject(yvals[i])
+				? recursiveSame(x, yvals[i], pred)
+				: pred(x, yvals[i], i)
+		)
+	)
+}
+
+/**
+ * Returns a copy of a given object without the provided Set of properties `props`
+ */
+export function withoutProperties(props: Set<ObjectKey>) {
+	return function (object: object): object {
+		const newObj = {}
+		for (const prop in object) if (!props.has(prop)) newObj[prop] = object[prop]
+		return newObj
+	}
+}
