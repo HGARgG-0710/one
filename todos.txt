@@ -151,6 +151,9 @@
 	[Done]
 	2.43. 'type.isMap'
 
+	[Done]
+	2.44. `array.recursiveSame`
+
 3. Delete: 
 	3.1 [done]. The 'declarationMap: true' option - ONLY WASTES SPACE; 
 		It doesn't do ANYTHING useful when there are no '.ts' files provided; 
@@ -182,11 +185,6 @@
 	2. Modules to make new tests for: 
 
 		7. object
-			1. kv
-			2. dekv
-			3. structCheck
-			4. keys
-			5. values
 			6. recursiveStringKeys
 			7. recursiveSymbolKeys
 			8. ownProperties
@@ -199,16 +197,18 @@
 			15. empty
 			16. allocator
 			17. same
+			18. toMap
 
 6. Logs [write the changelogs]; 
 
 7. Publishing: 
 
-	1. Delete the 'source-map's [needed for debugging only]
+	1. Delete the 'source-map's [needed for debugging only - remove from tsconfig.json as well]
 	2. Remove the 'dist' manually
 	3. Do 'npm run all'
-	4. Try doing 'npm pack' (until the moment that the list of exported stuff is precisely as it's supposed to be)
-	5. Do 'npm run publish'
+	4. Re-run all the tests (manually - just in case)
+	5. Try doing 'npm pack' (until the moment that the list of exported stuff is precisely as it's supposed to be)
+	6. Do 'npm run publish'
 
 8. Future: 
 

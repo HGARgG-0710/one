@@ -1,7 +1,12 @@
 import { T } from "../boolean/boolean.js"
 import { isArray, isObject, TypePredicate } from "../type/type.js"
 
-import { same as array_same } from "../array/array.js"
+import { same as array_same, Pair } from "../array/array.js"
+
+/**
+ * A type for representing a pair of object's keys-values
+ */
+export type KeyValues<T extends any = any> = Pair<KeyArray, T[]>
 
 /**
  * Type for representing a converted object key
@@ -20,7 +25,7 @@ export type KeyArray = FullKey[]
  */
 export type ShapeArg =
 	| KeyArray
-	| { [x: FullKey]: ((x: any) => boolean) | null | undefined }
+	| { [x: FullKey]: ((x?: any) => boolean) | null | undefined }
 
 /**
  * Returns the pair of keys and values of the given object
@@ -30,7 +35,10 @@ export const kv = (obj: object): [(string | symbol)[], any[]] => [keys(obj), val
 /**
  * Creates a new object using the pair of keys and values
  */
-export const dekv = ([keys, values]: [(string | symbol)[], any[]]): object => {
+export const dekv = <T extends any = any>([keys, values]: KeyValues<T>): Record<
+	ObjectKey,
+	T
+> => {
 	const result = empty()
 	for (let i = 0; i < keys.length; ++i) result[keys[i]] = values[i]
 	return result
@@ -42,7 +50,7 @@ export const dekv = ([keys, values]: [(string | symbol)[], any[]]): object => {
  * For `true`, mandates that argument be of `typeof x === "object"`. For `null`, returns `false`
  *
  * @param properties The basic object shape. If an array - items from the array are treated as keys to be checked for presence on the passed `x`. Otherwise - an object, keys of which correspond to property names to be proven to be present, and to be passing of the predicates assigned to the respective keys. Defaults to `[]`
- * @param lacks The array of keys to be shown to definitively not be present on the object. Defaults to `[]`
+ * @param lacks The array of keys to be shown to definitively not be present on the object. Checked before `optional`. Defaults to `[]`
  * @param optional The array of properties to be allowed on the object in the event that `isStrict` is set to `true`. Defaults to `[]`
  * @param isStrict The flag for indicating whether the shape to be checked for is "strict", meaning - whether any properties other than `properties` and `optional` are allowed. Defaults to `false`
  *
@@ -121,12 +129,14 @@ export function structCheck<Type extends object = object>(
 
 		if (!isStrict) return true
 
+		const currKeys = keys(x)
 		const keyslen = keys(x).length
-		return (
-			props.length === keyslen ||
-			(keyslen - props.length === optional.length &&
-				optional.every((opprop) => opprop in x))
-		)
+		const proplen = props.length
+		if (proplen === keyslen) return true
+		if (keyslen - proplen > optional.length) return false
+
+		const difference = Array.from(new Set(currKeys).difference(new Set(props)))
+		return difference.every((key) => optional.includes(key))
 	}
 }
 

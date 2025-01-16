@@ -27,7 +27,8 @@ const {
 	uniqueArr,
 	and,
 	or,
-	allocator
+	allocator,
+	recursiveSame
 } = array
 
 const getArray = () => [0, 1, 2, 3]
@@ -205,5 +206,29 @@ suite("array", () => {
 		assert.notStrictEqual(X1(), X1())
 		assert.notStrictEqual(X1(), T)
 		assert(same(X1(), T))
+	})
+
+	test("recursiveSame", () => {
+		type RecursiveType<T = any> = (T | RecursiveType)[]
+		const recursiveMap = <T = any>(x: RecursiveType<T>, map: (x: any) => any) =>
+			x.map((x) => (isArray(x) ? recursiveMap(x, map) : map(x)))
+
+		const heterogenousItems = [["S", 10, true], [[[[], Symbol("R")]]]]
+		const homogenousItems: RecursiveType<number> = [1, [2, [3, 4], 5]]
+
+		const square = (x: number) => x ** 2
+		const homogenousItemsSquared = recursiveMap(homogenousItems, square)
+
+		assert(recursiveSame(heterogenousItems, heterogenousItems))
+		assert(
+			recursiveSame(
+				homogenousItems,
+				homogenousItemsSquared,
+				(x: number, y: number) => x ** 2 === y
+			)
+		)
+
+		assert(!recursiveSame([1, 2], [1, 2, 3]))
+		assert(!recursiveSame([1, 2, 4], [1, 2, 3]))
 	})
 })

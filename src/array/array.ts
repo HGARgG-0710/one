@@ -58,7 +58,7 @@ type _TupleOf<
 
 /**
  * Returns a predicate, purpose of which is to indicate that the argument `x` is a `Tuple`,
- * with '.length' being precisely `n`.
+ * with `.length` being precisely `n`.
  */
 export const isTuple =
 	<Items extends number>(n: number) =>
@@ -92,7 +92,7 @@ export const last = <Type = any>(x: Type[]) => x[lastIndex(x)]
 export const setLast = <T = any>(x: T[], v: T) => (x[lastIndex(x)] = v)
 
 /**
- * A function for mutating the given array via setting its' `.length` to `0`.
+ * A function for mutating the given array via setting its` `.length` to `0`.
  */
 export const clear = <Type = any>(x: Type[]) => (x.length = 0)
 
@@ -226,7 +226,7 @@ export const empty = (): [] => []
 
 /**
  * Conducts the comparison of two iterables `a` and `b`
- * by converting them to arrays and using element-by-element 'pred(a[i], b[i], i)'.
+ * by converting them to arrays and using element-by-element `pred(a[i], b[i], i)`.
  *
  * For comparison to yield `true`, it is required for both arrays to have the same length.
  *
@@ -264,7 +264,7 @@ export const and = <T = any>(x: T[]) => {
 }
 
 /**
- * Creates a function returning new shallow copies of `array` [useful for factoring-out/remembering information about the array's contents]
+ * Creates a function returning new shallow copies of `array` [useful for factoring-out/remembering information about the array`s contents]
  */
 export const allocator =
 	<T = any>(array: T[]) =>
@@ -280,3 +280,18 @@ export const lastIndex = (array: any[]) => array.length - 1
  * @returns whether the given array is empty
  */
 export const isEmpty = (array: any[]) => !array.length
+
+/**
+ * Recursively applies `array.same(a[i], b[i], i)` for `a[i]` and `b[i]` - arrays,
+ * to the given arrays `a` and `b` (otherwise, applying `pred(a[i], b[i], i)`),
+ * and returns the result.
+ */
+export const recursiveSame = (
+	a: any[],
+	b: any[],
+	pred: (x?: any, y?: any, i?: number) => boolean = equals
+) =>
+	a.length === b.length &&
+	a.every((ax, i) =>
+		isArray(ax) && isArray(b[i]) ? recursiveSame(ax, b[i], pred) : pred(a[i], b[i], i)
+	)
