@@ -25,7 +25,10 @@ const {
 	ownValues,
 	copy,
 	recursiveSame,
-	withoutProperties
+	withoutProperties,
+	findOwnMissing,
+	allocator,
+	toMap
 } = object
 
 const s = Symbol("R")
@@ -429,5 +432,138 @@ suite("object", () => {
 					expectedNewDescriptors
 				)
 			))
+	})
+
+	test("findOwnMissing", () => {
+		const iterator = function* () {}
+		assert(
+			same(
+				findOwnMissing(getObject(), {
+					A: "17",
+					B: false,
+					[Symbol.iterator]: iterator,
+					[s]: 11
+				}),
+				{
+					B: false,
+					[Symbol.iterator]: iterator
+				}
+			)
+		)
+	})
+
+	test("allocator", () => {
+		const X = getObject()
+		const alloc_obj = allocator(X)
+
+		assert(same(alloc_obj(), X))
+		assert(recursiveSame(alloc_obj(), X))
+		assert.notStrictEqual(alloc_obj(), X)
+		assert.notStrictEqual(alloc_obj(), alloc_obj())
+	})
+
+	test("same", () => {
+		const X = getObject()
+		assert(same(X, getObject()))
+		assert(same(X, X))
+
+		const numObject = {
+			x: 1,
+			y: 20,
+			z: 47
+		}
+
+		const squareObject = {
+			x: 1,
+			y: 400,
+			z: 2209
+		}
+
+		const nonSquareObject = {
+			y: 400,
+			z: 2209,
+			x: 1
+		}
+
+		const firstSquared = (x: number, y: number) => x ** 2 === y
+
+		assert(same(numObject, squareObject, firstSquared))
+		assert(!same(numObject, nonSquareObject, firstSquared))
+	})
+
+	test("toMap", () => {
+		const X = getObject()
+		const map = toMap(X)
+		assert(array_same([...map.keys()], keys(X)))
+		assert(array_same([...map.values()], values(X)))
+	})
+
+	test("recursiveSame", () => {
+		const X = getObject()
+		assert(recursiveSame(getObject(), X))
+		assert(recursiveSame(X, X))
+
+		const numObject = {
+			s: {
+				b: 40,
+				r: 90,
+				l: {
+					m: 3
+				}
+			},
+			k: 7
+		}
+
+		const addObject = {
+			s: {
+				b: 43,
+				r: 93,
+				l: {
+					m: 6
+				}
+			},
+			k: 10
+		}
+
+		const nonAddObject1 = {
+			k: 10,
+			s: {
+				b: 43,
+				r: 93,
+				l: {
+					m: 6
+				}
+			}
+		}
+
+		const nonAddObject2 = {
+			k: 10,
+			s: {
+				b: 43,
+				r: 93,
+				l: {}
+			}
+		}
+
+		const addedThree = (x: number, y: number) => x + 3 === y
+
+		assert(recursiveSame(numObject, addObject, addedThree))
+		assert(!recursiveSame(numObject, nonAddObject1, addedThree))
+		assert(!recursiveSame(numObject, nonAddObject2, addedThree))
+	})
+
+	test("withoutProperties", () => {
+		const withObj = {
+			R: 90,
+			C: 20,
+			[s]: 440,
+			N: "Ah?",
+			[bs]: "T"
+		}
+
+		const sans = withoutProperties(new Set(["A", s, "B", "C"]))
+
+		assert(same(sans(withObj), { R: 90, N: "Ah?", [bs]: "T" }))
+		assert.notStrictEqual(sans(withObj), withObj)
 	})
 })

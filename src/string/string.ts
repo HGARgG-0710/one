@@ -19,7 +19,7 @@ export const extract = (
 ) => string.split(toExtract).join(toReplaceWith)
 
 /**
- * Counts the number of (non-intersecting) occurences of `substring` inside the string
+ * Counts the number of (non-intersecting) occurences of `substring` inside `string`
  */
 export const count = (string: string, substring: string | RegExp) =>
 	string.split(substring).length - 1
@@ -68,5 +68,5 @@ export const isEmpty = (x: string) => !x.length
 
 /**
  * Returns the last index of a given string
-*/
+ */
 export const lastIndex = (x: string) => x.length - 1

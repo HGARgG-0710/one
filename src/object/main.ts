@@ -1,5 +1,5 @@
 import { equals, T } from "../boolean/boolean.js"
-import { isArray, isObject, TypePredicate } from "../type/type.js"
+import { isArray, isStruct, TypePredicate } from "../type/type.js"
 
 import { same as array_same, Pair } from "../array/array.js"
 
@@ -118,8 +118,7 @@ export function structCheck<Type extends object = object>(
 	return (x: any): x is Type => {
 		if (
 			!(
-				isObject(x) &&
-				!!x &&
+				isStruct(x) &&
 				props.every((p) => p in x) &&
 				lacks.every((p) => !(p in x)) &&
 				propsPredicateArrays.every((pred, i) => (pred || T)(x[props[i]]))
@@ -253,10 +252,10 @@ export function propertyDescriptors(
 }
 
 /**
- * Returns the object containing all the properties of `atobj` not present in `inobj`
+ * Returns a new object containing all the own properties of `atobj` not present in `inobj`
  */
 export function findOwnMissing(inobj: object, atobj: object) {
-	const final = empty()
+	const final: object = empty()
 	for (const x of ownKeys(atobj)) if (!(x in inobj)) final[x] = atobj[x]
 	return final
 }
@@ -299,7 +298,7 @@ export function recursiveSame(
 	return (
 		array_same(keys(x), keys(y)) &&
 		values(x).every((x, i) =>
-			isObject(x) && isObject(yvals[i])
+			isStruct(x) && isStruct(yvals[i])
 				? recursiveSame(x, yvals[i], pred)
 				: pred(x, yvals[i], i)
 		)
@@ -310,9 +309,9 @@ export function recursiveSame(
  * Returns a copy of a given object without the provided Set of properties `props`
  */
 export function withoutProperties(props: Set<ObjectKey>) {
-	return function (object: object): object {
-		const newObj = {}
-		for (const prop in object) if (!props.has(prop)) newObj[prop] = object[prop]
+	return function (object: object) {
+		const newObj: object = empty()
+		for (const prop of keys(object)) if (!props.has(prop)) newObj[prop] = object[prop]
 		return newObj
 	}
 }

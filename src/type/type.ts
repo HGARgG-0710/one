@@ -103,3 +103,8 @@ export const isTruthy = (x: any) => !!x
  * Checks whether the given `x` is `Falsy`
  */
 export const isFalsy = not as (x: any) => x is Falsy
+
+/**
+ * Returns either `x` if it's a non-`null` object, or `false`, if it isn't
+ */
+export const isStruct = (x: any) => isObject(x) && x
