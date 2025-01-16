@@ -17,9 +17,10 @@
 	},
 	"homepage": "https://github.com/HGARgG-0710/one#readme",
 	"keywords": [
-		"expression",
-		"line",
-		"typeof"
+		"one-line", 
+		"types", 
+		"common", 
+		"object"
 	],
 	"devDependencies": {
 		"@types/node": "^22.5.1"
