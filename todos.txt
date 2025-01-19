@@ -27,6 +27,9 @@
 					Then - one.js can import it [and subsequently EXPORT it, as part of the "combination-package" thing], TOGETHER
 						with 'parsers.js' [due to: 1. how conviniently it fits with parsers.js functionality; 2. that it already IS a dependency - why not export it as well?]
 
+			2. for types: 
+				1. Use 'NoInfer' where beneficial [example: 'functional.constant']; 
+
 	1. functional programming library in JavaScript: 
 		Let the 'functional' module be moved there...
 		The purpose of one.js is: 
