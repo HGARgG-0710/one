@@ -1,15 +1,14 @@
 import test, { suite } from "node:test"
 import assert from "node:assert"
 
-import { propertyDescriptors, type KeyValues } from "../../dist/src/object/main.js"
-
-import { isArray, isNumber, isString, isTruthy } from "../../dist/src/type/type.js"
+import { propertyDescriptors, type KeyValues } from "../../../dist/src/object/main.js"
+import { isArray, isNumber, isString, isTruthy } from "../../../dist/src/type/type.js"
 import {
 	recursiveSame as array_recursiveSame,
 	same as array_same
-} from "../../dist/src/array/array.js"
+} from "../../../dist/src/array/array.js"
 
-import { object } from "../../dist/main.js"
+import { object } from "../../../dist/main.js"
 const {
 	kv,
 	same,

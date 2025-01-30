@@ -1,11 +1,11 @@
 import test, { suite } from "node:test"
 import assert from "node:assert"
 
-import { isNumber, isString } from "../../dist/src/type/type.js"
+import { isNumber, isString } from "../../../dist/src/type/type.js"
+import { max, product, sum } from "../../../dist/src/number/number.js"
+import { same } from "../../../dist/src/array/array.js"
 
-import { functional } from "../../dist/main.js"
-import { max, product, sum } from "../../dist/src/number/number.js"
-import { same } from "../../dist/src/array/array.js"
+import { functional } from "../../../dist/main.js"
 
 const {
 	or,

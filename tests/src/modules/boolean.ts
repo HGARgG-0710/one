@@ -1,7 +1,7 @@
 import test, { suite } from "node:test"
 import assert from "node:assert"
 
-import { boolean } from "../../dist/main.js"
+import { boolean } from "../../../dist/main.js"
 const { not, T, F, equals, eqcurry } = boolean
 
 suite("boolean", () => {

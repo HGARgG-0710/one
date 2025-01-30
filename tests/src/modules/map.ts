@@ -1,9 +1,9 @@
 import test, { suite } from "node:test"
 import assert from "node:assert"
 
-import { map } from "../../dist/main.js"
-import { same as array_same } from "../../dist/src/array/array.js"
-import { same as object_same } from "../../dist/src/object/main.js"
+import { map } from "../../../dist/main.js"
+import { same as array_same } from "../../../dist/src/array/array.js"
+import { same as object_same } from "../../../dist/src/object/main.js"
 
 const { kv, dekv, toObject } = map
 

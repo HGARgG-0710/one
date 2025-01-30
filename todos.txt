@@ -1,3 +1,17 @@
+[v0.5]
+
+1. Finish adding the GitHub Workflows: 
+	Reusable: 
+		[note: these: 0. auth into 'git' using your credentials; 1. run 'npm version (patch|minor)', 2. 'git add .; git commit -m "..."; git push']
+		1. make-release-patch.yml - creates a patch-release for the project (incremental /w 2.)
+		2. make-release-minor.yml - creates a minor-release for the project (incremental /w 1.)
+
+		[separate commit - just in case...]; 
+		3. npm-deploy - [on push to 'main' - DO IT LAST]: 
+			0. runs the 'run-tests' workflow as a reusable workflow
+			1. npm publish
+
+
 8. Future: 
 
 	0. prior to all this, however...
@@ -109,3 +123,5 @@
 		With an updated 'npm run all' being: 	
 
 			npm run build && npm run test-compile && npm run test
+	
+	10. make the .yml files in the '.github/workflows' a GitHub Gist [expecting those to be rather frequently used...]; 

@@ -1,15 +1,15 @@
 import test, { suite } from "node:test"
 import assert from "node:assert"
-import { copy, same } from "../../dist/src/array/array.js"
+import { copy, same } from "../../../dist/src/array/array.js"
 
 import {
 	insert as copying_insert,
 	out as copying_out,
 	lastOut as copying_lastOut,
 	replace as copying_replace
-} from "../../dist/src/array/array.js"
+} from "../../../dist/src/array/array.js"
 
-import { inplace } from "../../dist/main.js"
+import { inplace } from "../../../dist/main.js"
 const { mutate, insert, out, lastOut, swap, replace } = inplace
 
 const getArray = () => [1, 2, 3, 4]

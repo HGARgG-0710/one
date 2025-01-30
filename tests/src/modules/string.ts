@@ -1,7 +1,7 @@
 import test, { suite } from "node:test"
 import assert from "node:assert"
 
-import { string } from "../../dist/main.js"
+import { string } from "../../../dist/main.js"
 const { capitalize, extract, count, limit, concat, cover, isEmpty } = string
 
 suite("string", () => {

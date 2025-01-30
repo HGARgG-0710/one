@@ -1,7 +1,7 @@
 import test, { suite } from "node:test"
 import assert from "assert"
-import { array } from "../../dist/main.js"
-import { isArray } from "../../dist/src/type/type.js"
+import { array } from "../../../dist/main.js"
+import { isArray } from "../../../dist/src/type/type.js"
 
 const {
 	isTuple,

@@ -1,7 +1,7 @@
 import test, { suite } from "node:test"
 import assert from "node:assert"
 
-import { number } from "../../dist/main.js"
+import { number } from "../../../dist/main.js"
 
 const { sum, product, min, max } = number
 

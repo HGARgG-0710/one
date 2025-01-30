@@ -2,13 +2,13 @@
 	"name": "@hgargg-0710/one",
 	"author": "hgargg-0710",
 	"version": "0.4.0",
-	"description": "A tiny npm library purposed for providing beautiful solutions to frequent miniature (ex: one-line/one-expression) tasks for various JS datatypes.",
+	"description": "A tiny npm library purposed for providing beautiful solutions to frequent miniature (one-line/one-expression) tasks for various JS datatypes.",
 	"type": "module",
 	"main": "./dist/main.js",
 	"types": "./dist/main.d.ts",
 	"scripts": {
 		"build": "tsc --project .",
-		"test": "cd tests && tsc --project tsconfig.json && cd ..",
+		"test": "cd tests && tsc --project . && cd ..",
 		"all": "npm run build && npm run test"
 	},
 	"license": "MIT",
@@ -23,6 +23,6 @@
 		"object"
 	],
 	"devDependencies": {
-		"@types/node": "^22.5.1"
+		"@types/node": "^22.12.0"
 	}
 }
