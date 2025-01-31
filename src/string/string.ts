@@ -70,3 +70,5 @@ export const isEmpty = (x: string) => !x.length
  * Returns the last index of a given string
  */
 export const lastIndex = (x: string) => x.length - 1
+
+export const charCodeAt = (x: string, i: number = 0) => x.charCodeAt(i)

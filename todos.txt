@@ -11,6 +11,46 @@
 			0. runs the 'run-tests' workflow as a reusable workflow
 			1. npm publish
 
+2. Changelog [early]: 
+	1. Add: 
+		1. array: 
+			1. substitute
+			2. sort
+		2. functional: 
+			1. argFiller
+			2. copy
+			3. argWaster
+			4. has
+		3. object: 
+			1. prop
+			2. classes [module]: 
+				1. classWrapper
+				2. withoutConstructor
+				3. mixin
+				4. delegateMethod
+				5. delegateProperty
+				6. calledDelegate
+			3. propDefine
+			4. Prototypal
+			5. protoProp	
+			6. descriptor [module]: 
+				1. GetSetDescriptor
+				2. ConstDescriptor
+				3. Descriptor
+				4. EnumerableDescriptor
+				5. ConfigurableDescriptor
+				6. WritableDescriptor	
+			8. extendPrototype
+		4. string: 
+			1. charCodeAt
+		
+	2. Remove [breaking]: 
+		1. object: 
+			1. FullKey
+
+3. add docs [JSDoc + update the 'wiki...']; 
+
+4. add tests
 
 8. Future: 
 

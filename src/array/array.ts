@@ -295,3 +295,21 @@ export const recursiveSame = (
 	a.every((ax, i) =>
 		isArray(ax) && isArray(b[i]) ? recursiveSame(ax, b[i], pred) : pred(a[i], b[i], i)
 	)
+
+export const sort = <T = any>(
+	array: T[],
+	order: (a: any, b: any) => number = (a: number, b: number) => a - b
+) => array.sort(order)
+
+export const substitute = (n: number, indexes: Set<number>) => {
+	return (values: any[]) => {
+		const arr = Array(n)
+		for (let i = 0, vi = 0; i < n; ++i) if (indexes.has(i)) arr[i] = values[vi++]
+		const other = sort(Array.from(indexes).filter((x) => x < n && !indexes.has(x)))
+		return function (x: any[]) {
+			const final = arr
+			for (let i = 0; i < other.length; ++i) final[other[i]] = x[i]
+			return copy(final)
+		}
+	}
+}

@@ -3,6 +3,8 @@ import { isArray, isStruct, TypePredicate } from "../type/type.js"
 
 import { same as array_same, Pair } from "../array/array.js"
 
+export type Prototypal<T extends object = any> = Function & { prototype: T }
+
 /**
  * A type for representing a pair of object's keys-values
  */
@@ -17,15 +19,14 @@ export type FinalKeys = ObjectKey[]
 /**
  * Type for representing an object key
  */
-export type FullKey = ObjectKey | number
-export type KeyArray = FullKey[]
+export type KeyArray = PropertyKey[]
 
 /**
  * Type for representing a shape of an object
  */
 export type ShapeArg =
 	| KeyArray
-	| { [x: FullKey]: ((x?: any) => boolean) | null | undefined }
+	| { [x: PropertyKey]: ((x?: any) => boolean) | null | undefined }
 
 /**
  * Returns the pair of keys and values of the given object
@@ -315,3 +316,21 @@ export function withoutProperties(props: Set<ObjectKey>) {
 		return newObj
 	}
 }
+
+export const prop = (name: string) => (x: object) => x[name]
+
+export const propDefine = Object.defineProperty
+
+export const protoProp = (
+	Extended: Prototypal,
+	name: PropertyKey,
+	value: PropertyDescriptor
+) => Object.defineProperty(Extended.prototype, name, value)
+
+export const extendPrototype = (
+	Extended: Prototypal,
+	properties: PropertyDescriptorMap
+) => Object.defineProperties(Extended.prototype, properties)
+
+export * as classes from "./classes.js"
+export * as descriptor from "./descriptor.js"
