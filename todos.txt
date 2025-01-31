@@ -7,9 +7,43 @@
 		2. make-release-minor.yml - creates a minor-release for the project (incremental /w 1.)
 
 		[separate commit - just in case...]; 
+		3.1. Preparations: 
+			1. create a new npm token: 
+				1. COPY-TO-CLIPBOARD AND SAVE IT IMMIDIATELY to the flash drive (or somewhere...)
+			2. install (locally) the 'act' tool [https://github.com/nektos/act]
+				1. NOTE: one *MAY* need to finally move to WSL specifically for this (as doing this on pure Windows seems to be plain unreasonable...)
+					Reason - the runner one uses is 'linux' (one most certainly wouldn't use any other), therefore - one needs a local Linux environment to mimic its behaviour...; 
+				2. Then - save the SSH key from GitHub there (and other things...), connect to GitHub appropriately, and - COPY ALL THE REPOS! 
+			3. create a 'mock' temporary '.github/workflows/npm-pack.yml' file, which would be EXACTLY the same as the 'npm-deploy' except for a few things - it'd:
+				1. replace the 'npm publish' with 'npm pack'; 
+				2. configure the 'setup/node' action appropriately, to create a default .npmrc file [/w registry URL and Auth Token]: 
+					2.1. setup the NODE_AUTH_TOKEN environment variable
+						2.1.1. provide it with the value obtained from the 'NPM_TOKEN' secret configured on GitHub as the newly created npm token
+					2.2. add the appropriate 'registry: ...' field to the 'setup-node' args [to automatically create an '.npmrc' file]; 
+				3. printf [secrets]: NPM_TOKEN, GITHUB_TOKEN, 
+			4. Create appropriate GitHub Secrets ("npm publish"-related): 
+
+			5. run the "mock versions" of 'make-release-patch.yml' and 'make-release-minor.yml' locally [see how they work]; 
+				THESE are exactly the same as your current ones BUT: 
+					1. they do *not* log into GitHub + git push to the repo
+					2. INSTEAD, there is A WHOLE SEPARATE '.yml' file SPECIFICALLY for connecting to GitHub via SSH (via the user profile provided with the chosen Secrets); 
+						Its' contents are used to ensure that, indeed, the whole thing is working as intended...; 
+						After - they are copied into the final 'make-release-patch.yml' and 'make-release-minor.yml'
+			
+			6. For .yml files 1. and 2., write the APPROPRIATE GitHub auth: 
+				specifically, add the SSH key [as a secret] needed to connect to GitHub;
+
 		3. npm-deploy - [on push to 'main' - DO IT LAST]: 
+			-1. CONFIGURED AS: 
+				on: 
+					release: 
+						types: [published]
+
 			0. runs the 'run-tests' workflow as a reusable workflow
-			1. npm publish
+			1. 'npm publish --provenance --access public'
+
+2. Add the workflow files in question to the 'GitHub Gist' 
+	[specifically - the 2 first, the 'mock' one and the 'npm-deploy' one, it'd be using the convention of 'run-tests.yml' to designate the testing procedure...];
 
 2. Changelog [early]: 
 	1. Add: 
