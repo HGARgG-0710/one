@@ -39,3 +39,8 @@ export const makeOdd = (x: number) => 2 * x + 1
  * Using the given number `x`, constructs and returns a new number guaranteed to be even - "2 * x"
  */
 export const makeEven = (x: number) => 2 * x
+
+/**
+ * Returns difference of `a` (defaults to 0) with sum of `b`
+ */
+export const difference = (a: number = 0, ...b: number[]) => a - sum(...b)

@@ -71,4 +71,7 @@ export const isEmpty = (x: string) => !x.length
  */
 export const lastIndex = (x: string) => x.length - 1
 
+/**
+ * Returns `x.charCodeAt(i)`. `i` defaults to 0
+*/
 export const charCodeAt = (x: string, i: number = 0) => x.charCodeAt(i)

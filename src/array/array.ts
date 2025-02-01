@@ -2,6 +2,7 @@ import { isArray, isNumberConvertible, isUndefined } from "../type/type.js"
 import { ownProperties } from "../object/main.js"
 import { constant } from "../functional/constant.js"
 import { equals } from "../boolean/boolean.js"
+import { difference } from "../number/number.js"
 
 export type Pair<A = any, B = A> = [A, B]
 export type Pairs<A = any, B = A> = Pair<A, B>[]
@@ -138,18 +139,20 @@ export const first = <Type = any>(x: Type[]) => x[0]
  *
  * Useful for creating "hybrid" arrays from existing objects.
  */
-export const propPreserve =
-	(f: Function, excluded: Set<string | symbol> = new Set()) =>
-	(x: object) => {
+export const propPreserve = (f: Function, excluded: (string | symbol)[] = []) => {
+	const excludedSet = new Set(excluded)
+	return (x: object) => {
 		const result = f(x)
 		const [keys, values] = ownProperties(x)
 		let i = keys.length
 		while (i--) {
 			const key = keys[i]
-			if (!isNumberConvertible(key) && !excluded.has(key)) result[key] = values[i]
+			if (!isNumberConvertible(key) && !excludedSet.has(key))
+				result[key] = values[i]
 		}
 		return result
 	}
+}
 
 /**
  * Creates a copy of the given array
@@ -296,20 +299,46 @@ export const recursiveSame = (
 		isArray(ax) && isArray(b[i]) ? recursiveSame(ax, b[i], pred) : pred(a[i], b[i], i)
 	)
 
+/**
+ * Calls `array.sort(order)` with `order` defaulting to `number.difference`
+ */
 export const sort = <T = any>(
 	array: T[],
-	order: (a: any, b: any) => number = (a: number, b: number) => a - b
+	order: (a: any, b: any) => number = difference
 ) => array.sort(order)
 
+/**
+ * Creates a new function, which creates a new array, indexes of which
+ * defined by the `indexes` Set, are filled with `values` [in increasing order],
+ * the remaining ones being filled by the values of the `x` array
+ */
 export const substitute = (n: number, indexes: Set<number>) => {
+	const filledIndexes = sort(Array.from(indexes)).filter((x) => x < n)
+	const limIndexes = new Set(filledIndexes)
 	return (values: any[]) => {
-		const arr = Array(n)
-		for (let i = 0, vi = 0; i < n; ++i) if (indexes.has(i)) arr[i] = values[vi++]
-		const other = sort(Array.from(indexes).filter((x) => x < n && !indexes.has(x)))
-		return function (x: any[]) {
-			const final = arr
-			for (let i = 0; i < other.length; ++i) final[other[i]] = x[i]
+		const protoArr = Array(n)
+		for (let i = 0, vi = 0; i < filledIndexes.length; ++i)
+			protoArr[filledIndexes[i]] = values[vi++]
+		const restIndexes = Array.from(protoArr.keys().filter((x) => !limIndexes.has(x)))
+		return (x: any[]) => {
+			const final = protoArr
+			for (let i = 0; i < restIndexes.length; ++i) final[restIndexes[i]] = x[i]
 			return copy(final)
 		}
 	}
 }
+
+/**
+ * Returns the array of keys for the given array `x`
+ */
+export const keys = <T = any>(x: T[]) => Array.from(x.keys())
+
+/**
+ * Returns the array of values for the given array `x`
+ */
+export const values = <T = any>(x: T[]) => Array.from(x.values())
+
+/**
+ * Returns an Array of numbers from `0` to `n`s
+ */
+export const numbers = (n: number) => Array(n).map((_x, i) => i)

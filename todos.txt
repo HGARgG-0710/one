@@ -16,6 +16,9 @@
 		1. array: 
 			1. substitute
 			2. sort
+			3. keys
+			4. values
+			5. numbers
 		2. functional: 
 			1. argFiller
 			2. copy
@@ -31,7 +34,7 @@
 				5. delegateProperty
 				6. calledDelegate
 			3. propDefine
-			4. Prototypal
+			4. Constructor
 			5. protoProp	
 			6. descriptor [module]: 
 				1. GetSetDescriptor
@@ -40,15 +43,24 @@
 				4. EnumerableDescriptor
 				5. ConfigurableDescriptor
 				6. WritableDescriptor	
-			8. extendPrototype
+			7. extendPrototype
+			8. propsDefine
 		4. string: 
 			1. charCodeAt
+		5. number: 
+			1. difference
 		
 	2. Remove [breaking]: 
 		1. object: 
 			1. FullKey
+	
+	3. Change [breaking]: 
+		1. object: 
+			[signature change - removal of 'Set' parameters in favour of spread/array]
+			1. withoutProperties
+			2. propPreserve
 
-3. add docs [JSDoc + update the 'wiki...']; 
+3. add docs [update the 'wiki...']: 
 
 4. add tests
 
