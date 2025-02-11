@@ -89,11 +89,6 @@
 			6. WritableDescriptor	
 		7. extendPrototype
 		8. propsDefine
-	4. string: 
-		1. charCodeAt
-		2. multiSplit
-	5. number: 
-		1. difference
 
 
 8. Future: 
@@ -209,3 +204,6 @@
 			npm run build && npm run test-compile && npm run test
 	
 	10. make the .yml files in the '.github/workflows' a GitHub Gist [expecting those to be rather frequently used...]; 
+
+	11. make the 'forkSync' function into a micro-module on 'npm': 
+		Call the package: 'fork_sync'

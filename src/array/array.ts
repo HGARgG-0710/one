@@ -309,11 +309,11 @@ export const sort = <T = any>(
 
 /**
  * Creates a new function, which creates a new array of length `n`, indexes of which
- * defined by the `indexes` Set, are filled with `values`,
+ * defined by the `indexes` array (note: which is pre-ordered), are filled with `values`,
  * the remaining ones being filled by the values of the `x` array
  */
-export const substitute = (n: number, indexes: Set<number>) => {
-	const filledIndexes = sort(Array.from(indexes)).filter((x) => x < n)
+export const substitute = (n: number, indexes: number[]) => {
+	const filledIndexes = sort(indexes).filter((x) => x < n)
 	const limIndexes = new Set(filledIndexes)
 	return (values: any[]) => {
 		const protoArr = Array(n)

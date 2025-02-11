@@ -237,7 +237,7 @@ suite("array", () => {
 	})
 
 	test("substitute", () => {
-		const S = substitute(4, new Set([1, 2]))
+		const S = substitute(4, [1, 2])
 		const S1 = S([24, 25])
 		const S2 = S(["R", "C"])
 

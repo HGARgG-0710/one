@@ -1,4 +1,4 @@
-import { last } from "../array/array.js"
+import { last, uniqueArr } from "../array/array.js"
 
 /**
  * Returns a new string based off `x`, in which the first character is put through `.toUpperCase()`,
@@ -83,7 +83,9 @@ export const charCodeAt = (x: string, i: number = 0) => x.charCodeAt(i)
  */
 export const multiSplit = (x: string, splitBy: string[]) => {
 	let orig = x
+	splitBy = uniqueArr(splitBy)
+	const finalDelim = last(splitBy)
 	for (let i = 0; i < splitBy.length - 1; ++i)
-		orig = extract(orig, splitBy[i], splitBy[i + 1])
-	return orig.split(last(splitBy))
+		orig = extract(orig, splitBy[i], finalDelim)
+	return orig.split(finalDelim)
 }

@@ -143,7 +143,7 @@ export const nil = () => {}
  */
 export const argFiller = (f: Function) => {
 	return (...indexes: number[]) => {
-		const substitutionForm = substitute(f.length, new Set(indexes))
+		const substitutionForm = substitute(f.length, indexes)
 		return (...values: any[]) => {
 			const substituter = substitutionForm(values)
 			return (...x: any[]) => f(...substituter(x))
@@ -158,14 +158,14 @@ export const copy = (f: Function, bound: any = null): Function => f.bind(bound)
 
 /**
  * Returns a function returning `set.has(x)`
-*/
+ */
 export const has = (set: Set<any>) => (x: any) => set.has(x)
 
 /**
- * Returns a function that removes last `n` arguments 
- * (or, all of them, if it is greater than `args.length`) from `args`, 
+ * Returns a function that removes last `n` arguments
+ * (or, all of them, if it is greater than `args.length`) from `args`,
  * and calls `f` on the result
-*/
+ */
 export const argWaster =
 	(f: Function) =>
 	(n: number = Infinity) =>
