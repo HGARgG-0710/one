@@ -2,12 +2,37 @@
 
 1. Finish adding the GitHub Workflows: 
 	Reusable: 
-		[note: these: 0. auth into 'git' using your credentials; 1. run 'npm version (patch|minor)', 2. 'git add .; git commit -m "..."; git push']
-		1. make-release-patch.yml - creates a patch-release for the project (incremental /w 2.)
-		2. make-release-minor.yml - creates a minor-release for the project (incremental /w 1.)
+		1. make-tag.yml - creates a tag for the project
+			[NOTE: do this one SEPARATELY; Reason - one MAY need a passphrase, and (hence), one MAY need to learn to pass it as well... SEPARATELY...]; 
+			0. auth into 'git' using your credentials; 
+				Those are stored as repository SECRETS: 
+
+					0. Your user-name
+					1. Your email
+					2. Your SSH key; 
+					3. [Maybe] Your passphrase; 
+
+			1. '@actions/checkout'
+		
+			2. '@actions/setup-node'
+			
+			[NOTE: SEPARATELY - run first WITHOUT committing; JUST add a 'git status' to check that the local repo is COMMIT-VIABLE]
+			3. run 'npm version [CURRENT_VERSION]'
+				1.1. Here, 'CURRENT_VERSION' is a GitHub-repository-level secret, 
+					purpose of which is to contain valid semver for the current package version. 
+					[This case - '0.5.0']
+
+			[NOTE: when doing this FINAL step - squash the changes into A SINGLE commit...]; 
+			4. git add .
+			5. git commit -m "updating npm package version"
+			6. git tag [CURRENT_VERSION] -F CHANGELOG.md
+				Note: one will need to WRITE the 'CHANGELOG.md' BEFORE doing this...; 
+					Commit it on 'main'
+			7. git remote set-url origin git@github.com:username/repo-name.git
+			8. git push origin main --set-upstream --tags
 
 		[separate commit - just in case...]; 
-		3.1. Preparations: 
+		2.1. Preparations: 
 			1. create a new npm token: 
 				1. COPY-TO-CLIPBOARD AND SAVE IT IMMIDIATELY to the flash drive (or somewhere...)
 			2. install (locally) the 'act' tool [https://github.com/nektos/act]
@@ -34,7 +59,7 @@
 				specifically, add the SSH key [as a secret] needed to connect to GitHub;
 
 		3. npm-deploy - [on push to 'main' - DO IT LAST]: 
-			-1. CONFIGURED AS: 
+			-1. CONFIGURED AS [explanation - fires ONLY upon CREATION of a RELEASE (*not* a tag - that's what 'make-tag' is for...)]: 
 				on: 
 					release: 
 						types: [published]
