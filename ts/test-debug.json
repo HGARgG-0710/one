@@ -1,0 +1,14 @@
+{
+	"compilerOptions": {
+		"baseUrl": "../tests/src/modules",
+		"outDir": "../tests/out",
+		"lib": ["ESNext"],
+		"strictNullChecks": true,
+		"target": "ESNext",
+		"module": "NodeNext",
+		"moduleResolution": "NodeNext",
+		"verbatimModuleSyntax": true, 
+		"sourceMap": true
+	},
+	"include": ["../tests/**/*.ts"]
+}

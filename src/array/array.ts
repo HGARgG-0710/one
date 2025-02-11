@@ -308,8 +308,8 @@ export const sort = <T = any>(
 ) => array.sort(order)
 
 /**
- * Creates a new function, which creates a new array, indexes of which
- * defined by the `indexes` Set, are filled with `values` [in increasing order],
+ * Creates a new function, which creates a new array of length `n`, indexes of which
+ * defined by the `indexes` Set, are filled with `values`,
  * the remaining ones being filled by the values of the `x` array
  */
 export const substitute = (n: number, indexes: Set<number>) => {
@@ -317,8 +317,8 @@ export const substitute = (n: number, indexes: Set<number>) => {
 	const limIndexes = new Set(filledIndexes)
 	return (values: any[]) => {
 		const protoArr = Array(n)
-		for (let i = 0, vi = 0; i < filledIndexes.length; ++i)
-			protoArr[filledIndexes[i]] = values[vi++]
+		for (let i = 0; i < filledIndexes.length; ++i)
+			protoArr[filledIndexes[i]] = values[i]
 		const restIndexes = Array.from(protoArr.keys().filter((x) => !limIndexes.has(x)))
 		return (x: any[]) => {
 			const final = protoArr
@@ -334,11 +334,9 @@ export const substitute = (n: number, indexes: Set<number>) => {
 export const keys = <T = any>(x: T[]) => Array.from(x.keys())
 
 /**
- * Returns the array of values for the given array `x`
+ * Returns an Array of numbers from `0` to `n - 1`
  */
-export const values = <T = any>(x: T[]) => Array.from(x.values())
-
-/**
- * Returns an Array of numbers from `0` to `n`s
- */
-export const numbers = (n: number) => Array(n).map((_x, i) => i)
+export const numbers = (n: number) =>
+	Array(n)
+		.fill(0)
+		.map((_x, i) => i)

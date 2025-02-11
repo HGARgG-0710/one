@@ -2,21 +2,14 @@
 	"compilerOptions": {
 		"baseUrl": "../",
 		"outDir": "../dist",
-		"lib": [
-			"ESNext"
-		],
+		"lib": ["ESNext"],
 		"target": "ESNext",
 		"module": "NodeNext",
 		"moduleResolution": "nodenext",
 		"declaration": true,
 		"strictNullChecks": true,
+		"sourceMap": true
 	},
-	"include": [
-		"../**/*.ts"
-	],
-	"exclude": [
-		"../node_modules",
-		"../tests",
-		"../dist"
-	]
+	"include": ["../**/*.ts"],
+	"exclude": ["../node_modules", "../tests", "../dist"]
 }
