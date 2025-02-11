@@ -1,6 +1,6 @@
 import { last, lastOut, substitute, Tuple } from "../array/array.js"
 import { T } from "../boolean/boolean.js"
-import { min } from "../number/number.js"
+import { max } from "../number/number.js"
 import { isUndefined } from "../type/type.js"
 
 /**
@@ -170,6 +170,6 @@ export const argWaster =
 	(f: Function) =>
 	(n: number = Infinity) =>
 	(...args: any[]) =>
-		f(...args.slice(0, min(0, args.length - n)))
+		f(...args.slice(0, max(0, args.length - n)))
 
 export * from "./constant.js"

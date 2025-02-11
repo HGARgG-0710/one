@@ -63,11 +63,6 @@
 3. add docs [update the 'wiki...']: 
 
 4. add tests: 
-	2. functional: 
-		1. argFiller
-		2. copy
-		3. argWaster
-		4. has
 	3. object: 
 		1. prop
 		2. classes [module]: 
