@@ -1,3 +1,5 @@
+import { last } from "../array/array.js"
+
 /**
  * Returns a new string based off `x`, in which the first character is put through `.toUpperCase()`,
  * and the remainder are put through `.toLowerCase()`
@@ -73,5 +75,15 @@ export const lastIndex = (x: string) => x.length - 1
 
 /**
  * Returns `x.charCodeAt(i)`. `i` defaults to 0
-*/
+ */
 export const charCodeAt = (x: string, i: number = 0) => x.charCodeAt(i)
+
+/**
+ * Consequently splits the given string `x` using `splitBy` delimiters, and returns the result.
+ */
+export const multiSplit = (x: string, splitBy: string[]) => {
+	let orig = x
+	for (let i = 0; i < splitBy.length - 1; ++i)
+		orig = extract(orig, splitBy[i], splitBy[i + 1])
+	return orig.split(last(splitBy))
+}

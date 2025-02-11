@@ -9,6 +9,7 @@ import {
 } from "../../../dist/src/array/array.js"
 
 import { object } from "../../../dist/main.js"
+import { withoutConstructor } from "../../../dist/src/object/classes.js"
 const {
 	kv,
 	same,
@@ -378,12 +379,10 @@ suite("object", () => {
 		class T {}
 		Object.defineProperties(T.prototype, propDescSimple)
 
-		const sansConstructor = withoutProperties(new Set(["constructor"]))
-
 		test("simple case", () =>
 			assert(
 				recursiveSame(
-					sansConstructor(propertyDescriptors(T.prototype)),
+					withoutConstructor(propertyDescriptors(T.prototype)),
 					expectedDescSimple
 				)
 			))
@@ -427,7 +426,7 @@ suite("object", () => {
 		test("recursive case", () =>
 			assert(
 				recursiveSame(
-					sansConstructor(propertyDescriptors(R.prototype)),
+					withoutConstructor(propertyDescriptors(R.prototype)),
 					expectedNewDescriptors
 				)
 			))
@@ -560,7 +559,7 @@ suite("object", () => {
 			[bs]: "T"
 		}
 
-		const sans = withoutProperties(new Set(["A", s, "B", "C"]))
+		const sans = withoutProperties("A", s, "B", "C")
 
 		assert(same(sans(withObj), { R: 90, N: "Ah?", [bs]: "T" }))
 		assert.notStrictEqual(sans(withObj), withObj)

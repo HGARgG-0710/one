@@ -111,7 +111,7 @@ suite("array", () => {
 			arr: any[]
 		}
 
-		const mapPropPreserve = propPreserve((x: ArrHaving) => x.arr, new Set(["length"]))
+		const mapPropPreserve = propPreserve((x: ArrHaving) => x.arr, ["length"])
 		const X1 = mapPropPreserve({
 			T: 90,
 			arr: [40, 40, 19]

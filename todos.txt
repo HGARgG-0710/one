@@ -47,6 +47,7 @@
 			8. propsDefine
 		4. string: 
 			1. charCodeAt
+			2. multiSplit
 		5. number: 
 			1. difference
 		
