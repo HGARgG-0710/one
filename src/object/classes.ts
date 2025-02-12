@@ -36,7 +36,7 @@ export const delegateProperty = (delegatePropName: string) => (propName: string)
  *
  * Useful for multiple inheritance and mixin pattern
  */
-export const mixin = (Extended: Constructor, ...classes: Constructor[]) =>
+export const mixin = (Extended: Constructor, classes: Constructor[]) =>
 	classes.forEach((ParentClass) =>
 		extendPrototype(
 			Extended,

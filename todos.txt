@@ -64,17 +64,6 @@
 
 4. add tests: 
 	3. object: 
-		1. prop
-		2. classes [module]: 
-			1. classWrapper
-			2. withoutConstructor
-			3. mixin
-			4. delegateMethod
-			5. delegateProperty
-			6. calledDelegate
-		3. propDefine
-		4. Constructor
-		5. protoProp	
 		6. descriptor [module]: 
 			1. GetSetDescriptor
 			2. ConstDescriptor
@@ -82,9 +71,6 @@
 			4. EnumerableDescriptor
 			5. ConfigurableDescriptor
 			6. WritableDescriptor	
-		7. extendPrototype
-		8. propsDefine
-
 
 8. Future: 
 

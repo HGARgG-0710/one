@@ -1,7 +1,7 @@
 import test, { suite } from "node:test"
 import assert from "node:assert"
 
-import { propertyDescriptors, type KeyValues } from "../../../dist/src/object/main.js"
+import type { KeyValues } from "../../../dist/src/object/main.js"
 import { isArray, isNumber, isString, isTruthy } from "../../../dist/src/type/type.js"
 import {
 	recursiveSame as array_recursiveSame,
@@ -9,7 +9,7 @@ import {
 } from "../../../dist/src/array/array.js"
 
 import { object } from "../../../dist/main.js"
-import { withoutConstructor } from "../../../dist/src/object/classes.js"
+import { argWaster } from "../../../dist/src/functional/functional.js"
 const {
 	kv,
 	same,
@@ -28,8 +28,21 @@ const {
 	withoutProperties,
 	findOwnMissing,
 	allocator,
-	toMap
+	toMap,
+	prop,
+	protoProp,
+	extendPrototype,
+	propertyDescriptors
 } = object
+
+const {
+	classWrapper,
+	withoutConstructor,
+	mixin,
+	delegateMethod,
+	delegateProperty,
+	calledDelegate
+} = object.classes
 
 const s = Symbol("R")
 const subObject = { K: null }
@@ -563,5 +576,189 @@ suite("object", () => {
 
 		assert(same(sans(withObj), { R: 90, N: "Ah?", [bs]: "T" }))
 		assert.notStrictEqual(sans(withObj), withObj)
+	})
+
+	test("prop", () => {
+		assert.strictEqual(prop("x")({ y: 23, x: 17 }), 17)
+	})
+
+	test("protoProp", () => {
+		class C {}
+
+		const cPre = new C() as { soon?: any }
+		protoProp(C, "soon", { value: true })
+		const cPost = new C() as { soon: boolean }
+
+		assert.strictEqual(cPre.soon, cPost.soon)
+		assert.strictEqual(cPre.soon, true)
+		assert.strictEqual(prototype(cPre), prototype(cPost))
+	})
+
+	test("extendPrototype", () => {
+		class C {
+			k = 0
+		}
+
+		interface D {
+			k: number
+			d: number
+			readonly c: number
+		}
+
+		const c1 = new C() as D
+		const c2 = new C() as D
+
+		extendPrototype(C, {
+			c: { value: 17 },
+			d: {
+				set: function () {
+					++this.k
+				},
+				get: function () {
+					return this.k - 11
+				}
+			}
+		})
+
+		c1.d = 10
+		c1.d = 27
+		c1.d = 19
+
+		assert.strictEqual(c1.d, -8)
+		assert.strictEqual(c2.d, -11)
+		assert.strictEqual(c1.c, c2.c)
+	})
+
+	suite("classes", () => {
+		test("classWrapper", () => {
+			class C {
+				k: number
+				constructor(k = 17) {
+					this.k = k
+				}
+			}
+
+			const t = argWaster(classWrapper(C))(1) as (...args: any[]) => C
+
+			const c = t()
+			const c1 = t(11)
+
+			assert.strictEqual(c.k, 17)
+			assert.strictEqual(c1.k, 17)
+		})
+
+		test("withoutConstructor", () => {
+			const C = { constructor: function () {} }
+			assert.strictEqual(withoutConstructor(C).constructor, Object)
+		})
+
+		test("mixin", () => {
+			class C {
+				constructor(public r: number) {}
+			}
+
+			class D {
+				constructor() {}
+				meth1() {}
+				meth2() {}
+				meth3() {}
+				meth4() {}
+			}
+
+			class E {
+				meth1() {}
+			}
+
+			class F {
+				x: number
+				constructor(x: number) {
+					this.x = 90 + x
+				}
+				meth3() {}
+			}
+
+			mixin(C, [D, E, F])
+
+			const c = new C(3) as {
+				r: number
+				meth1(): any
+				meth2(): any
+				meth3(): any
+				meth4(): any
+			}
+
+			assert.strictEqual(c.r, 3)
+			assert.strictEqual(c.meth1, E.prototype.meth1)
+			assert.strictEqual(c.meth2, D.prototype.meth2)
+			assert.strictEqual(c.meth3, F.prototype.meth3)
+			assert.strictEqual(c.meth4, D.prototype.meth4)
+		})
+
+		test("delegateMethod", () => {
+			class B {
+				constructor(public r: number = 11) {}
+
+				meth1(x: number) {
+					return this.r * x
+				}
+			}
+
+			class C {
+				constructor(public b: B) {}
+			}
+
+			const b = new B()
+			const c = new C(b)
+			const callDelegate = delegateMethod("b")("meth1").bind(c)
+
+			assert.strictEqual(callDelegate(3), 33)
+			assert.strictEqual(callDelegate(9), 99)
+
+			b.r = 2
+			assert.strictEqual(callDelegate(2), 4)
+		})
+
+		test("delegateProperty", () => {
+			class B {
+				constructor(public r: number) {}
+			}
+
+			class C {
+				constructor(public b: B) {}
+			}
+
+			const b = new B(13)
+			const c = new C(b)
+
+			const getProperty = delegateProperty("b")("r").bind(c)
+			assert.strictEqual(getProperty(), 13)
+
+			b.r = 1119
+			assert.strictEqual(getProperty(), 1119)
+		})
+
+		test("calledDelegate", () => {
+			class B {
+				constructor(public r: number) {}
+				meth1(x: number) {
+					return this.r * x
+				}
+			}
+
+			class C {
+				constructor(public b: B, public r: number) {}
+			}
+
+			const b1 = new B(7)
+			const c1 = new C(b1, 5)
+
+			const b2 = new B(4)
+			const c2 = new C(b2, 3)
+
+			const callDelegate = calledDelegate("b")("meth1")
+
+			assert.strictEqual(callDelegate(c1, 3), 15)
+			assert.strictEqual(callDelegate(c2, 3), 9)
+		})
 	})
 })
