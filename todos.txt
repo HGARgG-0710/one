@@ -15,21 +15,23 @@
 			1. '@actions/checkout'
 		
 			2. '@actions/setup-node'
+
+			3. run-tests.yml [sub-task]
 			
 			[NOTE: SEPARATELY - run first WITHOUT committing; JUST add a 'git status' to check that the local repo is COMMIT-VIABLE]
-			3. run 'npm version [CURRENT_VERSION]'
+			4. run 'npm version [CURRENT_VERSION]'
 				1.1. Here, 'CURRENT_VERSION' is a GitHub-repository-level secret, 
 					purpose of which is to contain valid semver for the current package version. 
 					[This case - '0.5.0']
 
 			[NOTE: when doing this FINAL step - squash the changes into A SINGLE commit...]; 
-			4. git add .
-			5. git commit -m "updating npm package version"
-			6. git tag [CURRENT_VERSION] -F CHANGELOG.md
+			5. git add .
+			6. git commit -m "updating npm package version"
+			7. git tag [secrets.CURRENT_VERSION] -F CHANGELOG.md
 				Note: one will need to WRITE the 'CHANGELOG.md' BEFORE doing this...; 
 					Commit it on 'main'
-			7. git remote set-url origin git@github.com:username/repo-name.git
-			8. git push origin main --set-upstream --tags
+			8. git remote set-url origin git@github.com:username/repo-name.git
+			9. git push origin main --set-upstream --tags
 
 		[separate commit - just in case...]; 
 		2.1. Preparations: 
