@@ -32,7 +32,8 @@ const {
 	prop,
 	protoProp,
 	extendPrototype,
-	propertyDescriptors
+	propertyDescriptors,
+	propDefine
 } = object
 
 const {
@@ -43,6 +44,8 @@ const {
 	delegateProperty,
 	calledDelegate
 } = object.classes
+
+const { GetSetDescriptor, ConstDescriptor } = object.descriptor
 
 const s = Symbol("R")
 const subObject = { K: null }
@@ -759,6 +762,43 @@ suite("object", () => {
 
 			assert.strictEqual(callDelegate(c1, 3), 15)
 			assert.strictEqual(callDelegate(c2, 3), 9)
+		})
+	})
+
+	suite("descriptor", () => {
+		test("GetSetDescriptor", () => {
+			const c = { T: 9 } as { T: any; M?: any }
+
+			propDefine(
+				c,
+				"M",
+				GetSetDescriptor(
+					function () {
+						return 12
+					},
+					function (x: any) {
+						return (this.T = x)
+					}
+				)
+			)
+
+			assert.strictEqual(c.M, 12)
+
+			c.M = 1
+			assert.strictEqual(c.T, 1)
+			assert.strictEqual(c.M, 12)
+		})
+
+		test("ConstDescriptor", () => {
+			const c = {} as { M?: any }
+			propDefine(c, "M", ConstDescriptor(111))
+			assert.strictEqual(c.M, 111)
+
+			try {
+				c.M = 1
+			} catch {
+				assert.strictEqual(c.M, 111)
+			}
 		})
 	})
 })

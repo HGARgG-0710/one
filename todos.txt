@@ -62,16 +62,6 @@
 
 3. add docs [update the 'wiki...']: 
 
-4. add tests: 
-	3. object: 
-		6. descriptor [module]: 
-			1. GetSetDescriptor
-			2. ConstDescriptor
-			3. Descriptor
-			4. EnumerableDescriptor
-			5. ConfigurableDescriptor
-			6. WritableDescriptor	
-
 8. Future: 
 
 	0. prior to all this, however...
