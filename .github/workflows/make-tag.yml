@@ -1,6 +1,6 @@
 name: Add Current Tag
 run-name: Making New Tag
-on: workflow-dispatch
+on: workflow_dispatch
 jobs:
     make-tag:
         name: Make Tag
