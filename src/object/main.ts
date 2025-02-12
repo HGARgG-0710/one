@@ -3,7 +3,10 @@ import { isArray, isStruct, TypePredicate } from "../type/type.js"
 
 import { same as array_same, Pair } from "../array/array.js"
 
-export type Prototypal<T extends object = any> = Function & { prototype: T }
+/**
+ * A type for representing a class
+ */
+export type Constructor<T extends object = any> = Function & { prototype: T }
 
 /**
  * A type for representing a pair of object's keys-values
@@ -307,30 +310,50 @@ export function recursiveSame(
 }
 
 /**
- * Returns a copy of a given object without the provided Set of properties `props`
+ * Returns a copy of a given object without the provided properties `props`
  */
-export function withoutProperties(props: Set<ObjectKey>) {
+export function withoutProperties(...props: ObjectKey[]) {
+	const propsSet = new Set(props)
 	return function (object: object) {
 		const newObj: object = empty()
-		for (const prop of keys(object)) if (!props.has(prop)) newObj[prop] = object[prop]
+		for (const prop of keys(object))
+			if (!propsSet.has(prop)) newObj[prop] = object[prop]
 		return newObj
 	}
 }
 
+/**
+ * Returns a function for obtaining `x[name]`
+ */
 export const prop = (name: string) => (x: object) => x[name]
 
+/**
+ * Alias of 'Object.defineProperty'
+ */
 export const propDefine = Object.defineProperty
 
+/**
+ * Alias of 'Object.defineProperties'
+ */
+export const propsDefine = Object.defineProperties
+
+/**
+ * Defines a property with a name `name` and value described by the property-descriptor `value`
+ * on the `Extended.prototype`
+ */
 export const protoProp = (
-	Extended: Prototypal,
+	Extended: Constructor,
 	name: PropertyKey,
 	value: PropertyDescriptor
-) => Object.defineProperty(Extended.prototype, name, value)
+) => propDefine(Extended.prototype, name, value)
 
+/**
+ * Defines the properties described by the given property-descriptor-map `properties` on `Extended.prototype`
+ */
 export const extendPrototype = (
-	Extended: Prototypal,
+	Extended: Constructor,
 	properties: PropertyDescriptorMap
-) => Object.defineProperties(Extended.prototype, properties)
+) => propsDefine(Extended.prototype, properties)
 
 export * as classes from "./classes.js"
 export * as descriptor from "./descriptor.js"

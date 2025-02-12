@@ -1,6 +1,6 @@
 import { last, lastOut, substitute, Tuple } from "../array/array.js"
 import { T } from "../boolean/boolean.js"
-import { min } from "../number/number.js"
+import { max } from "../number/number.js"
 import { isUndefined } from "../type/type.js"
 
 /**
@@ -137,22 +137,39 @@ export const id = <Type = any>(x: Type) => x
  */
 export const nil = () => {}
 
-export const argFiller = (f: Function, indexes: Set<number>) => {
-	const substitutionForm = substitute(f.length, indexes)
-	return (...values: any[]) => {
-		const substituter = substitutionForm(values)
-		return (...x: any[]) => f(...substituter(x))
+/**
+ * Creates a new function calling `f`, with arguments at positions defined by `indexes` Set
+ * filled with values from `values`, and the remaining arguments filled with values from 'x'.
+ */
+export const argFiller = (f: Function) => {
+	return (...indexes: number[]) => {
+		const substitutionForm = substitute(f.length, indexes)
+		return (...values: any[]) => {
+			const substituter = substitutionForm(values)
+			return (...x: any[]) => f(...substituter(x))
+		}
 	}
 }
 
-export const copy = (f: Function, bound: any = null) => f.bind(bound)
+/**
+ * Returns `f.bind(bound)`. `bound` defaults to `null`
+ */
+export const copy = (f: Function, bound: any = null): Function => f.bind(bound)
 
+/**
+ * Returns a function returning `set.has(x)`
+ */
 export const has = (set: Set<any>) => (x: any) => set.has(x)
 
+/**
+ * Returns a function that removes last `n` arguments
+ * (or, all of them, if it is greater than `args.length`) from `args`,
+ * and calls `f` on the result
+ */
 export const argWaster =
 	(f: Function) =>
 	(n: number = Infinity) =>
 	(...args: any[]) =>
-		f(...args.slice(0, min(0, args.length - n)))
+		f(...args.slice(0, max(0, args.length - n)))
 
 export * from "./constant.js"

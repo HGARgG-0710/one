@@ -2,7 +2,8 @@ import test, { suite } from "node:test"
 import assert from "node:assert"
 
 import { string } from "../../../dist/main.js"
-const { capitalize, extract, count, limit, concat, cover, isEmpty } = string
+import { same } from "../../../dist/src/array/array.js"
+const { capitalize, extract, count, limit, concat, cover, isEmpty, multiSplit } = string
 
 suite("string", () => {
 	test("capitalize", () => {
@@ -43,5 +44,32 @@ suite("string", () => {
 	test("isEmpty", () => {
 		assert(isEmpty(""))
 		assert(!isEmpty("Bark"))
+	})
+
+	test("multiSplit", () => {
+		const origStr =
+			"Rough, angry pillow\nflew\n out through the \t old, battered \n window"
+
+		const expStrs = [
+			"Rough",
+			"",
+			"angry",
+			"pillow",
+			"flew",
+			"",
+			"out",
+			"through",
+			"the",
+			"",
+			"",
+			"old",
+			"",
+			"battered",
+			"",
+			"",
+			"window"
+		]
+
+		assert(same(multiSplit(origStr, ["\n", "\t", " ", ","]), expStrs))
 	})
 })

@@ -20,7 +20,11 @@ const {
 	tupleSlice,
 	tuplePick,
 	constant,
-	cached
+	cached,
+	copy,
+	has,
+	argWaster,
+	argFiller
 } = functional
 
 suite("functional", () => {
@@ -175,5 +179,56 @@ suite("functional", () => {
 		assert.strictEqual(constant(5)(), 5)
 		assert.strictEqual(constant(false)(), false)
 		assert.strictEqual(constant("49")(), "49")
+	})
+
+	test("copy", () => {
+		function F() {}
+		function S() {
+			if (this && this.r) {
+				this.r += 13
+				return this.r
+			}
+		}
+		const T = { r: 329 }
+
+		assert.notStrictEqual(copy(F), F)
+		assert.strictEqual(copy(S, T)(), 342)
+	})
+
+	test("has", () => {
+		const hasF = has(new Set(["2929", 13]))
+		assert(!hasF(10))
+		assert(!hasF(null))
+		assert(hasF("2929"))
+		assert(hasF(13))
+	})
+
+	test("argWaster", () => {
+		function F(f = 32) {
+			return f + 3
+		}
+
+		function S(a = 29, b = 11, c = 23) {
+			return a * b + c ** 2
+		}
+
+		const SWaster = argWaster(S)
+
+		assert.strictEqual(argWaster(F)()(5), 35)
+		assert.strictEqual(SWaster()(5, 2, 3), 848)
+		assert.strictEqual(SWaster(2)(5, 2, 3), 584)
+		assert.strictEqual(SWaster(1)(5, 2, 3), 539)
+		assert.strictEqual(SWaster(0)(5, 2, 3), 19)
+	})
+
+	test("argFiller", () => {
+		function S(a: number, b: number, c: number) {
+			return a * (b + c) ** 2
+		}
+
+		const filler = argFiller(S)(0, 2)(11, 3)
+
+		assert.strictEqual(filler(4), 539)
+		assert.strictEqual(filler(6), 891)
 	})
 })

@@ -9,7 +9,10 @@
 	"scripts": {
 		"build": "tsc --project .",
 		"test": "cd tests && tsc --project . && cd ..",
-		"all": "npm run build && npm run test"
+		"debug": "tsc --project ./ts/debug.json",
+		"test-debug": "cd tests && tsc --project ../ts/test-debug.json && cd ..",
+		"all": "npm run build && npm run test",
+		"debug-all": "npm run debug && npm run test-debug"
 	},
 	"license": "MIT",
 	"bugs": {
@@ -17,9 +20,9 @@
 	},
 	"homepage": "https://github.com/HGARgG-0710/one#readme",
 	"keywords": [
-		"one-line", 
-		"types", 
-		"common", 
+		"one-line",
+		"types",
+		"common",
 		"object"
 	],
 	"devDependencies": {

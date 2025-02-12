@@ -12,9 +12,9 @@
 				"<node_internals>/**"
 			],
 			"program": "${file}",
-			"preLaunchTask": "npm: all",
+			"preLaunchTask": "npm: debug-all",
 			"outFiles": [
-				"${workspaceFolder}\\tests\\out\\*.js",
+				"${workspaceFolder}\\tests\\out\\**\\*.js",
 				"${workspaceFolder}\\dist\\**\\*.js",
 			]
 		}

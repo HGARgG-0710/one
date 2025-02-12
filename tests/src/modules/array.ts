@@ -28,7 +28,11 @@ const {
 	and,
 	or,
 	allocator,
-	recursiveSame
+	recursiveSame,
+	substitute,
+	sort,
+	keys,
+	numbers
 } = array
 
 const getArray = () => [0, 1, 2, 3]
@@ -111,7 +115,7 @@ suite("array", () => {
 			arr: any[]
 		}
 
-		const mapPropPreserve = propPreserve((x: ArrHaving) => x.arr, new Set(["length"]))
+		const mapPropPreserve = propPreserve((x: ArrHaving) => x.arr, ["length"])
 		const X1 = mapPropPreserve({
 			T: 90,
 			arr: [40, 40, 19]
@@ -230,5 +234,36 @@ suite("array", () => {
 
 		assert(!recursiveSame([1, 2], [1, 2, 3]))
 		assert(!recursiveSame([1, 2, 4], [1, 2, 3]))
+	})
+
+	test("substitute", () => {
+		const S = substitute(4, [1, 2])
+		const S1 = S([24, 25])
+		const S2 = S(["R", "C"])
+
+		assert(same(S1([33, 17]), [33, 24, 25, 17]))
+		assert(same(S2(["O", "S"]), ["O", "R", "C", "S"]))
+	})
+
+	test("sort", () => {
+		assert(same(sort([3, 2, 1]), [1, 2, 3]))
+		assert(
+			same(
+				sort([1, 2, 3], (a: number, b: number) => b - a),
+				[3, 2, 1]
+			)
+		)
+	})
+
+	test("keys", () => {
+		const array = getArray()
+		assert(same(keys(array), array))
+		assert(same(keys(["luff", "duff", "puff", "huff"]), array))
+	})
+
+	test("numbers", () => {
+		const array = getArray()
+		assert(same(numbers(4), array))
+		assert(same(numbers(7), [0, 1, 2, 3, 4, 5, 6]))
 	})
 })
