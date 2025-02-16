@@ -1,5 +1,5 @@
 import { last, lastOut, substitute, Tuple } from "../array/array.js"
-import { T } from "../boolean/boolean.js"
+import { not, T } from "../boolean/boolean.js"
 import { max } from "../number/number.js"
 import { isUndefined } from "../type/type.js"
 
@@ -171,5 +171,11 @@ export const argWaster =
 	(n: number = Infinity) =>
 	(...args: any[]) =>
 		f(...args.slice(0, max(0, args.length - n)))
+
+/**
+ * Returns `(...x) => !f(...x)`
+ */
+export const negate = (f: (...args: any[]) => any): ((...args: any[]) => boolean) =>
+	trivialCompose(not, f)
 
 export * from "./constant.js"

@@ -84,6 +84,7 @@
 			2. copy
 			3. argWaster
 			4. has
+			5. negate
 		3. object: 
 			1. prop
 			2. classes [module]: 
