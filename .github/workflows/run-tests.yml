@@ -1,6 +1,6 @@
 name: Run Tests
 run-name: Running Tests
-on: workflow_dispatch
+on: [ workflow_dispatch, workflow_call ]
 permissions:
     packages: read
 jobs:

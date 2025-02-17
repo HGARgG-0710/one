@@ -12,7 +12,7 @@ npm install @hgargg-0710/one
 
 The documentation is presently located at the [GitHub Wiki](https://github.com/HGARgG-0710/one/wiki). 
 
-Current library version is v0.4
+Current library version is v0.5
 
 ## TypeScript support
 

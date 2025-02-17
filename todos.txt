@@ -1,38 +1,6 @@
 [v0.5]
 
 1. Finish adding the GitHub Workflows: 
-	Reusable: 
-		1. make-tag.yml - creates a tag for the project
-			[NOTE: do this one SEPARATELY; Reason - one MAY need a passphrase, and (hence), one MAY need to learn to pass it as well... SEPARATELY...]; 
-			0. auth into 'git' using your credentials; 
-				Those are stored as repository SECRETS: 
-
-					0. Your user-name
-					1. Your email
-					2. Your SSH key; 
-					3. [Maybe] Your passphrase; 
-
-			1. '@actions/checkout'
-		
-			2. '@actions/setup-node'
-
-			3. run-tests.yml [sub-task]
-			
-			[NOTE: SEPARATELY - run first WITHOUT committing; JUST add a 'git status' to check that the local repo is COMMIT-VIABLE]
-			4. run 'npm version [CURRENT_VERSION]'
-				1.1. Here, 'CURRENT_VERSION' is a GitHub-repository-level secret, 
-					purpose of which is to contain valid semver for the current package version. 
-					[This case - '0.5.0']
-
-			[NOTE: when doing this FINAL step - squash the changes into A SINGLE commit...]; 
-			5. git add .
-			6. git commit -m "updating npm package version"
-			7. git tag [secrets.CURRENT_VERSION] -F CHANGELOG.md
-				Note: one will need to WRITE the 'CHANGELOG.md' BEFORE doing this...; 
-					Commit it on 'main'
-			8. git remote set-url origin git@github.com:username/repo-name.git
-			9. git push origin main --set-upstream --tags
-
 		[separate commit - just in case...]; 
 		2.1. Preparations: 
 			1. create a new npm token: 
@@ -60,67 +28,17 @@
 			6. For .yml files 1. and 2., write the APPROPRIATE GitHub auth: 
 				specifically, add the SSH key [as a secret] needed to connect to GitHub;
 
-		3. npm-deploy - [on push to 'main' - DO IT LAST]: 
+		3. npm-deploy - automated: 
 			-1. CONFIGURED AS [explanation - fires ONLY upon CREATION of a RELEASE (*not* a tag - that's what 'make-tag' is for...)]: 
 				on: 
 					release: 
 						types: [published]
 
 			0. runs the 'run-tests' workflow as a reusable workflow
-			1. 'npm publish --provenance --access public'
+			1. publishes to 'npm' via https://github.com/marketplace/actions/npm-publish
 
 2. Add the workflow files in question to the 'GitHub Gist' 
 	[specifically - the 2 first, the 'mock' one and the 'npm-deploy' one, it'd be using the convention of 'run-tests.yml' to designate the testing procedure...];
-
-2. Changelog [early]: 
-	1. Add: 
-		1. array: 
-			1. substitute
-			2. sort
-			3. keys
-			4. numbers
-		2. functional: 
-			1. argFiller
-			2. copy
-			3. argWaster
-			4. has
-			5. negate
-		3. object: 
-			1. prop
-			2. classes [module]: 
-				1. classWrapper
-				2. withoutConstructor
-				3. mixin
-				4. delegateMethod
-				5. delegateProperty
-				6. calledDelegate
-			3. propDefine
-			4. Constructor
-			5. protoProp	
-			6. descriptor [module]: 
-				1. GetSetDescriptor
-				2. ConstDescriptor
-				3. Descriptor
-				4. EnumerableDescriptor
-				5. ConfigurableDescriptor
-				6. WritableDescriptor	
-			7. extendPrototype
-			8. propsDefine
-		4. string: 
-			1. charCodeAt
-			2. multiSplit
-		5. number: 
-			1. difference
-		
-	2. Remove [breaking]: 
-		1. object: 
-			1. FullKey
-	
-	3. Change [breaking]: 
-		1. object: 
-			[signature change - removal of 'Set' parameters in favour of spread/array]
-			1. withoutProperties
-			2. propPreserve
 
 3. add docs [update the 'wiki...']: 
 
