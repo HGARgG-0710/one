@@ -46,7 +46,6 @@ jobs:
                   git add .
                   git commit -m "version update"
                   git tag -F CHANGELOG.md $CURRENT_VERSION
-                  
+
                   git push --set-upstream origin main
                   git push origin $CURRENT_VERSION
-                  

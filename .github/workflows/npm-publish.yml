@@ -1,0 +1,26 @@
+name: Publish to NPM
+run-name: Publishing to NPM Registry
+on: workflow_dispatch
+jobs:
+    publish:
+        name: Publish
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout Repo
+              uses: actions/checkout@v4
+
+            - name: Install Node.js
+              uses: actions/setup-node@v4
+              with:
+                  node-version: 22.0.0
+
+            - name: Build Project
+              run: |
+                  npm ci
+                  npm run build
+
+            - name: Finish
+              uses: JS-DevTools/npm-publish@v3
+              with:
+                  token: ${{ secrets.NPM_TOKEN }}
+                  access: public
