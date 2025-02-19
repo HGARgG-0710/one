@@ -17,6 +17,13 @@
 				10. Http_Case - [Http-Case] works like camelCase
 				11. camel_Snake_Case - works like camelCase
 
+			2. object: 
+				1. descriptor: 
+					1. GetterDescriptor - ({get}), WITHOUT the '.set'; 
+				2. classes: 
+					1. attachConst = (x: Prototypal, name: PropertyKey, value: any) => protoProp(x, name, ConstDescriptor(value))
+					2. attachGetter = (x: Prototypal, name: PropertyKey, value: any) => protoProp(x, name, GetterDescriptor(value))
+
 		Fix: 	
 
 			1. string: 
@@ -29,8 +36,14 @@
 					Then - one.js can import it [and subsequently EXPORT it, as part of the "combination-package" thing], TOGETHER
 						with 'parsers.js' [due to: 1. how conviniently it fits with parsers.js functionality; 2. that it already IS a dependency - why not export it as well?]
 
-			2. for types: 
+			2. types: 
 				1. Use 'NoInfer' where beneficial [example: 'functional.constant']; 
+			
+			3. functional: 
+				1. argWaster - change places the 'n' and 'f' arguments
+		
+		Also: 
+			1. Refactor back into the `parsers.js` [there are STILL a few imperfect places...]; 
 
 	1. functional programming library in JavaScript: 
 		Let the 'functional' module be moved there...
