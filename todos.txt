@@ -24,7 +24,9 @@
 				3. propCall = (name: string, n: number = Infinity) => (x: object) => (...args: any[]) x[name](...args)
 					Note: in practice, one also needs applying the 'argWaster' on this. 	
 
-				4. add 'AbstractConstructor<Signature extends any[] = [], Type = any> = abstract new (...s: Signature) => Type'
+			3. types
+				1. add 'Constructor<Signature extends any[] = [], Type = any> = new (...s: Signature) => Type'
+				2. add 'AbstractConstructor<Signature extends any[] = [], Type = any> = abstract new (...s: Signature) => Type'
 
 		Fix: 	
 
