@@ -1,5 +1,3 @@
-[v0.5]
-
 8. Future: 
 
 	0. prior to all this, however...
@@ -24,7 +22,9 @@
 					1. attachConst = (x: Prototypal, name: PropertyKey, value: any) => protoProp(x, name, ConstDescriptor(value))
 					2. attachGetter = (x: Prototypal, name: PropertyKey, value: any) => protoProp(x, name, GetterDescriptor(value))
 				3. propCall = (name: string, n: number = Infinity) => (x: object) => (...args: any[]) x[name](...args)
-					Note: in practice, one also needs applying the 'argWaster' on this. 
+					Note: in practice, one also needs applying the 'argWaster' on this. 	
+
+				4. add 'AbstractConstructor<Signature extends any[] = [], Type = any> = abstract new (...s: Signature) => Type'
 
 		Fix: 	
 
@@ -37,12 +37,12 @@
 
 					Then - one.js can import it [and subsequently EXPORT it, as part of the "combination-package" thing], TOGETHER
 						with 'parsers.js' [due to: 1. how conviniently it fits with parsers.js functionality; 2. that it already IS a dependency - why not export it as well?]
-
-			2. types: 
-				1. Use 'NoInfer' where beneficial [example: 'functional.constant']; 
 			
-			3. functional: 
+			2. functional: 
 				1. argWaster - change places the 'n' and 'f' arguments
+				2. copy - add generics 'FunctionType extends Function': 
+					1. Do so for EVERY function in the library that accepts function-like objects, 
+						and which keeps the function's Shape; 
 		
 		Also: 
 			1. Refactor back into the `parsers.js` [there are STILL a few imperfect places...]; 
