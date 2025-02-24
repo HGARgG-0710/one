@@ -23,6 +23,8 @@
 				2. classes: 
 					1. attachConst = (x: Prototypal, name: PropertyKey, value: any) => protoProp(x, name, ConstDescriptor(value))
 					2. attachGetter = (x: Prototypal, name: PropertyKey, value: any) => protoProp(x, name, GetterDescriptor(value))
+				3. propCall = (name: string, n: number = Infinity) => (x: object) => (...args: any[]) x[name](...args)
+					Note: in practice, one also needs applying the 'argWaster' on this. 
 
 		Fix: 	
 
