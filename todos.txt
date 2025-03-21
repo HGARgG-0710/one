@@ -38,6 +38,11 @@
 			5. array: 
 				1. from = (n: number, f: Function) => Array.from({ length: n }, f)
 					A VERY common construct. 
+				2. last, lastIndex: make the argument `readonly`
+					THE SAME applies in general to ALL the micro-functions that 
+						handle arrays that DO NOT need to be written to
+					Reason: IF the given array IS `readonly`, it prevents a need for manual conversion 
+						to `T[]` from `readonly T[]`. 
 
 		Fix: 	
 
