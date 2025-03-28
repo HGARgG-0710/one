@@ -1,4 +1,4 @@
-8. Future: 
+8. Future [v0.5.1]: 
 
 	0. prior to all this, however...
 		Add: 
@@ -38,11 +38,13 @@
 			5. array: 
 				1. from = (n: number, f: Function) => Array.from({ length: n }, f)
 					A VERY common construct. 
-				2. last, lastIndex: make the argument `readonly`
-					THE SAME applies in general to ALL the micro-functions that 
-						handle arrays that DO NOT need to be written to
-					Reason: IF the given array IS `readonly`, it prevents a need for manual conversion 
-						to `T[]` from `readonly T[]`. 
+				2. fill(indexes, values, array): 
+					REFACTOR from out the `substitute` function: 
+						fill = function (indexes, values, array) {
+							for (let i = 0 ; i < indexes.length; ++i) 
+								array[indexes[i]] = values[i]
+						}
+					This fills the "gaps" inside the array. 
 
 		Fix: 	
 
@@ -61,6 +63,13 @@
 				2. copy - add generics 'FunctionType extends Function': 
 					1. Do so for EVERY function in the library that accepts function-like objects, 
 						and which keeps the function's Shape; 
+
+			3. array: 
+				1. last, lastIndex: make the argument `readonly`
+					THE SAME applies in general to ALL the micro-functions that 
+						handle arrays that DO NOT need to be written to
+					Reason: IF the given array IS `readonly`, it prevents a need for manual conversion 
+						to `T[]` from `readonly T[]`. 
 		
 		Also: 
 			1. Refactor back into the `parsers.js` [there are STILL a few imperfect places...]; 
