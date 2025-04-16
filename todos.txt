@@ -46,6 +46,10 @@
 						}
 					This fills the "gaps" inside the array. 
 
+			6. number: 
+				1. isPositive = (x: number) => x > 0
+				2. isNegative = (x: number) => x < 0
+
 		Fix: 	
 
 			1. string: 
