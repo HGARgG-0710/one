@@ -27,6 +27,8 @@
 			3. types
 				1. add 'Constructor<Signature extends any[] = [], Type = any> = new (...s: Signature) => Type'
 				2. add 'AbstractConstructor<Signature extends any[] = [], Type = any> = abstract new (...s: Signature) => Type'
+				3. add `isIterable` - defines whether a given something is one of: 
+					returns: x is an entity (not NECESSARILY an object...) with '[Symbol.iterator]: isFunction'
 
 			4. boolean: 
 				[AND their curried versions...]
