@@ -47,6 +47,8 @@
 								array[indexes[i]] = values[i]
 						}
 					This fills the "gaps" inside the array. 
+				3. repeat(array, n): 
+					creates a new array repeated n times using `array`;
 
 			6. number: 
 				1. isPositive = (x: number) => x > 0
