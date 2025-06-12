@@ -54,6 +54,13 @@
 				1. isPositive = (x: number) => x > 0
 				2. isNegative = (x: number) => x < 0
 
+			7. `map`: 
+				1. `keys`
+					(m: Map) => Array.from(map.keys())
+					
+				2. `values`
+					(m: Map) => Array.from(map.values())
+
 		Fix: 	
 
 			1. string: 
