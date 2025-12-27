@@ -85,6 +85,11 @@
 						handle arrays that DO NOT need to be written to
 					Reason: IF the given array IS `readonly`, it prevents a need for manual conversion 
 						to `T[]` from `readonly T[]`. 
+					
+			4. JSDOC: 
+				Fix bad jsdoc: 
+					1. fix the copypaste (example: 'object.empty' jsdoc is copypaste of 'array.empty'); 
+					2. make it more descriptive
 		
 		Also: 
 			1. Refactor back into the `parsers.js` [there are STILL a few imperfect places...]; 
