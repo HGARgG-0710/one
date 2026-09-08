@@ -1,8 +1,4 @@
 * Future [v1.0.0]:
-	* CURRENT [test]:
-		* array:
-			1. insertion
-
 	* to jsdoc:
 		0. functional.jumps
 		1. object.recursiveIterate
@@ -76,16 +72,9 @@
  				*/
 		5. object.Shape.Builder
 
-	* To test [new]:
+	* To test:
 		* array.ArraySet
-		* object.descriptor:
-			* `Configurable()`
-				1. two descriptors - one without, another with 'Configurable()'
-				2. check that the first cannot be re-configured
-				3. check that the second can be reconfigured
-			* `Getter()` + `Setter()` + `Configurable()`:
-				* (serves more as a practical example-verification of setter-replacement, than a proper Equivalence Partition test)
-				* replace a setter in the getter/setter pair on an object by utilizing `Conrigurable()`
+		* array.insertion
 
 	* TODO: fix the publish pipeline
 		1. replace the expired NPM_TOKEN secret

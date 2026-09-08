@@ -931,6 +931,5 @@ suite("object", () => {
 			assert.strictEqual(a.a, 44)
 			assert.strictEqual(a.b, 41)
 		})
-		// TODO: finish
 	})
 })
