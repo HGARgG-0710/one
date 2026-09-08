@@ -84,4 +84,4 @@
 
 	* Update wiki [all the links - new AND old]
 
-	* 'git rebase -i' the current release's commits once all else is done
+	* 'git rebase -i' the current release's [and previous' ones] commits once all else is done
