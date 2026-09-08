@@ -892,6 +892,45 @@ suite("object", () => {
 			assertThrows(() => ((a as any).b = 0))
 		})
 
+		test("Configurable", () => {
+			const desc1 = {
+				...descriptor.Configurable(),
+				...descriptor.Value(11),
+			}
+
+			const desc2 = {
+				...descriptor.Value(13),
+			}
+
+			interface A {
+				a?: number
+				c?: number
+				b: number
+			}
+
+			const a: A = { b: 10 }
+			propDefine(a, "a", desc1)
+			propDefine(a, "c", desc2)
+
+			function replacePropWithGetSet(target: any, propName: PropertyKey) {
+				propDefine(target, propName, {
+					...descriptor.Getter(function () {
+						return this.b + 3
+					}),
+					...descriptor.Setter(function (b: number) {
+						this.b = b - 3
+					}),
+				})
+			}
+
+			assertThrows(() => replacePropWithGetSet(a, "c"))
+			replacePropWithGetSet(a, "a")
+			assert.strictEqual(a.b, 10)
+			assert.strictEqual(a.a, 13)
+			a.a = 44
+			assert.strictEqual(a.a, 44)
+			assert.strictEqual(a.b, 41)
+		})
 		// TODO: finish
 	})
 })
