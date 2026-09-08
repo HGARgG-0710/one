@@ -5,9 +5,10 @@ import {
 	recursiveSame as array_recursiveSame,
 	same as array_same,
 } from "../../../dist/src/array/array.js"
-import { propDefine, type KeyValues } from "../../../dist/src/object/main.js"
+import { propDefine } from "../../../dist/src/object/main.js"
 import {
 	isArray,
+	isNull,
 	isNumber,
 	isString,
 	isTruthy,
@@ -16,7 +17,7 @@ import {
 
 import { object, testing } from "../../../dist/main.js"
 import { argWaster } from "../../../dist/src/functional/functional.js"
-import { sum } from "../../../dist/src/number/number.js"
+import { isEven, sum } from "../../../dist/src/number/number.js"
 
 const { assertThrows } = testing
 const {
@@ -41,6 +42,7 @@ const {
 	extendPrototype,
 	propertyDescriptors,
 	recursiveIterate,
+	Shape,
 	descriptor,
 } = object
 
@@ -55,20 +57,20 @@ const {
 	attachGetter,
 } = object.classes
 
-const s = Symbol("R")
+const s1 = Symbol("R")
 const subObject = { K: null }
 const getObject = () => ({
 	A: 10,
-	[s]: true,
+	[s1]: true,
 	T: subObject,
 })
 
 const methFunction = () => console.log("rumpus")
-const bs = Symbol("Nabe")
+const s2 = Symbol("Nabe")
 
 const getPrototypeObject = () => {
 	const target = {
-		[bs]: "55",
+		[s2]: "55",
 		1919: "kr40al",
 		meth: methFunction,
 	}
@@ -80,11 +82,11 @@ const getPrototypeObject = () => {
 
 const kvTests: any = {
 	own: [
-		["A", "T", s],
+		["A", "T", s1],
 		[10, subObject, true],
 	],
 	prototype: [
-		["1919", "meth", "A", "T", bs, s],
+		["1919", "meth", "A", "T", s2, s1],
 		["kr40al", methFunction, 10, subObject, "55", true],
 	],
 	string: {
@@ -98,15 +100,15 @@ const kvTests: any = {
 		],
 	},
 	symbol: {
-		own: [[s], [true]],
+		own: [[s1], [true]],
 		prototype: [
-			[bs, s],
+			[s2, s1],
 			["55", true],
 		],
 	},
 	ownOnly: {
 		prototype: [
-			["1919", "meth", bs],
+			["1919", "meth", s2],
 			["kr40al", methFunction, "55"],
 		],
 	},
@@ -129,201 +131,142 @@ suite("object", () => {
 		assert(!same(prototype(reconstruct(protoObj)), protoObj))
 	})
 
-	// suite("structCheck", () => {
-	// 	const stringProps = ["rao", "word"]
-	// 	const symbolProps = ["s", "t"].map(Symbol)
-	// 	const [s, t] = symbolProps
-	// 	const shapeKeys = [...stringProps, ...symbolProps]
-	// 	const shapePredicates = [isNumber, isString, isArray, isTruthy] as ((
-	// 		x: any,
-	// 	) => boolean)[]
+	suite("Shape", () => {
+		test("empty [isStrict = false]", {}, () => {
+			const emptyShape = new Shape.Builder().build()
+			const emptyTest = (emptyStruct: (x: any) => boolean) => {
+				assert(emptyStruct({}))
+				assert(emptyStruct([]))
+				assert(emptyStruct(new Set()))
+				assert(emptyStruct({ K: "S", [Symbol.iterator]: function* () {} }))
+				assert(!emptyStruct(null))
+				assert(!emptyStruct(3))
+				assert(!emptyStruct(true))
+				assert(!emptyStruct(new Function()))
+			}
+			emptyTest(emptyShape.asPredicate())
+		})
 
-	// 	const shape_kv: KeyValues<(x: any) => boolean> = [
-	// 		shapeKeys,
-	// 		shapePredicates,
-	// 	]
-	// 	const shapeObj = dekv(shape_kv)
+		test("empty [isStrict = true, optional = []]", () => {
+			const emptyStrictShape = new Shape.Builder().makeStrict().build()
+			const emptyStrictTest = (emptyStrict: (x: any) => boolean) => {
+				assert(!emptyStrict({ K: "S", R: 2 }))
+				assert(!emptyStrict(null))
+				assert(!emptyStrict(3))
+				assert(!emptyStrict([]))
+				assert(!emptyStrict(new Set()))
+				assert(emptyStrict({}))
+			}
+			emptyStrictTest(emptyStrictShape.asPredicate())
+		})
 
-	// 	const meat = Symbol("meat")
-	// 	const optionalKeys = ["raaf", meat]
+		test("empty [isStrict = true, optional != []]", () => {
+			interface I {
+				a?: any
+				[s1]: any
+			}
 
-	// 	const r = Symbol("r")
-	// 	const lackingProps = ["board", r]
+			const emptyOptional = new Shape.Builder<I>()
+				.makeStrict()
+				.optional("a")
+				.optional(s1)
+				.build()
 
-	// 	const getEmpty = () => ({})
+			const emptyOptionalTest = (emptyOptional: (x: any) => boolean) => {
+				assert(emptyOptional({}))
+				assert(emptyOptional({ a: "" }))
+				assert(emptyOptional({ [s1]: 49 }))
+				assert(!emptyOptional({ K: true }))
+				assert(!emptyOptional({ a: 11, K: true }))
+			}
 
-	// 	const getStructValid = () => ({
-	// 		rao: 22,
-	// 		[s]: [],
-	// 		[t]: 20,
-	// 		word: "Sairo",
-	// 	})
+			emptyOptionalTest(emptyOptional.asPredicate())
+		})
 
-	// 	const getStructInvalid = () => ({
-	// 		...getStructValid(),
-	// 		word: 22,
-	// 	})
+		test("empty [isStrict = false, lacking != []]", () => {
+			const emptyLacking = new Shape.Builder().remove("a").remove(s1).build()
+			const emptyLackingTest = (emptyNeg: (x: any) => boolean) => {
+				assert(emptyNeg({}))
+				assert(emptyNeg({ S: 70, [s2]: 29 }))
+				assert(!emptyNeg({ S: 70, [s1]: 20 }))
+				assert(!emptyNeg({ a: true }))
+			}
+			emptyLackingTest(emptyLacking.asPredicate())
+		})
 
-	// 	const getStructExcessive = () => ({
-	// 		...getStructValid(),
-	// 		bb: 429,
-	// 	})
+		test("non-empty [isStrict = false]", () => {
+			const nonEmpty = new Shape.Builder().add("a").add(s2, isNull).build()
+			const nonEmptyTest = (nonEmpty: (x: any) => boolean) => {
+				assert(!nonEmpty({}))
+				assert(!nonEmpty({ a: 1 }))
+				assert(nonEmpty({ a: 1, [s2]: null }))
+				assert(nonEmpty({ a: false, [s2]: null, b: 43 }))
+				assert(nonEmpty({ a: "", [s2]: null }))
+				assert(nonEmpty({ a: {}, [s2]: null }))
+				assert(nonEmpty({ a: null, [s2]: null }))
+				assert(nonEmpty({ a: undefined, [s2]: null }))
+				assert(!nonEmpty({ a: undefined, [s2]: 5 }))
+			}
+			nonEmptyTest(nonEmpty.asPredicate())
+		})
 
-	// 	const getStructOptional = () => ({
-	// 		...getStructValid(),
-	// 		[meat]: true,
-	// 		raf: 17,
-	// 	})
+		test("non-empty [isStrict = true, optional = []]", () => {
+			const shape = new Shape.Builder()
+				.add("a", isNumber)
+				.add(s2, isTruthy)
+				.makeStrict()
+				.build()
 
-	// 	const getStructViolating = () => ({
-	// 		...getStructValid(),
-	// 		board: 20,
-	// 		[r]: null,
-	// 	})
+			const nonEmptyStrictTest = (nonEmptyStrict: (x: any) => boolean) => {
+				assert(!nonEmptyStrict({}))
+				assert(!nonEmptyStrict({ a: 3 }))
+				assert(!nonEmptyStrict({ a: 3, [s2]: 0 }))
+				assert(!nonEmptyStrict({ a: 3, [s2]: 1, K: "" }))
+				assert(nonEmptyStrict({ a: 3, [s2]: 1 }))
+			}
 
-	// 	const emptyForbidding = (pred: (x: any) => boolean) =>
-	// 		assert(!pred(getEmpty()))
-	// 	const emptyAllowing = (pred: (x: any) => boolean) =>
-	// 		assert(pred(getEmpty()))
-	// 	const insufficientForbidding = (pred: (x: any) => boolean) => {
-	// 		assert(!pred({ [s]: [] }))
-	// 		assert(!pred({ [s]: [], [t]: 20 }))
-	// 		assert(!pred({ rao: 22 }))
-	// 	}
+			nonEmptyStrictTest(shape.asPredicate())
+		})
 
-	// 	const validAllowing = (pred: (x: any) => boolean) =>
-	// 		assert(pred(getStructValid()))
+		test("non-empty [isStrict = true, optional != []]", () => {
+			const shape = new Shape.Builder()
+				.add("b", isArray)
+				.add(s1, (x) => isNumber(x) && isEven(x))
+				.makeStrict()
+				.optional("l")
+				.optional(s1)
+				.build()
 
-	// 	const excessiveAllowing = (pred: (x: any) => boolean) =>
-	// 		assert(pred(getStructExcessive()))
+			const strictOptionalTest = (shapePred: (x: any) => boolean) => {
+				assert(!shapePred({}))
+				assert(!shapePred({ b: [] }))
+				assert(!shapePred({ b: [], [s1]: 1 }))
+				assert(!shapePred({ b: 3, [s1]: 1, K: "" }))
+				assert(shapePred({ b: [], [s1]: 2 }))
+			}
 
-	// 	const excessiveForibidding = (pred: (x: any) => boolean) =>
-	// 		assert(!pred(getStructExcessive()))
+			strictOptionalTest(shape.asPredicate())
+		})
 
-	// 	const invalidForbidding = (pred: (x: any) => boolean) =>
-	// 		assert(!pred(getStructInvalid()))
+		test("non-empty [isStrict = false, lacking != []]", () => {
+			const shape = new Shape.Builder()
+				.add("a", isString)
+				.add("b")
+				.remove("abc")
+				.build()
 
-	// 	const optionalAllowing = (pred: (x: any) => boolean) =>
-	// 		assert(!pred(getStructOptional()))
+			const lackingShapeTest = (shapePred: (x: any) => boolean) => {
+				assert(!shapePred({}))
+				assert(!shapePred({ a: "" }))
+				assert(!shapePred({ a: 1, b: null }))
+				assert(!shapePred({ a: "", b: null, R: true, abc: 10 }))
+				assert(shapePred({ a: "", b: null }))
+				assert(shapePred({ a: "", b: null, R: true }))
+			}
 
-	// 	const violatingForbidding = (pred: (x: any) => boolean) =>
-	// 		assert(!pred(getStructViolating()))
-
-	// 	const nonEmptyStrictTest = (nonEmptyStrict: (x: any) => boolean) => {
-	// 		emptyForbidding(nonEmptyStrict)
-	// 		insufficientForbidding(nonEmptyStrict)
-	// 		invalidForbidding(nonEmptyStrict)
-	// 		excessiveForibidding(nonEmptyStrict)
-	// 		validAllowing(nonEmptyStrict)
-	// 	}
-
-	// 	test("with empty structs [isStrict = false]", {}, () => {
-	// 		const [emptyStructArr, emptyStructObj] = [[], {}].map((x) =>
-	// 			structCheck(x),
-	// 		)
-
-	// 		const emptyTest = (emptyStruct: (x: any) => boolean) => {
-	// 			emptyAllowing(emptyStruct)
-	// 			assert(emptyStruct([]))
-	// 			assert(emptyStruct(new Set()))
-	// 			assert(emptyStruct({ K: "S", [Symbol.iterator]: function* () {} }))
-
-	// 			assert(!emptyStruct(null))
-	// 			assert(!emptyStruct(3))
-	// 			assert(!emptyStruct(true))
-	// 			assert(!emptyStruct(new Function()))
-	// 		}
-
-	// 		emptyTest(emptyStructArr)
-	// 		emptyTest(emptyStructObj)
-	// 	})
-
-	// 	test("with empty structs [isStrict = true, optional = []]", () => {
-	// 		const emptyStrict = structCheck({}, [], true, [])
-
-	// 		const emptyStrictTest = (emptyStrict: (x: any) => boolean) => {
-	// 			assert(!emptyStrict({ K: "S", R: 2 }))
-	// 			assert(!emptyStrict(null))
-	// 			assert(!emptyStrict(3))
-	// 			assert(!emptyStrict([]))
-	// 			assert(!emptyStrict(new Set()))
-
-	// 			emptyAllowing(emptyStrict)
-	// 		}
-
-	// 		emptyStrictTest(emptyStrict)
-	// 	})
-
-	// 	test("with empty structs [isStrict = true, optional != []]", () => {
-	// 		const emptyOptional = structCheck([], [], true, shapeKeys)
-
-	// 		const emptyOptionalTest = (emptyOptional: (x: any) => boolean) => {
-	// 			emptyAllowing(emptyOptional)
-	// 			validAllowing(emptyOptional)
-
-	// 			assert(emptyOptional({ rao: "" }))
-	// 			assert(emptyOptional({ [s]: 49 }))
-	// 			assert(!emptyOptional({ K: true }))
-	// 		}
-
-	// 		emptyOptionalTest(emptyOptional)
-	// 	})
-
-	// 	test("with empty structs [lacking != []]", () => {
-	// 		const emptyLacking = structCheck([], lackingProps)
-
-	// 		const emptyLackingTest = (emptyLacking: (x: any) => boolean) => {
-	// 			emptyAllowing(emptyLacking)
-	// 			assert(emptyLacking({ S: 70, K: 20 }))
-	// 			assert(!emptyLacking({ S: 70, [r]: 29 }))
-	// 			assert(!emptyLacking({ board: true }))
-	// 		}
-
-	// 		emptyLackingTest(emptyLacking)
-	// 	})
-
-	// 	test("with non-empty structs [isStrict = false]", () => {
-	// 		const nonEmptyStruct = structCheck(shapeObj)
-
-	// 		const nonEmptyStructTest = (nonEmptyStruct: (x: any) => boolean) => {
-	// 			emptyForbidding(nonEmptyStruct)
-	// 			insufficientForbidding(nonEmptyStruct)
-	// 			validAllowing(nonEmptyStruct)
-	// 			excessiveAllowing(nonEmptyStruct)
-	// 			invalidForbidding(nonEmptyStruct)
-	// 		}
-
-	// 		nonEmptyStructTest(nonEmptyStruct)
-	// 	})
-
-	// 	test("with non-empty structs [isStrict = true, optional = []]", () =>
-	// 		nonEmptyStrictTest(structCheck(shapeObj, [], true, [])))
-
-	// 	test("with non-empty structs [isStrict = true, optional != []]", () => {
-	// 		const nonEmptyOptional = structCheck(shapeObj, [], true, optionalKeys)
-
-	// 		const nonEmptyOptionalTest = (nonEmptyOptional: (x: any) => boolean) => {
-	// 			nonEmptyStrictTest(nonEmptyOptional)
-	// 			optionalAllowing(nonEmptyOptional)
-	// 		}
-
-	// 		nonEmptyOptionalTest(nonEmptyOptional)
-	// 	})
-
-	// 	test("with non-empty structs [lacking != []]", () => {
-	// 		const lackingNonEmpty = structCheck(shapeObj, lackingProps)
-	// 		const lackingNonEmptyTest = (lackingNonEmpty: (x: any) => boolean) => {
-	// 			emptyForbidding(lackingNonEmpty)
-	// 			insufficientForbidding(lackingNonEmpty)
-	// 			validAllowing(lackingNonEmpty)
-	// 			excessiveAllowing(lackingNonEmpty)
-	// 			violatingForbidding(lackingNonEmpty)
-	// 			invalidForbidding(lackingNonEmpty)
-	// 		}
-
-	// 		lackingNonEmptyTest(lackingNonEmpty)
-	// 	})
-	// })
+			lackingShapeTest(shape.asPredicate())
+		})
+	})
 
 	test("keys", () => {
 		assert(array_same(keys(getObject()), kvTests.own[0]))
@@ -491,7 +434,7 @@ suite("object", () => {
 					A: "17",
 					B: false,
 					[Symbol.iterator]: iterator,
-					[s]: 11,
+					[s1]: 11,
 				}),
 				{
 					B: false,
@@ -605,14 +548,14 @@ suite("object", () => {
 		const withObj = {
 			R: 90,
 			C: 20,
-			[s]: 440,
+			[s1]: 440,
 			N: "Ah?",
-			[bs]: "T",
+			[s2]: "T",
 		}
 
-		const sans = withoutProperties("A", s, "B", "C")
+		const sans = withoutProperties("A", s1, "B", "C")
 
-		assert(same(sans(withObj), { R: 90, N: "Ah?", [bs]: "T" }))
+		assert(same(sans(withObj), { R: 90, N: "Ah?", [s2]: "T" }))
 		assert.notStrictEqual(sans(withObj), withObj)
 	})
 
@@ -943,7 +886,7 @@ suite("object", () => {
 
 			assert.strictEqual(a.a, 10)
 			assert.strictEqual(a.b, 10)
-			
+
 			a.a = 0
 			assert.strictEqual(a.a, 0)
 			assertThrows(() => ((a as any).b = 0))

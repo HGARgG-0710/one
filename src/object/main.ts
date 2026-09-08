@@ -60,7 +60,7 @@ export class Shape<T extends object = any> {
 		return (x: any): x is T => this.verify(x)
 	}
 
-	verify(x: any): boolean {
+	verify(x: any): x is T {
 		if (!isStruct(x)) return false
 		if (!this.properties.every((p) => p in x)) return false
 		if (this.lacks.some((p) => p in x)) return false

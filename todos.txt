@@ -77,10 +77,6 @@
 		5. object.Shape.Builder
 
 	* To test [new]:
-		* object.Shape.Builder
-		* object.Shape [note: test SEPARATELY from `object.Shape.Builder`]
-			Base it on the test of `structCheck` (since Shape is effectively a
-				refactoring of it).
 		* array.ArraySet
 		* object.descriptor:
 			* `Configurable()`
